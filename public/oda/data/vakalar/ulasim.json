@@ -1,0 +1,237 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "ulasim-02-agir-yuk-karar",
+   "topic": "ulasim",
+   "difficulty": 1,
+   "type": "decision",
+   "title": "Çimento Sevkiyatı",
+   "radio": [
+    "Deniz: Kasabaya 500 ton çimento götürmemiz gerekiyor, mesafe 600 km. Acelemiz yok ama maliyet önemli.",
+    "Deniz: Hangi taşıma yolunu seçelim?"
+   ],
+   "question": "Deniz’e hangi taşıma yolunu önerirsin?",
+   "board": {
+    "start": "s1",
+    "steps": [
+     {
+      "id": "s1",
+      "text": "Ağır bir yükü 600 km uzağa göndereceksin. Acelen yok, maliyet önemli. Hangi taşıma?",
+      "options": [
+       {
+        "id": "s1a",
+        "text": "Uçak kargosu",
+        "end": "bad",
+        "note": "Havayolu hızlıdır ama çok pahalıdır; ağır ve acelesiz yük için uygun değildir."
+       },
+       {
+        "id": "s1b",
+        "text": "Demiryolu",
+        "next": "s2",
+        "note": "Doğru: ağır yükü uzun mesafede taşımada demiryolu ucuz ve verimlidir."
+       },
+       {
+        "id": "s1c",
+        "text": "Küçük kamyonetlerle tek tek taşımak",
+        "end": "bad",
+        "note": "Çok sayıda küçük araç maliyeti artırır ve yolları yorar."
+       }
+      ]
+     },
+     {
+      "id": "s2",
+      "text": "Tren en yakın istasyona kadar gidiyor; istasyondan kasabaya 20 km kaldı. Ne yapalım?",
+      "options": [
+       {
+        "id": "s2a",
+        "text": "Yükü helikopterle taşımak",
+        "end": "bad",
+        "note": "Helikopter çok pahalıdır ve ağır yük için uygun değildir."
+       },
+       {
+        "id": "s2b",
+        "text": "İstasyondan kasabaya karayoluyla kamyonla taşımak",
+        "end": "best",
+        "note": "Doğru: kısa mesafede karayolu kapıdan kapıya esnek taşıma sağlar."
+       },
+       {
+        "id": "s2c",
+        "text": "Yükü istasyonda bekletmek",
+        "end": "bad",
+        "note": "Yükün beklemesi teslimi geciktirir; kısa mesafe için esnek bir yol seçilmeli."
+       }
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "okEndings": [
+     "best"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Ağır yük ve uzun mesafede hangi taşıma türü ucuzdur?"
+    },
+    {
+     "from": "ayse",
+     "text": "Tren her yere gitmez; son kısa mesafeyi hangi yolla bitirirsin?"
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Çimento kasabaya ulaştı, harika.",
+    "wrong": "Deniz: Bu seçim ya pahalı ya yavaş, başka yol düşünelim.",
+    "explain": "Ağır yükü uzun mesafede taşımak için demiryolu ucuz ve verimlidir. İstasyondan sonraki kısa mesafede karayolu esnek bir çözümdür."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Taşıma türlerinin özellikleri: demiryolu, karayolu, havayolu."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "s1b",
+      "s2b"
+     ]
+    ],
+    "wrong": [
+     [
+      "s1a"
+     ],
+     [
+      "s1b",
+      "s2a"
+     ],
+     [
+      "s1c"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ulasim-03-izmir-ankara-rota",
+   "topic": "ulasim",
+   "difficulty": 2,
+   "type": "route",
+   "title": "Karlı Yol",
+   "radio": [
+    "Deniz: Erzak İzmir’den Ankara’ya gidecek. Eskişehir çevresinde yollar karla kapanmış, kamyonlar o hattan geçemiyor.",
+    "Deniz: Afyonkarahisar üzerinden güneyi dolaşarak Ankara’ya ulaşmalılar. Rotayı çizer misin?"
+   ],
+   "question": "İzmir’den Ankara’ya, Afyonkarahisar’dan geçen ve kapalı bölgeden kaçınan rotayı çiz.",
+   "board": {
+    "mode": "map",
+    "mapMode": "neutral",
+    "start": {
+     "lat": 38.42,
+     "lon": 27.14,
+     "radiusKm": 70,
+     "name": "İzmir"
+    },
+    "end": {
+     "lat": 39.93,
+     "lon": 32.86,
+     "radiusKm": 70,
+     "name": "Ankara"
+    },
+    "ordered": true,
+    "waypoints": [
+     {
+      "lat": 38.76,
+      "lon": 30.54,
+      "radiusKm": 70,
+      "name": "Afyonkarahisar"
+     }
+    ],
+    "forbidden": [
+     {
+      "lat": 39.77,
+      "lon": 30.52,
+      "radiusKm": 70,
+      "name": "Kar nedeniyle kapalı bölge"
+     }
+    ],
+    "maxLengthKm": 900,
+    "maxPoints": 8
+   },
+   "answer": {},
+   "hints": [
+    {
+     "from": "ayse",
+     "text": "Önce İzmir’den Afyonkarahisar’a git, sonra oradan Ankara’ya dön."
+    },
+    {
+     "from": "nuri",
+     "text": "Kırmızı daireye değmeyecek biçimde rotanı güneyden geçir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Rotayı aldım, kamyonlar güvenle geçer.",
+    "wrong": "Deniz: Bu rota kapalı bölgeye giriyor ya da Afyonkarahisar’ı atlıyor.",
+    "explain": "Rotada ara nokta ve yasak bölge birlikte düşünülür: önce güneydeki Afyonkarahisar’a, oradan Ankara’ya giden hat kapalı bölgenin dışında kalır."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Şehir koordinatları ve yasak dairenin yarıçapı atlasla kontrol edilmeli (örnek senaryo, gerçek yol durumu değil)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "points": [
+       {
+        "lat": 38.42,
+        "lon": 27.14
+       },
+       {
+        "lat": 38.76,
+        "lon": 30.54
+       },
+       {
+        "lat": 39.93,
+        "lon": 32.86
+       }
+      ]
+     }
+    ],
+    "wrong": [
+     {
+      "points": [
+       {
+        "lat": 38.42,
+        "lon": 27.14
+       },
+       {
+        "lat": 39.93,
+        "lon": 32.86
+       }
+      ]
+     },
+     {
+      "points": [
+       {
+        "lat": 38.42,
+        "lon": 27.14
+       },
+       {
+        "lat": 39.77,
+        "lon": 30.52
+       },
+       {
+        "lat": 39.93,
+        "lon": 32.86
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

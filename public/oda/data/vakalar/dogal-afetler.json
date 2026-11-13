@@ -1,0 +1,144 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "afet-03-heyelan-karar",
+   "topic": "dogal-afetler",
+   "difficulty": 3,
+   "type": "decision",
+   "title": "Kayan Yamaç",
+   "radio": [
+    "Deniz: Üç gündür sürekli yağmur yağıyor. Evim yamacın eteğinde.",
+    "Deniz: Yamaçta yeni çatlaklar, eğilmiş ağaçlar var; pınarın suyu çamurlu akıyor. Ne yapmalıyım?"
+   ],
+   "question": "Deniz’e ne yapmasını söylersin?",
+   "board": {
+    "start": "s1",
+    "steps": [
+     {
+      "id": "s1",
+      "text": "Üç gündür yağmur var. Yamaçta yeni çatlaklar, eğilmiş ağaçlar ve çamurlu pınar suyu görülüyor. Deniz yamaç eteğindeki evde. Ne yapsın?",
+      "options": [
+       {
+        "id": "s1a",
+        "text": "Evde kalıp yağmurun dinmesini beklemek",
+        "end": "bad",
+        "note": "Heyelan belirtileri varken yamaç eteğinde kalmak çok tehlikelidir."
+       },
+       {
+        "id": "s1b",
+        "text": "Hemen yamaçtan uzak, yüksekçe ve sağlam bir yere çıkıp yetkililere haber vermek",
+        "next": "s2",
+        "note": "Doğru: belirtiler varsa yamaçtan hemen uzaklaşılır ve yetkililere haber verilir."
+       },
+       {
+        "id": "s1c",
+        "text": "Çatlakları çamurla doldurmak",
+        "end": "bad",
+        "note": "Çatlağı doldurmak yamacın kaymasını durdurmaz."
+       }
+      ]
+     },
+     {
+      "id": "s2",
+      "text": "Deniz uzaklaşırken yamaçtan gürültü geliyor, yol çamurlu. Hangi yöne gitsin?",
+      "options": [
+       {
+        "id": "s2a",
+        "text": "Dere yatağı boyunca koşmak",
+        "end": "bad",
+        "note": "Heyelan çamuru çoğu zaman dere yatağını izler; dere yatağı tehlikeli bir yoldur."
+       },
+       {
+        "id": "s2b",
+        "text": "Kayma yönüne dik doğrultuda, yamaçtan uzağa ve yüksek bir yere gitmek",
+        "next": "s3",
+        "note": "Doğru: kayma yönüne dik uzaklaşmak, heyelanın yoluna girmemeyi sağlar."
+       },
+       {
+        "id": "s2c",
+        "text": "Geri dönüp eşyalarını almak",
+        "end": "bad",
+        "note": "Eşya için geri dönmek hayati risk oluşturur."
+       }
+      ]
+     },
+     {
+      "id": "s3",
+      "text": "Deniz güvenli bir yere ulaştı, telsizi çalışıyor. Şimdi ne yapsın?",
+      "options": [
+       {
+        "id": "s3a",
+        "text": "Kayma durunca evine dönmek",
+        "end": "bad",
+        "note": "Yamaç ikinci kez kayabilir; yetkililer izin vermeden dönülmez."
+       },
+       {
+        "id": "s3b",
+        "text": "Telsizle konumunu ve yamaçtaki durumu bildirip yetkililerin uyarısını beklemek",
+        "end": "best",
+        "note": "Doğru: güvenli yerde kalıp bilgi vermek en doğru davranıştır."
+       },
+       {
+        "id": "s3c",
+        "text": "Kayan yere yaklaşıp fotoğraf çekmek",
+        "end": "bad",
+        "note": "Kayma bölgesine yaklaşmak yeni bir kayma durumunda tehlikelidir."
+       }
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "okEndings": [
+     "best"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Heyelan belirtileri (çatlak, eğik ağaç, çamurlu su) varsa yamaçtan hemen uzaklaşılır."
+    },
+    {
+     "from": "ayse",
+     "text": "Heyelan kütlesi yamaç aşağı iner; kayma yönüne dik doğrultuda uzaklaşmak daha güvenlidir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Güvendeyim, ekip yolda.",
+    "wrong": "Deniz: Bu karar beni riske atar, başka bir yol bulalım.",
+    "explain": "Heyelan belirtilerinde yamaçtan uzaklaşılır, kayma yönüne dik gidilir ve güvenli yerden yetkililere haber verilir. Dere yatağından gidilmez, eve dönülmez."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Heyelan güvenliği (AFAD yönergeleri)."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "s1b",
+      "s2b",
+      "s3b"
+     ]
+    ],
+    "wrong": [
+     [
+      "s1a"
+     ],
+     [
+      "s1b",
+      "s2a"
+     ],
+     [
+      "s1b",
+      "s2b",
+      "s3a"
+     ]
+    ]
+   }
+  }
+ ]
+}

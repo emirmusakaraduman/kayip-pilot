@@ -1,0 +1,191 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "ic-02-kivrim-dag-kart",
+   "topic": "ic-kuvvetler",
+   "difficulty": 2,
+   "type": "cards",
+   "title": "Dalga Gibi Katmanlar",
+   "radio": [
+    "Deniz: Kayaların katmanları dalga gibi bükülmüş; yer yer kemerler, yer yer çukurlar var. Kırık ya da çatlak göremiyorum.",
+    "Deniz: Sıralar çok uzun ve yüksek. Kayalarda deniz kabuklarının izleri var."
+   ],
+   "question": "Bu dağların oluşumunda hangi iç kuvvet olayı etkili olmuştur?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Kıvrılma",
+      "text": "Sıkışmayla katmanların bükülmesi"
+     },
+     {
+      "id": "b",
+      "title": "Faylanma",
+      "text": "Kırılma ve kayma",
+      "why": "Faylanmada katmanlar kırılıp kayar; burada kırık değil, bükülmüş katmanlar anlatılıyor."
+     },
+     {
+      "id": "c",
+      "title": "Volkanizma",
+      "text": "Magmanın yüzeye çıkışı",
+      "why": "Volkanizmada lav ve kül çıkar; burada yalnızca bükülmüş çökel katmanlar var."
+     },
+     {
+      "id": "d",
+      "title": "Epirojenez",
+      "text": "Geniş alanda yavaş yükselme",
+      "why": "Epirojenezde katmanlar bükülmez, geniş alan yatay biçimde yükselir ya da alçalır."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Katmanların dalga gibi bükülmesi hangi kuvvetle olur: sıkışma mı, çekme mi?"
+    },
+    {
+     "from": "ayse",
+     "text": "Kırık anlatılmıyor ve lav ya da kül yok.",
+     "eliminate": [
+      "b",
+      "c"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Kıvrılma, sıralar bu yüzden uzun ve yüksek.",
+    "wrong": "Deniz: Bu olay katmanları kırmıyor, bükmüş; tekrar düşün.",
+    "explain": "Yanlardan gelen sıkışma kuvvetleri eski deniz tabanındaki çökel katmanları bükerek kıvrım dağlarını oluşturur. Deniz kabuklu kayalar bunu doğrular."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Kıvrım dağları: Alp-Himalaya kuşağı, Toroslar."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ic-03-ic-kuvvet-coklu-kart",
+   "topic": "ic-kuvvetler",
+   "difficulty": 3,
+   "type": "cards",
+   "title": "Dört Gözlem",
+   "radio": [
+    "Deniz: Dört şey gördüm. Bir pınardan buharlı sıcak su fışkırıyor; kıyıda dalgalar kayalığı oyuyor.",
+    "Deniz: Yolu bir çizgi boyunca yana kaymış görüyorum. Vadide ise akarsu kıyısını kemiriyor."
+   ],
+   "question": "Hangileri iç kuvvetlerin ürünüdür? Hepsini seç.",
+   "board": {
+    "multi": true,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Sıcak su fışkırması",
+      "text": "Gayzer, volkanik faaliyetin izi"
+     },
+     {
+      "id": "b",
+      "title": "Dalgaların oyduğu kayalık",
+      "text": "Falez oluşumu",
+      "why": "Falez, dalgaların kıyıyı aşındırmasıyla oluşur; bu dış kuvvet ürünüdür."
+     },
+     {
+      "id": "c",
+      "title": "Çizgi boyunca kayan yol",
+      "text": "Fay hattında yer kayması"
+     },
+     {
+      "id": "d",
+      "title": "Kıyısı kemirilen vadi",
+      "text": "Akarsuyun yan aşındırması",
+      "why": "Akarsu aşındırması dış kuvvettir; iç kuvvetlerle ilgisi yoktur."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a",
+     "c"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "İç kuvvetler yerin içinden gelir: deprem, volkanizma, faylanma."
+    },
+    {
+     "from": "ayse",
+     "text": "Dalga ve akarsu yeryüzünü dışarıdan aşındırır.",
+     "eliminate": [
+      "b",
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: İkisi de yerin içinden gelen olaylarmış, anladım.",
+    "wrong": "Deniz: Birini eksik ya da fazla seçtin, aşındıran kuvvetlere bir daha bak.",
+    "explain": "İç kuvvetler (volkanizma, faylanma) yerin içinden kaynaklanır; dalga ve akarsu aşındırması dış kuvvettir. Gayzer volkanik faaliyetin, yolun kayması fayın ürünüdür."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Gayzer volkanik faaliyetin sonucudur (iç kuvvet)."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a",
+      "c"
+     ]
+    ],
+    "wrong": [
+     [
+      "a"
+     ],
+     [
+      "a",
+      "b"
+     ],
+     [
+      "b",
+      "d"
+     ],
+     [
+      "a",
+      "c",
+      "d"
+     ]
+    ]
+   }
+  }
+ ]
+}

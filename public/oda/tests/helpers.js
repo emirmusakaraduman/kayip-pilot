@@ -14,7 +14,11 @@ function loadKP() {
   KP.geo.setMapData(MAP);
   return { KP: KP, DOC: DOC, MAP: MAP };
 }
-function loadCases() { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data/vakalar/ornek_vakalar.json'), 'utf8')).vakalar; }
+function loadCases() { // data/vakalar altındaki tüm .json dosyaları (ornek_vakalar.json dahil)
+  var dir = path.join(ROOT, 'data/vakalar'), all = [];
+  fs.readdirSync(dir).filter(function (f) { return /.json$/.test(f); }).sort(function (a, b) { return (a === 'ornek_vakalar.json' ? -1 : b === 'ornek_vakalar.json' ? 1 : a < b ? -1 : 1); }).forEach(function (f) { all = all.concat(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).vakalar || []); });
+  return all;
+}
 
 /* ---- küçük sahte DOM ---- */
 function FakeNode(tag) { this.tag = tag; this.children = []; this.attrs = {}; this.style = {}; this.listeners = {}; this.textContent = ''; this.parentNode = null; this.value = ''; this.disabled = false; this.hidden = false;

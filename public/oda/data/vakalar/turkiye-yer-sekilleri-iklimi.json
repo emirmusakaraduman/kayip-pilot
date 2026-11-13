@@ -1,0 +1,188 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "tr-01-agri-dagi-pin",
+   "topic": "turkiye-yer-sekilleri-iklimi",
+   "difficulty": 1,
+   "type": "pin",
+   "title": "Tek Başına Dev",
+   "radio": [
+    "Deniz: Önümde tek başına yükselen, külah biçimli, karlı bir dev dağ var. Zirvesinde kar yaz kış duruyor.",
+    "Deniz: Çevresi geniş ve yüksek bir plato. Hava çok soğuk, uzakta bir sınır görünüyor."
+   ],
+   "question": "Bu dağ hangi bölgede? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 39.7,
+    "lon": 44.3,
+    "radiusKm": 90
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Külah biçimli, tek başına yükselen karlı dağ volkanik bir dağdır."
+    },
+    {
+     "from": "ayse",
+     "text": "Türkiye’nin en yüksek dağı, doğu sınırına yakın, yüksek platoların ortasında."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Ağrı Dağı’nın eteğindeyim, görüntü çok etkileyici.",
+    "wrong": "Deniz: Burası değil, en yüksek volkanik dağın yakınında olmalıyım.",
+    "explain": "Türkiye’nin en yüksek dağı olan Ağrı Dağı, Doğu Anadolu’da tek başına yükselen sönmüş bir volkandır. Çevresi yüksek platolarla çevrilidir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Ağrı Dağı: Türkiye’nin en yüksek dağı, volkanik."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 39.7,
+      "lon": 44.2
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 41,
+      "lon": 29
+     },
+     {
+      "lat": 37.2,
+      "lon": 29.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "tr-02-graben-ova-pin",
+   "topic": "turkiye-yer-sekilleri-iklimi",
+   "difficulty": 2,
+   "type": "pin",
+   "title": "Paralel Çukurlar",
+   "radio": [
+    "Deniz: Doğu-batı doğrultusunda uzanan geniş, düz tabanlı ovalar görüyorum. İki yanı dik yamaçlı dağlarla çevrili, ovalar birbirine paralel.",
+    "Deniz: Ovada pamuk, incir ve zeytin yetişiyor, kışlar ılık."
+   ],
+   "question": "Bu ova ve dağ dizilişi hangi yörede görülür? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 38.2,
+    "lon": 28.5,
+    "radiusKm": 110
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Faylarla çöken çukurlara graben, yüksekte kalan bloklara horst denir."
+    },
+    {
+     "from": "ayse",
+     "text": "Doğu-batı doğrultulu grabenler batı Anadolu’da; Gediz ve Büyük Menderes ovalarını düşün."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Ege’de graben ovalarındayım.",
+    "wrong": "Deniz: Burada ova ile dağlar paralel uzanmıyor, batıya bak.",
+    "explain": "Batı Anadolu’da fay hatlarıyla çöken grabenler Gediz ve Büyük Menderes gibi ovaları oluşturur. Aralarındaki yükselen bloklar horsttur."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Ege Bölgesi grabenleri."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 38.4,
+      "lon": 28
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 40,
+      "lon": 42
+     },
+     {
+      "lat": 37,
+      "lon": 35
+     }
+    ]
+   }
+  },
+  {
+   "id": "tr-03-ege-kiyisi-pin",
+   "topic": "turkiye-yer-sekilleri-iklimi",
+   "difficulty": 3,
+   "type": "pin",
+   "title": "Girintili Kıyı",
+   "radio": [
+    "Deniz: Kıyı çok girintili çıkıntılı; koylar ve yarımadalar birbirini izliyor. Dağlar denize dik uzanıyor, vadiler denize iniyor.",
+    "Deniz: Birkaç ada görünüyor. Yaz kurak, çevrede zeytin ve kızılçam var."
+   ],
+   "question": "Bu kıyı tipi hangi kıyıda görülür? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 38.4,
+    "lon": 27,
+    "radiusKm": 120
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Dağların kıyıya dik uzandığı kıyılar girintili çıkıntılı olur (Ege tipi kıyı)."
+    },
+    {
+     "from": "ayse",
+     "text": "Zeytin ve kızılçam yalnızca iklimi gösterir; kıyıdaki dağların yönüne bak, Akdeniz kıyısı daha düzdür."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Ege kıyısındayım, her yerde koy var.",
+    "wrong": "Deniz: Kıyı çizgisi burada bu kadar girintili değil, dağların yönüne bak.",
+    "explain": "Dağların kıyıya dik uzandığı Ege’de denizin sokulmasıyla girintili çıkıntılı kıyı oluşur. Zeytin ve kızılçam Akdeniz iklimini gösterir, kıyı tipini değil."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Ege kıyısının merkezi (İzmir çevresi) ve yarıçap atlasla kontrol edilmeli."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 38.4,
+      "lon": 27.2
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 36.9,
+      "lon": 30.7
+     },
+     {
+      "lat": 41,
+      "lon": 36
+     }
+    ]
+   }
+  }
+ ]
+}

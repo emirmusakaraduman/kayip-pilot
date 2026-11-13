@@ -1,0 +1,147 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "elemanlar-02-yillik-sicaklik-farki",
+   "topic": "iklim-elemanlari",
+   "difficulty": 1,
+   "type": "number",
+   "title": "Defterdeki Sıcaklıklar",
+   "radio": [
+    "Deniz: İstasyon defterinde en sıcak ayın ortalaması 28°C, en soğuk ayın ortalaması 4°C yazıyor.",
+    "Deniz: Burası yıl boyunca ne kadar değişiyor, bilmem lazım."
+   ],
+   "question": "Yıllık sıcaklık farkı kaç °C’dir?",
+   "board": {
+    "unit": "°C",
+    "placeholder": "Örn. 15",
+    "given": [
+     "En sıcak ayın ortalaması: 28°C",
+     "En soğuk ayın ortalaması: 4°C"
+    ]
+   },
+   "answer": {
+    "value": 24,
+    "tolerance": 0.1
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Yıllık sıcaklık farkı, en sıcak ay ile en soğuk ay arasındaki farktır."
+    },
+    {
+     "from": "ayse",
+     "text": "İki ortalamayı birbirinden çıkar."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 24°C fark, yıl boyunca epey değişiyor.",
+    "wrong": "Deniz: Sonuç tutmuyor, hangi iki ayı karşılaştırdığına bak.",
+    "explain": "Yıllık sıcaklık farkı = en sıcak ay − en soğuk ay = 28 − 4 = 24°C."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Yıllık sıcaklık farkı tanımı."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "24"
+     },
+     {
+      "raw": "24°C"
+     },
+     {
+      "raw": "24,0"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "32"
+     },
+     {
+      "raw": "16"
+     },
+     {
+      "raw": "4"
+     }
+    ]
+   }
+  },
+  {
+   "id": "elemanlar-03-basinc-yukselti-sicaklik",
+   "topic": "iklim-elemanlari",
+   "difficulty": 3,
+   "type": "number",
+   "title": "Barometre ve Termometre",
+   "radio": [
+    "Deniz: Barometremde 913 mb yazıyor. Kıyıdaki ekip aynı anda deniz seviyesinde 1013 mb ve 25°C ölçmüş.",
+    "Deniz: Termometrem bozuldu. Bulunduğum yerdeki sıcaklığı hesaplayabilir misin?"
+   ],
+   "question": "Deniz’in bulunduğu yerde sıcaklık kaç °C’dir?",
+   "board": {
+    "unit": "°C",
+    "placeholder": "Örn. 15",
+    "given": [
+     "Deniz seviyesi: 1013 mb, 25°C",
+     "Deniz’in barometresi: 913 mb",
+     "Her 10 m yükselişte basınç yaklaşık 1 mb düşer",
+     "Her 200 m yükselişte sıcaklık yaklaşık 1°C düşer"
+    ]
+   },
+   "answer": {
+    "value": 20,
+    "tolerance": 0.5
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Önce basınç farkından yüksekliği bul, sonra sıcaklığa geç."
+    },
+    {
+     "from": "ayse",
+     "text": "Basınç farkı 100 mb ise yükselti kaç metredir? Bu yüksekliği 200’e bölerek sıcaklık düşüşünü bul."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 20°C, hissettiğime uyuyor.",
+    "wrong": "Deniz: Hesap tutmuyor, önce kaç metre yükseldiğimi bul.",
+    "explain": "Basınç farkı 100 mb × 10 m = 1000 m yükseltidir. 1000 ÷ 200 = 5°C düşer; 25 − 5 = 20°C."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "10 m’de 1 mb ve 200 m’de 1°C kuralları ders kitabıyla kontrol edilmeli (sıcaklık için 100 m’de 0,6°C de geçebilir)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "20"
+     },
+     {
+      "raw": "20°C"
+     },
+     {
+      "raw": "20,0"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "5"
+     },
+     {
+      "raw": "30"
+     },
+     {
+      "raw": "1000"
+     }
+    ]
+   }
+  }
+ ]
+}

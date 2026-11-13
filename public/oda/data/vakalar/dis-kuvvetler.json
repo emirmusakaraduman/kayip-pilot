@@ -1,0 +1,127 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "dis-02-obruk-pin",
+   "topic": "dis-kuvvetler",
+   "difficulty": 1,
+   "type": "pin",
+   "title": "Çöken Zemin",
+   "radio": [
+    "Deniz: Düz bir bozkırın ortasındayım, ağaç yok. Zeminde derin, dik kenarlı, yuvarlak çöküntüler var; bazılarının dibinde su göllenmiş.",
+    "Deniz: Yağış çok az. Altında kalın bir kalker tabakası olduğunu söylediler."
+   ],
+   "question": "Bu şekiller hangi bölgede görülür? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 37.65,
+    "lon": 33.2,
+    "radiusKm": 110
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kalkerin yağmur suyunda çözünmesiyle oluşan çöküntülere ne denir?"
+    },
+    {
+     "from": "ayse",
+     "text": "Kalkerli, kurak ve düz bir iç kesim ara; Konya Kapalı Havzası’nı düşün."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Konya Ovası’nın güneyindeyim, çöküntüler burada.",
+    "wrong": "Deniz: Burada kalker çözünmesi görünmüyor, kurak ve düz bir bozkır arıyorum.",
+    "explain": "Kalkerli arazide suyun çözmesiyle karstik şekiller oluşur; kurak Konya Kapalı Havzası’ndaki obruklar buna örnektir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Obruk alanının (Karapınar–Çumra, Konya) koordinatını atlasla kontrol et."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 37.7,
+      "lon": 33.5
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 41,
+      "lon": 29
+     },
+     {
+      "lat": 39.9,
+      "lon": 41.2
+     }
+    ]
+   }
+  },
+  {
+   "id": "dis-03-buzul-pin",
+   "topic": "dis-kuvvetler",
+   "difficulty": 3,
+   "type": "pin",
+   "title": "Kaşık Biçimli Çukurlar",
+   "radio": [
+    "Deniz: Zirvelere yakın kaşık biçimli çukurlar var, içlerinde göl. Aşağı inen vadi U biçiminde, tabanında moloz yığınları dizilmiş.",
+    "Deniz: Yazın bile kar lekeleri duruyor. Daha aşağıda sağanak, sis ve çay tarlaları var."
+   ],
+   "question": "Bu şekillerin görüldüğü yüksek dağ hangi bölgede? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 40.85,
+    "lon": 41.1,
+    "radiusKm": 100
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kaşık biçimli çukur (sirk), U vadi ve moren, buzulların işidir. Buzul yalnızca çok yüksek dağlarda kalır."
+    },
+    {
+     "from": "ayse",
+     "text": "Çay ve bol yağış doğu Karadeniz’i gösterir; kıyıya paralel uzanan en yüksek sıradağı ara."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Kaçkarlar’dayım, buzul gölleri burada.",
+    "wrong": "Deniz: Buzul şekilleri için yeterince yüksek bir dağ ve çayın yetiştiği yağışlı kıyı gerekiyor.",
+    "explain": "Sirk, U vadi ve moren buzul aşındırma ve biriktirme şekilleridir. Çay yetişen yağışlı doğu Karadeniz’in arkasındaki Kaçkarlar’da görülür."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Kaçkar Dağları’nda buzul gölleri ve buzul şekilleri."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 40.85,
+      "lon": 41.15
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 37.2,
+      "lon": 29.5
+     },
+     {
+      "lat": 37.9,
+      "lon": 32.5
+     }
+    ]
+   }
+  }
+ ]
+}

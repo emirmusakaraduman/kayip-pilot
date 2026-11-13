@@ -1,0 +1,104 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "goc-03-goc-alan-sehir-grafik",
+   "topic": "goc",
+   "difficulty": 3,
+   "type": "graph",
+   "title": "Sanayi Kentinin Piramidi",
+   "radio": [
+    "Deniz: Büyük bir sanayi kentinin nüfus piramidini buldum. Çalışma çağındaki gruplar çok kalabalık; taban ve tepe daha dar.",
+    "Deniz: Erkekler kadınlardan belirgin biçimde fazla."
+   ],
+   "question": "Bu piramit kentin nüfus hareketi hakkında neyi gösterir?",
+   "board": {
+    "kind": "pyramid",
+    "pickMode": "choice",
+    "data": {
+     "title": "Örnek nüfus piramidi (yaklaşık değerler)",
+     "groups": [
+      "0-14",
+      "15-29",
+      "30-44",
+      "45-59",
+      "60+"
+     ],
+     "male": [
+      8,
+      17,
+      16,
+      8,
+      3.5
+     ],
+     "female": [
+      7.5,
+      12,
+      11,
+      7.5,
+      4.5
+     ]
+    },
+    "choices": [
+     {
+      "id": "alan",
+      "text": "Dışarıdan göç alıyor"
+     },
+     {
+      "id": "veren",
+      "text": "Dışarıya göç veriyor",
+      "why": "Göç veren yerde çalışma çağındaki genç nüfus azalır; burada o gruplar tam tersine kalabalık."
+     },
+     {
+      "id": "genc",
+      "text": "Doğum oranı çok yüksek, nüfus genç",
+      "why": "Genç nüfusta taban en geniş olur; bu piramidin tabanı dar."
+     }
+    ]
+   },
+   "answer": {
+    "choice": "alan"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Çalışma çağındaki nüfusun ve erkeklerin fazlalığı iş için gelen insanları düşündürür."
+    },
+    {
+     "from": "ayse",
+     "text": "Piramidin tabanı dar; yani yüksek doğum oranı nedeni olamaz."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Göç alan bir kent, iş için gelenler çok.",
+    "wrong": "Deniz: Piramidin şekli başka bir şeyi anlatıyor, orta yaşlara dikkat et.",
+    "explain": "Çalışma çağındaki grupların kabarık, erkeklerin fazla olduğu piramit iş için gelen göçü gösterir. Dar taban doğumun yüksek olmadığını gösterir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Örnek (yaklaşık) veri; ders kitabındaki gerçek piramitle değiştir."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "choice": "alan"
+     }
+    ],
+    "wrong": [
+     {
+      "choice": "veren"
+     },
+     {
+      "choice": "genc"
+     },
+     {
+      "choice": null
+     }
+    ]
+   }
+  }
+ ]
+}

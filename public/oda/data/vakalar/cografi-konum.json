@@ -1,0 +1,66 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "konum-03-saat-ve-aci-pin",
+   "topic": "cografi-konum",
+   "difficulty": 3,
+   "type": "pin",
+   "title": "Saat ve Gölge",
+   "radio": [
+    "Deniz: Yerel saatim 14.28, telsizden aldığım Greenwich saati 12.00.",
+    "Deniz: Bugün 21 Mart. Öğle Güneş ışınlarının yere geliş açısı 51°. Haritada beni bulabilir misin?"
+   ],
+   "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 39,
+    "lon": 37,
+    "radiusKm": 90
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "1° boylam 4 dakikadır. Saat farkını dakikaya çevir, 4’e böl."
+    },
+    {
+     "from": "ayse",
+     "text": "21 Mart’ta ışınlar ekvatora dik gelir; enlem = 90° − ışın açısı. İkisini haritada kesiştir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Beni buldun, iç kesimin doğusundayım.",
+    "wrong": "Deniz: Burası değil, hem saat farkını hem açıyı bir daha hesapla.",
+    "explain": "Saat farkı 148 dk; 148 ÷ 4 = 37° D. 21 Mart’ta enlem = 90° − 51° = 39° K. Bu iki değerin kesiştiği yer Sivas çevresidir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "1° = 4 dakika; ekinokta enlem = 90° − ışın açısı. Konum haritada yaklaşık."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 39.5,
+      "lon": 37.2
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 37,
+      "lon": 35
+     },
+     {
+      "lat": 41,
+      "lon": 29
+     }
+    ]
+   }
+  }
+ ]
+}

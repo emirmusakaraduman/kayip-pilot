@@ -1,0 +1,183 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "nufus-02-yogunluk-kart",
+   "topic": "nufus-yerlesme",
+   "difficulty": 1,
+   "type": "cards",
+   "title": "Kaç Kişi Düşüyor?",
+   "radio": [
+    "Deniz: Muhtar ilçenin alanının 2.000 km², nüfusunun 100.000 olduğunu söyledi.",
+    "Deniz: Bir kilometrekareye kaç kişi düştüğünü merak ediyorum."
+   ],
+   "question": "Bu ilçenin nüfus yoğunluğu kaç kişi/km²’dir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "50 kişi/km²",
+      "text": "Nüfus ÷ alan"
+     },
+     {
+      "id": "b",
+      "title": "5 kişi/km²",
+      "text": "Nüfus ÷ 20.000",
+      "why": "100.000 ÷ 2.000 = 50 eder; 5 değeri bölmede bir sıfır eksik kalmasından çıkar."
+     },
+     {
+      "id": "c",
+      "title": "500 kişi/km²",
+      "text": "Nüfus ÷ 200",
+      "why": "500 değeri alanı 200 km² almakla bulunur; ilçenin alanı 2.000 km²."
+     },
+     {
+      "id": "d",
+      "title": "200.000 kişi/km²",
+      "text": "Nüfus × alan",
+      "why": "Nüfus yoğunluğu nüfusu alana bölerek bulunur; çarpmakla bulunmaz."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Nüfus yoğunluğu, nüfusun alana bölünmesiyle bulunur."
+    },
+    {
+     "from": "ayse",
+     "text": "100.000’i 2.000’e böl.",
+     "eliminate": [
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 50 kişi/km², pek kalabalık değil.",
+    "wrong": "Deniz: Sonuç tutmuyor, nüfus ile alanı doğru işleme sokmayı dene.",
+    "explain": "Nüfus yoğunluğu = nüfus ÷ alan. 100.000 ÷ 2.000 = 50 kişi/km² bulunur."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Nüfus yoğunluğu hesabı."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "nufus-03-toplu-yerlesme-kart",
+   "topic": "nufus-yerlesme",
+   "difficulty": 3,
+   "type": "cards",
+   "title": "Tek Çeşme",
+   "radio": [
+    "Deniz: Evler birbirine yapışık, tek merkezde toplanmış. Çevresi geniş ve düz bir ova.",
+    "Deniz: Köyün suyu tek bir kuyu ve çeşmeden geliyor. Ağaç yok, tarlalar köyün çevresine yayılmış."
+   ],
+   "question": "Köydeki yerleşmenin toplu olmasının başlıca nedeni nedir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Su kaynağının tek noktada olması",
+      "text": "Evler suya yakın kurulur"
+     },
+     {
+      "id": "b",
+      "title": "Bol yağış ve çok sayıda dere",
+      "text": "Her yerde su bulunur",
+      "why": "Su her yerde olursa evler dağılır; burada su tek bir noktada."
+     },
+     {
+      "id": "c",
+      "title": "Engebeli arazi",
+      "text": "Düzlük az",
+      "why": "Engebeli arazi yerleşmeyi dağıtır; burada geniş ve düz bir ova var."
+     },
+     {
+      "id": "d",
+      "title": "Geniş ormanlık alanlar",
+      "text": "Evler ormana yayılır",
+      "why": "Geniş ormanlar dağınık yerleşmeyi getirir; burada ağaç yok."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Su azsa evler ne yapar: suya yaklaşır mı, uzaklaşır mı?"
+    },
+    {
+     "from": "ayse",
+     "text": "Burada bol yağış, engebe ve orman anlatılmıyor.",
+     "eliminate": [
+      "b",
+      "c",
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Su tek yerde, evler de onun çevresinde.",
+    "wrong": "Deniz: Bu neden Deniz’in anlattıklarıyla uyuşmuyor, çevreye bir daha bak.",
+    "explain": "Suyun az olduğu ve tek noktada toplandığı düz ovalarda evler suya yakın kurulur; bu toplu yerleşmeyi doğurur. Bol su, engebe ve orman dağınık yerleşmeyi getirir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Toplu ve dağınık yerleşmeyi etkileyen faktörler."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,182 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "su-02-akarsu-rejimi-kart",
+   "topic": "su-kaynaklari",
+   "difficulty": 1,
+   "type": "cards",
+   "title": "İlkbaharda Kabaran Dere",
+   "radio": [
+    "Deniz: Yanımdaki akarsu ilkbaharda kabarıyor, yatağını dolduruyor. Yaz sonunda ise neredeyse kuruyacak.",
+    "Deniz: Yukarıdaki yamaçlarda kar erimeye başlamış."
+   ],
+   "question": "Bu akarsu en çok hangi kaynaktan beslenir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Kar erimesi",
+      "text": "İlkbaharda eriyen kar suyu"
+     },
+     {
+      "id": "b",
+      "title": "Yağmur",
+      "text": "Yağışlı mevsimde yağan yağmur",
+      "why": "Yağmurla beslenen akarsu en yağışlı mevsimde kabarır; burada kabarma kar erime zamanına denk geliyor."
+     },
+     {
+      "id": "c",
+      "title": "Buzul",
+      "text": "Yaz sıcağında eriyen buzul",
+      "why": "Buzulla beslenen akarsuyun suyu yazın en yüksektir; bu akarsu yazın azalıyor."
+     },
+     {
+      "id": "d",
+      "title": "Yer altı suyu",
+      "text": "Kaynak suları",
+      "why": "Yer altı suyuyla beslenen akarsuyun debisi çok az değişir; burada büyük dalgalanma var."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Akarsuyun ne zaman kabardığına bak; o dönemde hangi su kaynağı artar?"
+    },
+    {
+     "from": "ayse",
+     "text": "Su yıl içinde çok değişiyorsa yer altı suyu düşük ihtimaldir.",
+     "eliminate": [
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Kar suyuyla besleniyor, ilkbaharda en yüksek.",
+    "wrong": "Deniz: Kabarma zamanı bu kaynakla uyuşmuyor, tekrar bak.",
+    "explain": "İlkbaharda kabaran, yazın azalan akarsu kar erimesiyle beslenir. Buzul beslenmesinde en yüksek debi yazın, yağmur beslenmesinde yağışlı mevsimde görülür."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Akarsu rejimi: kar, buzul, yağmur, yer altı suyu beslenmesi."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "su-03-artezyen-kart",
+   "topic": "su-kaynaklari",
+   "difficulty": 3,
+   "type": "cards",
+   "title": "Fışkıran Kuyu",
+   "radio": [
+    "Deniz: Kuyuyu kazarken su pompa olmadan kendiliğinden yüzeye fışkırdı. Çevre, iki yamaç arasında çanak biçiminde bir ova.",
+    "Deniz: Yamaçlarda geçirimli kumtaşı, ovanın altında ise kil tabakası var. Yakında kayalıktan akan küçük bir pınar da görüyorum."
+   ],
+   "question": "Deniz’in açtığı kuyu hangi türdendir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Artezyen kuyusu",
+      "text": "Basınçlı yer altı suyu"
+     },
+     {
+      "id": "b",
+      "title": "Pınar",
+      "text": "Yamaçtan doğal çıkış",
+      "why": "Pınar suyu yamaçta doğal olarak çıkar; Deniz’in anlattığı şey kazılmış bir kuyu."
+     },
+     {
+      "id": "c",
+      "title": "Adi kuyu",
+      "text": "Pompa ya da kovayla çekilir",
+      "why": "Adi kuyuda su kendiliğinden fışkırmaz; burada su basınçla yüzeye çıkıyor."
+     },
+     {
+      "id": "d",
+      "title": "Karstik kaynak",
+      "text": "Kalkerli arazide çıkış",
+      "why": "Karstik kaynak kalkerli arazide görülür; burada kumtaşı ve kil var."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kendiliğinden fışkıran su basınç altındadır. Bu basınç nasıl oluşur?"
+    },
+    {
+     "from": "ayse",
+     "text": "Geçirimli tabaka iki geçirimsiz tabaka arasında çanak gibi kalırsa su sıkışır.",
+     "eliminate": [
+      "b",
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Basınçlı su, kuyudan fışkırıyor.",
+    "wrong": "Deniz: Suyun kendiliğinden fışkırmasının nedenini bir daha düşün.",
+    "explain": "Geçirimli bir tabaka, çanak biçiminde geçirimsiz tabakalar arasında kalırsa su basınç altında sıkışır. Kuyu açılınca su kendiliğinden fışkırır; buna artezyen kuyusu denir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Artezyen: geçirimli tabakanın geçirimsiz tabakalar arasında çanak biçimi."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  }
+ ]
+}

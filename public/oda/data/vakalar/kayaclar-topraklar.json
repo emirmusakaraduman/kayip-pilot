@@ -1,0 +1,185 @@
+{
+ "surum": 1,
+ "vakalar": [
+  {
+   "id": "kayac-01-kirmizi-toprak-pin",
+   "topic": "kayaclar-topraklar",
+   "difficulty": 1,
+   "type": "pin",
+   "title": "Kırmızı Toprak",
+   "radio": [
+    "Deniz: Elimdeki toprak parlak kırmızı, kalker kayaların arasında birikmiş. Çevrede kızılçam ormanı var.",
+    "Deniz: Yazlar çatlayacak kadar kuru geçiyor, kışın yağmur yağıyor."
+   ],
+   "question": "Bu toprak hangi iklim bölgesinde oluşmuştur? Haritadan seç.",
+   "board": {
+    "mapMode": "climate"
+   },
+   "answer": {
+    "mode": "zone",
+    "zone": "akdeniz"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kırmızı renkli, kalkerli arazide oluşan toprağa terra rossa denir."
+    },
+    {
+     "from": "ayse",
+     "text": "Yazın kurak, kışın yağışlı iklimin toprağıdır."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Akdeniz kıyısındayım, terra rossa burada oluşuyor.",
+    "wrong": "Deniz: Bu iklimde yaz kurak olmalı, tekrar düşün.",
+    "explain": "Kalkerli arazide, yazın kurak kışın yağışlı koşullarda kırmızı renkli terra rossa oluşur; Akdeniz iklim bölgesinin tipik toprağıdır."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Terra rossa (kırmızı Akdeniz toprağı)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 37.2,
+      "lon": 30.5,
+      "zone": "akdeniz"
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 39.9,
+      "lon": 32.8,
+      "zone": "karasal"
+     }
+    ]
+   }
+  },
+  {
+   "id": "kayac-02-tuz-jips-pin",
+   "topic": "kayaclar-topraklar",
+   "difficulty": 2,
+   "type": "pin",
+   "title": "Beyaz Kabuk",
+   "radio": [
+    "Deniz: Kuruyan bir gölün kıyısındayım. Zeminde beyaz, kristalimsi bir kabuk var; kayalar tabaka tabaka dizilmiş, bazıları kolayca tırnakla çiziliyor.",
+    "Deniz: Çevre bozkır, yağış çok az, gölün çevresi neredeyse çıplak."
+   ],
+   "question": "Bu kayaçlar nerede oluşuyor? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 38.75,
+    "lon": 33.4,
+    "radiusKm": 100
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Su buharlaşınca içindeki tuz ve jips çöker; bunlar kimyasal tortul kayaçlardır."
+    },
+    {
+     "from": "ayse",
+     "text": "Türkiye’nin iç kesiminde, kapalı havzada yer alan en büyük tuzlu gölü düşün."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Tuz Gölü çevresindeyim, kabuk tuzmuş.",
+    "wrong": "Deniz: Burada tuzlu, kapalı bir göl göremiyorum.",
+    "explain": "Kapalı havzada suyun buharlaşmasıyla tuz ve jips çöker; bunlar kimyasal tortul kayaçlardır. Tuz Gölü çevresi tipik örnektir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Tuz Gölü çevresinde tuz ve jips (kimyasal tortul kayaç)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 38.7,
+      "lon": 33.3
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 41,
+      "lon": 29
+     },
+     {
+      "lat": 37,
+      "lon": 35
+     }
+    ]
+   }
+  },
+  {
+   "id": "kayac-03-kara-toprak-pin",
+   "topic": "kayaclar-topraklar",
+   "difficulty": 3,
+   "type": "pin",
+   "title": "Simsiyah Toprak",
+   "radio": [
+    "Deniz: Toprak simsiyah, humusça çok zengin; elimde ufalanıyor. Yağış az, ağaç yok, geniş otlaklar uzanıyor.",
+    "Deniz: Kışlar çok uzun ve sert, yaylalarda kar aylarca kalıyor. Yazlar kısa ve serin geçiyor."
+   ],
+   "question": "Bu toprağın oluştuğu iklim bölgesini haritadan seç.",
+   "board": {
+    "mapMode": "climate"
+   },
+   "answer": {
+    "mode": "zone",
+    "zone": "sert"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Humusça zengin siyah toprak, soğuk ve kurak step koşullarında oluşur."
+    },
+    {
+     "from": "ayse",
+     "text": "Kışı çok uzun ve sert olan iklim bölgesi hangisi?"
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Sert karasal bölgedeyim, kara toprak burada.",
+    "wrong": "Deniz: Burada kışlar bu kadar sert olmamalı, tekrar düşün.",
+    "explain": "Çernozyom gibi siyah, humuslu topraklar soğuk ve yarı kurak step koşullarında oluşur. Kışı uzun ve sert olan sert karasal iklim bölgesine uyar."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Çernozyomun Türkiye’deki yayılışı (KD Anadolu, Kars–Ardahan platosu) ve hangi iklim sınıfına bağlandığı ders kitabıyla kontrol edilmeli."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 40,
+      "lon": 42,
+      "zone": "sert"
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 37.2,
+      "lon": 29.5,
+      "zone": "akdeniz"
+     },
+     {
+      "lat": 39.9,
+      "lon": 32.8,
+      "zone": "karasal"
+     }
+    ]
+   }
+  }
+ ]
+}
