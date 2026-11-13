@@ -104,7 +104,7 @@
   var DY = 1.06; // masa üst yüzeyi
 
   /* ---------- masa ---------- */
-  var deskMat = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.55, metalness: 0.05 });
+  var deskMat = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.8, metalness: 0.03 });
   deskMat.bumpMap = woodTex; deskMat.bumpScale = 1.1;
   var desk = mesh(new THREE.BoxGeometry(11.0, 0.12, 3.3), deskMat, 0.3, DY - 0.06, 0.5);
   desk.castShadow = true; desk.receiveShadow = true;
@@ -421,7 +421,7 @@
   scene.add(shade);
   var bulb = mesh(new THREE.SphereGeometry(0.09, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffe3b4, toneMapped: false, fog: false }), MAP_X, LAMP_Y + 0.02, MAP_Z);
   scene.add(bulb);
-  var spot = new THREE.SpotLight(0xffd29a, 0.55, 14, 0.62, 0.55, 1.2);
+  var spot = new THREE.SpotLight(0xffedd5, 0.55, 14, 0.62, 0.85, 1.2);
   spot.position.set(MAP_X, LAMP_Y, MAP_Z);
   spot.target.position.set(MAP_X, DY, MAP_Z);
   spot.castShadow = true;
@@ -583,16 +583,18 @@
   scene.add(nb);
   nb.add(mesh(new THREE.BoxGeometry(0.98, 0.045, 0.72), new THREE.MeshStandardMaterial({ color: 0x3b2417, roughness: 0.8 }), 0, 0.0225, 0));
   nb.add(mesh(new THREE.BoxGeometry(0.92, 0.03, 0.66), new THREE.MeshStandardMaterial({ color: 0xcfc29c, roughness: 0.9 }), 0.0, 0.06, 0));
-  var pageTex = makeTex(512, 384, function (g, w, h) {
+  var defterN = 0;
+  function drawPage(g, w, h) {
     g.fillStyle = '#d6c9a3'; g.fillRect(0, 0, w, h);
     g.strokeStyle = 'rgba(120,100,60,0.45)'; g.lineWidth = 1.5;
     for (var y = 90; y < h; y += 34) { g.beginPath(); g.moveTo(24, y); g.lineTo(w - 24, y); g.stroke(); }
     g.strokeStyle = 'rgba(160,60,50,0.5)'; g.beginPath(); g.moveTo(58, 0); g.lineTo(58, h); g.stroke();
     g.fillStyle = '#2b2214'; g.font = '700 34px "Barlow Condensed", sans-serif'; g.fillText('Deniz’in defteri', 74, 58);
-    g.font = '600 24px "IBM Plex Mono", monospace'; g.fillText('Sayfa 4 / 15', 74, 118);
+    g.font = '600 24px "IBM Plex Mono", monospace'; g.fillText('Sayfa ' + defterN + ' / 15', 74, 118);
     g.font = 'italic 26px cursive, "Brush Script MT", serif';
     g.fillText('yazlar kurak,', 74, 186); g.fillText('kışlar ılık ve yağışlı...', 74, 220);
-  });
+  }
+  var pageTex = makeTex(512, 384, drawPage);
   var pageTop = mesh(new THREE.PlaneGeometry(0.9, 0.64), new THREE.MeshStandardMaterial({ map: pageTex, roughness: 0.9 }), 0, 0.0755, 0);
   pageTop.rotation.x = -Math.PI / 2; nb.add(pageTop);
   var pen = mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.36, 10), new THREE.MeshStandardMaterial({ color: 0x15181a, roughness: 0.3, metalness: 0.6 }), 0.32, 0.1, 0.18);
@@ -997,8 +999,9 @@
       if (pr.userData.fl) scene.remove(pr.userData.fl);
       var ix = people.indexOf(pr); if (ix >= 0) people.splice(ix, 1);
     }
-    var fl2 = new THREE.PointLight(opt.light, 1.0, 2.8, 2);
-    fl2.position.set(opt.x, 1.6, opt.z + 0.9); scene.add(fl2);
+    // yüzlerine yalnızca dizüstü ekranından gelen zayıf, mavi bir ışık vurur
+    var fl2 = new THREE.PointLight(0x6fa8ff, 0.8, 2.4, 2);
+    fl2.position.set(opt.x, 1.7, opt.z + 0.75); scene.add(fl2);
 
     // canlandırma için kemikler
     var neck = bone('Neck'), nq = new THREE.Quaternion(), vx = new THREE.Vector3(1, 0, 0);
@@ -1057,8 +1060,8 @@
   }
 
   /* ---------- ışıklar ---------- */
-  scene.add(new THREE.AmbientLight(0x0d1417, 0.4));
-  var hemi = new THREE.HemisphereLight(0x3a5560, 0x120c08, 0.22);
+  scene.add(new THREE.AmbientLight(0x0d1417, 0.12));
+  var hemi = new THREE.HemisphereLight(0x3a5560, 0x120c08, 0.14);
   scene.add(hemi);
   var moon = new THREE.PointLight(0x6fa4bd, 0.4, 9, 2);
   moon.position.set(-3.0, 2.6, -3.0);
@@ -1284,9 +1287,68 @@
   scene.add(mesh(new THREE.CircleGeometry(0.34, 48), new THREE.MeshStandardMaterial({ map: clkTex, roughness: 0.6 }), 0.9, 3.4, -3.955));
   scene.add(mesh(new THREE.TorusGeometry(0.34, 0.025, 10, 48), new THREE.MeshStandardMaterial({ color: 0x3a2e1c, roughness: 0.4, metalness: 0.6 }), 0.9, 3.4, -3.95));
 
+  /* ---------- dağınıklık: raptiyeler, kâğıt topları, pusula ---------- */
+  var pins = [];
+  (function () {
+    var MD = window.MAP_DATA;
+    if (!MD || !MD.G) return;
+    function dec(bs) { var st = atob(bs), u = new Uint8Array(st.length); for (var q = 0; q < st.length; q++) u[q] = st.charCodeAt(q); return u; }
+    var gG = dec(MD.G), gH = dec(MD.HG), ZK = ['karasal', 'akdeniz', 'karadeniz', 'sert', 'karasal'];
+    var red = new THREE.MeshStandardMaterial({ color: 0xc4201a, roughness: 0.35, metalness: 0.1 });
+    var steel = new THREE.MeshStandardMaterial({ color: 0x9aa2a8, roughness: 0.3, metalness: 0.9 });
+    // Ankara, İstanbul, İzmir, Antalya, Erzurum, Trabzon (levha üzerinde yaklaşık konum)
+    [[0.378, 0.616], [0.194, 0.753], [0.108, 0.424], [0.276, 0.230], [0.775, 0.612], [0.702, 0.753]].forEach(function (p) {
+      var idx = Math.floor((1 - p[1]) * MD.GH) * MD.GW + Math.floor(p[0] * MD.GW);
+      var cv = gG[idx];
+      if (cv >= 5 || !zoneInfo[ZK[cv]]) return;
+      var g = new THREE.Group();
+      g.rotation.x = Math.PI / 2; g.scale.setScalar(1.8);
+      var h = gH[idx] / 255 * 0.30;
+      g.position.set((p[0] - 0.5) * MD.PW, (p[1] - 0.5) * MD.PH, h);
+      g.add(mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.07, 6), steel, 0, 0.035, 0));
+      g.add(mesh(new THREE.SphereGeometry(0.022, 14, 10), red, 0, 0.075, 0));
+      g.traverse(function (o) { if (o.isMesh) o.castShadow = true; });
+      mapG.add(g);
+      pins.push({ g: g, h: h, z: zoneInfo[ZK[cv]].meshes[0] });
+    });
+  })();
+
+  function paperBall(x, z, r, seed) {
+    var geo = new THREE.IcosahedronGeometry(r, 1), pos = geo.attributes.position;
+    for (var i = 0; i < pos.count; i++) {
+      var px = pos.getX(i), py = pos.getY(i), pz = pos.getZ(i);
+      var k = 1 + (hash2(Math.round(px * 1000), Math.round(py * 1000) + Math.round(pz * 977), seed) - 0.5) * 0.38;
+      pos.setXYZ(i, px * k, py * k, pz * k);
+    }
+    geo.computeVertexNormals();
+    var m = mesh(geo, new THREE.MeshStandardMaterial({ color: 0xd9d2bc, roughness: 0.95, flatShading: true }), x, DY + r * 0.85, z);
+    m.rotation.set(seed, seed * 2, 0); m.castShadow = true; m.receiveShadow = true;
+    scene.add(m);
+    contact(x, z, r * 4, r * 4, 0.45);
+  }
+  paperBall(1.4, 1.75, 0.055, 3); paperBall(1.63, 1.66, 0.045, 5); paperBall(-1.3, 1.62, 0.05, 8);
+
+  (function compass() {
+    var g = new THREE.Group(); g.position.set(0.85, DY, 1.55); g.rotation.y = 0.4;
+    var brass = new THREE.MeshStandardMaterial({ color: 0x9a7a3a, roughness: 0.35, metalness: 0.85 });
+    g.add(mesh(new THREE.CylinderGeometry(0.065, 0.068, 0.022, 32), brass, 0, 0.011, 0));
+    var face = makeTex(256, 256, function (c, w, h) {
+      c.fillStyle = '#e6dcc0'; c.beginPath(); c.arc(128, 128, 126, 0, 6.2832); c.fill();
+      c.strokeStyle = '#2a2218'; c.lineWidth = 3;
+      for (var i = 0; i < 36; i++) { var a = i * Math.PI / 18, l = i % 9 === 0 ? 30 : 14; c.beginPath(); c.moveTo(128 + Math.sin(a) * (120 - l), 128 - Math.cos(a) * (120 - l)); c.lineTo(128 + Math.sin(a) * 120, 128 - Math.cos(a) * 120); c.stroke(); }
+      c.fillStyle = '#2a2218'; c.font = '700 40px "Barlow Condensed", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('K', 128, 52);
+      c.fillStyle = '#b0261e'; c.beginPath(); c.moveTo(128, 70); c.lineTo(118, 128); c.lineTo(138, 128); c.fill();
+      c.fillStyle = '#d8d8d0'; c.beginPath(); c.moveTo(128, 186); c.lineTo(118, 128); c.lineTo(138, 128); c.fill();
+    });
+    var f = mesh(new THREE.CircleGeometry(0.058, 32), new THREE.MeshStandardMaterial({ map: face, roughness: 0.5 }), 0, 0.0225, 0);
+    f.rotation.x = -Math.PI / 2; g.add(f);
+    shadows(g); scene.add(g);
+    contact(0.85, 1.55, 0.2, 0.2, 0.5);
+  })();
+
   // karakterlerin arkasından soğuk kenar ışığı
   [[-0.9, 2.4, -3.7], [4.9, 2.4, -3.7]].forEach(function (pp) {
-    var rl = new THREE.PointLight(0x7fa8c8, 0.55, 3.5, 2);
+    var rl = new THREE.PointLight(0x7fa8c8, 0.3, 3.5, 2);
     rl.position.set(pp[0], pp[1], pp[2]); scene.add(rl);
   });
 
@@ -1314,7 +1376,7 @@
   }
   camBtns.forEach(function (b) { b.addEventListener('click', function () { setCam(b.getAttribute('data-cam')); }); });
 
-  var composer = null, composerOn = false, bloomPass = null, compFrames = 0;
+  var composer = null, composerOn = false, bloomPass = null, bokehPass = null, compFrames = 0;
   function onResize() {
     var w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
     renderer.setSize(w, h, false);
@@ -1374,6 +1436,23 @@
       rt.samples = 4;
       composer = new THREE.EffectComposer(renderer, rt);
       composer.addPass(new THREE.RenderPass(scene, camera));
+      if (THREE.BokehPass && window.location.search.indexOf('dof=0') < 0) {
+        // alan derinliği: odak masada; arkadaki karakterler ve pencere hafif flulaşır
+        bokehPass = new THREE.BokehPass(scene, camera, { focus: 6.5, aperture: 0.0035, maxblur: 0.007, width: w, height: h });
+        bokehPass.materialDepth.skinning = true; // kemikli karakterler derinlikte doğru pozda olsun
+        var bokehRender = bokehPass.render.bind(bokehPass), hidden = [];
+        bokehPass.render = function (r, wb, rb, d, m) {
+          // yarı saydam ışık hüzmeleri, parıltılar ve buhar derinlik haritasına girmesin
+          scene.traverse(function (o) {
+            var mt = o.material;
+            if (o.visible && mt && !Array.isArray(mt) && mt.transparent && mt.depthWrite === false) { o.visible = false; hidden.push(o); }
+          });
+          bokehRender(r, wb, rb, d, m);
+          for (var i = 0; i < hidden.length; i++) hidden[i].visible = true;
+          hidden.length = 0;
+        };
+        composer.addPass(bokehPass);
+      }
       bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(w, h), 0.45, 0.7, 1.05);
       composer.addPass(bloomPass);
       composer.addPass(new THREE.ShaderPass(FINAL_SHADER));
@@ -1478,6 +1557,11 @@
       if (dustu && !sessiz && !reduce) triggerFlash();
     },
     setJeton: function (n) { if (n !== jetonN) drawJeton(n); },
+    setDefter: function (n) {
+      if (n === defterN) return;
+      defterN = n;
+      var c = pageTex.image; drawPage(c.getContext('2d'), c.width, c.height); pageTex.needsUpdate = true;
+    },
     setSecili: function (arr) { var o = {}; (arr || []).forEach(function (k) { o[k] = true; }); state.secili = o; }
   };
 
@@ -1485,7 +1569,7 @@
   var clock = new THREE.Clock();
   var slowF = 0;
   var t = 0, scrAcc = 0, nextFlash = 5 + Math.random() * 5, flashPhase = 0;
-  var tmpOff = new THREE.Vector3(), sph = new THREE.Spherical();
+  var tmpOff = new THREE.Vector3(), sph = new THREE.Spherical(), tmpFocus = new THREE.Vector3();
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function frame() {
@@ -1525,6 +1609,13 @@
       zi.sprite.scale.set(sel ? 0.9 : 0.72, sel ? 0.225 : 0.18, 1);
       zi.sprite.position.y = DY + 0.04 + zi.depth * main.scale.z + 0.24 + (reduce ? 0 : Math.sin(t * 2 + zi.wx) * 0.012);
     });
+
+    // raptiyeler bölgeyle birlikte yükselir
+    pins.forEach(function (pn) { pn.g.position.z = pn.h * pn.z.scale.z; });
+    // odak noktası: bakılan yerin masa seviyesi
+    if (bokehPass) {
+      bokehPass.uniforms.focus.value = camera.position.distanceTo(tmpFocus.set(camLook.x, Math.min(camLook.y, 1.4), camLook.z));
+    }
 
     var nbTarget = state.hover === 'notebook' ? 0.3 : 0;
     pageTop.material.emissive.setHex(0xffc47a);
@@ -1579,7 +1670,7 @@
       if (flash < 0) flash = 0;
     }
     moon.intensity = 0.4 + flash * 6;
-    hemi.intensity = 0.22 + flash * 0.6;
+    hemi.intensity = 0.14 + flash * 0.6;
 
     // telsiz ekranı (≈20 fps)
     scrAcc += dt;

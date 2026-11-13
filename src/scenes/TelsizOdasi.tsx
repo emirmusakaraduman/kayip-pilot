@@ -10,6 +10,7 @@ interface OdaKopru {
   setText: (t: string, bitti: boolean) => void
   setPil: (p: number, sessiz?: boolean) => void
   setJeton: (n: number) => void
+  setDefter: (n: number) => void
   setSecili: (a: string[]) => void
 }
 
@@ -24,8 +25,9 @@ function enlemBoylam(u: number, v: number): [number, number] {
 }
 
 export function TelsizOdasi({
-  kamera, satir, bitti, pil, jeton, vurgu, onHarita, onDefter,
+  kamera, satir, bitti, pil, jeton, defter, vurgu, onHarita, onDefter,
 }: {
+  defter: number
   kamera: Kamera
   satir: string
   bitti: boolean
@@ -62,6 +64,7 @@ export function TelsizOdasi({
   useEffect(() => { kopru?.setText(satir, bitti) }, [kopru, satir, bitti])
   useEffect(() => { kopru?.setPil(pil) }, [kopru, pil])
   useEffect(() => { kopru?.setJeton(jeton) }, [kopru, jeton])
+  useEffect(() => { kopru?.setDefter(defter) }, [kopru, defter])
   useEffect(() => { kopru?.setSecili(vurgu.map((b) => OYUN_BOLGE[b])) }, [kopru, vurgu])
 
   return <iframe ref={frame} src="/oda/index.html" title="Telsiz odası" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />

@@ -97,6 +97,12 @@ export function OdaSahnesi() {
     setKamera('oda')
   }
 
+  // masadaki deftere tıklama: vaka seçerken menüyü aç/kapat, vaka sırasında defteri aç
+  const defterTikla = () => {
+    if (asama === 'sec') setVakaPaneli((x) => !x)
+    else setPanel('defter')
+  }
+
   const haritaTikla = (t: Tiklama) => {
     if (asama !== 'dinle' || !vaka) return
     if (vaka.cevap.tur === 'harita-bolge') setSecBolgeler((s) => (s.includes(t.bolge) ? s.filter((b) => b !== t.bolge) : [...s, t.bolge]))
@@ -163,21 +169,12 @@ export function OdaSahnesi() {
         jeton={oyun.jeton}
         vurgu={[...secBolgeler, ...aramaVurgu]}
         onHarita={haritaTikla}
-        onDefter={() => setPanel('defter')}
+        defter={oyun.defter.length}
+        onDefter={defterTikla}
       />
 
-      <div className="hud ust">
-        <span>🔋 %{oyun.pil}</span>
-        <span>🪙 {oyun.jeton}</span>
-        <span>📓 {oyun.defter.length}/15</span>
-        <button className="kucuk" onClick={oyun.sesDegistir}>{oyun.sesAcik ? '🔊' : '🔇'}</button>
-        <button className="kucuk" onClick={() => setPanel('defter')}>Defteri aç</button>
-        {asama === 'sec' && (
-          <button className={'kucuk' + (vakaPaneli ? ' secili' : '')} onClick={() => setVakaPaneli((x) => !x)}>Vakalar</button>
-        )}
-      </div>
-
       <div className="hud kameralar">
+        <button className="kucuk" onClick={oyun.sesDegistir} aria-label="Ses">{oyun.sesAcik ? '🔊' : '🔇'}</button>
         {(Object.keys(KAMERALAR) as Kamera[]).map((k) => (
           <button key={k} className={'kucuk' + (k === kamera ? ' secili' : '')} onClick={() => setKamera(k)}>
             {KAMERALAR[k].ad}
@@ -189,6 +186,8 @@ export function OdaSahnesi() {
         <VakaSecici
           onSec={(v) => { setVakaPaneli(false); setArama(null); setKisaSinema(v) }}
           onArama={() => { setVakaPaneli(false); setPanel('arama') }}
+          onDefter={() => { setVakaPaneli(false); setPanel('defter') }}
+          kapat={() => setVakaPaneli(false)}
         />
       )}
       {panel === 'arama' && <AramaGiris baslat={(i) => aramaBaslat(i)} kapat={() => setPanel(null)} />}
@@ -303,12 +302,13 @@ export function OdaSahnesi() {
   )
 }
 
-function VakaSecici({ onSec, onArama }: { onSec: (v: Vaka) => void; onArama: () => void }) {
+function VakaSecici({ onSec, onArama, onDefter, kapat }: { onSec: (v: Vaka) => void; onArama: () => void; onDefter: () => void; kapat: () => void }) {
   const biten = useOyun((s) => s.bitenVakalar)
   const ilerleme = useOyun((s) => s.aramaIlerleme)
   const zorluklar: Zorluk[] = ['kolay', 'orta', 'zor']
   return (
     <div className="hud panel sol">
+      <button className="kucuk kapat" onClick={kapat}>Kapat</button>
       <h3>Konu Modu</h3>
       <div className="konular">
         {KONULAR.map((k) => (
@@ -328,6 +328,7 @@ function VakaSecici({ onSec, onArama }: { onSec: (v: Vaka) => void; onArama: () 
         ))}
       </div>
       <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>
+      <button className="kucuk" onClick={onDefter}>Deniz'in defterini oku</button>
     </div>
   )
 }
