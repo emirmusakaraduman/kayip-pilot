@@ -209,6 +209,9 @@
   }
   function triggerFlash() { flash = 1; flashPhase = 1; makeBolt(); }
 
+  // oyun durumu: drawWindow ilk kez hemen aşağıda çağrılır, bu yüzden pencereden önce tanımlanmalı
+  var state = { pil: 100, secili: {}, hover: null, ilerleme: 0, iz: {}, parazit: 0 };
+
   function drawWindow() {
     cloudX += 2;
     var sky = wg.createLinearGradient(0, 0, 0, WH);
@@ -550,7 +553,6 @@
   sg.font = FONT;
   var CW = sg.measureText('M').width || 14.4;
   var typed = 0, holdT = 0, scrClock = 0;
-  var state = { pil: 100, secili: {}, hover: null, ilerleme: 0, iz: {}, parazit: 0 };
 
   // boştaki ekran: ilerledikçe sinyal çubukları dolar (Deniz'in konumu netleşir)
   function idleLines() {
