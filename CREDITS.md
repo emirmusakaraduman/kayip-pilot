@@ -19,6 +19,13 @@ Lisans bilgisi, yazar ve kaynak, dosyaların kendi `asset.extras` alanlarından 
 |---|---|---|
 | Harita yükseklikleri | AWS Open Data "Terrain Tiles" (terrarium, z=7), Mapzen/Tilezen birleşik veri; SRTM (NASA/USGS) dâhil | Atıf kaynağı: https://github.com/tilezen/joerd/blob/master/docs/attribution.md · Üretim: `scripts/yukseklik-uret.mjs` |
 
+## Yazı tipleri (SIL Open Font License)
+
+| Yazı tipi | Kullanım | Kaynak |
+|---|---|---|
+| Caveat | Defterin el yazısı | https://fonts.google.com/specimen/Caveat (Google Fonts üzerinden yüklenir; çevrimdışıysa sistem el yazısı yazı tipine düşer) |
+| Barlow Condensed | Telsiz plakası, harita etiketleri | https://fonts.google.com/specimen/Barlow+Condensed (aynı şekilde; yedek: Arial Narrow) |
+
 ## Kodla üretilenler (üçüncü taraf varlık yok)
 
 Odadaki tüm eşyalar (masa, telsiz, defter, kavanoz, kupa, saat, lamba, pencere, perde, harita), tüm sesler (Web Audio), sinematik ve ağaç/helikopter yer tutucuları kodla üretilmiştir.

@@ -7,9 +7,10 @@ import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
 import { KONULAR } from '../data/topics'
 import { VAKALAR } from '../data/cases'
 import { DEFTER } from '../data/defter'
-import { ARAMA_ASAMALARI, ARAMA_HIKAYE, ARAMA_VAKALARI } from '../data/buyukArama'
+import { DefterKitabi } from '../components/DefterKitabi'
+import { ARAMA_ASAMALARI, ARAMA_HIKAYE } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
-import type { KonuId, Vaka, Verilen, Zorluk } from '../game/types'
+import type { Vaka, Verilen, Zorluk } from '../game/types'
 import type { Tiklama } from './ReliefMap'
 import { Sinematik } from '../cinematic/Sinematik'
 
@@ -171,7 +172,7 @@ export function OdaSahnesi() {
         <span>🪙 {oyun.jeton}</span>
         <span>📓 {oyun.defter.length}/15</span>
         <button className="kucuk" onClick={oyun.sesDegistir}>{oyun.sesAcik ? '🔊' : '🔇'}</button>
-        <button className="kucuk" onClick={() => setPanel('defter')}>Defter</button>
+        <button className="kucuk" onClick={() => setPanel('defter')}>Defteri aç</button>
       </div>
 
       <div className="hud kameralar">
@@ -292,7 +293,7 @@ export function OdaSahnesi() {
         </div>
       )}
 
-      {panel === 'defter' && <Defter kapat={() => setPanel(null)} />}
+      {panel === 'defter' && <DefterKitabi kapat={() => setPanel(null)} />}
     </div>
   )
 }
@@ -322,47 +323,6 @@ function VakaSecici({ onSec, onArama }: { onSec: (v: Vaka) => void; onArama: () 
         ))}
       </div>
       <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>
-    </div>
-  )
-}
-
-function Defter({ kapat }: { kapat: () => void }) {
-  const { defter, yanlisDefteri } = useOyun()
-  const [secili, setSecili] = useState<KonuId | null>(defter[defter.length - 1] ?? null)
-  const sayfa = DEFTER.find((d) => d.konu === secili)
-  return (
-    <div className="hud panel orta">
-      <button className="kucuk kapat" onClick={kapat}>Kapat</button>
-      <h3>Deniz'in defteri ({defter.length}/15)</h3>
-      <div className="sayfalar">
-        {KONULAR.map((k) => {
-          const acik = defter.includes(k.id)
-          return (
-            <button
-              key={k.id}
-              disabled={!acik}
-              className={'sayfa' + (acik ? ' acik' : '') + (k.id === secili ? ' secili' : '')}
-              onClick={() => setSecili(k.id)}
-            >
-              {k.sayfa}. {acik ? k.ad : '???'}
-            </button>
-          )
-        })}
-      </div>
-      {sayfa ? (
-        <div className="defter-sayfa">
-          <h4>Sayfa {KONULAR.find((k) => k.id === sayfa.konu)?.sayfa}: {KONULAR.find((k) => k.id === sayfa.konu)?.ad}</h4>
-          {sayfa.metin.split('\n').map((satir, i) => <p key={i}>{satir}</p>)}
-        </div>
-      ) : (
-        <p>Bir konuyu bitirince Deniz'in defterine o konunun sayfası eklenir.</p>
-      )}
-      <h3>Yanlış defteri</h3>
-      {yanlisDefteri.length === 0 && <p>Henüz yanlış yok.</p>}
-      {yanlisDefteri.map((id) => {
-        const v = [...VAKALAR, ...ARAMA_VAKALARI].find((x) => x.id === id)
-        return v ? <p key={id}><b>{v.baslik}:</b> {v.aciklama}</p> : null
-      })}
     </div>
   )
 }

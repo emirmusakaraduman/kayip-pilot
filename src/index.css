@@ -47,3 +47,32 @@ button.sayfa.secili { outline: 2px solid #f0a020; }
 .hud.panel .kapat { align-self: flex-end; }
 .hud.pano { top: 56px; left: 10px; background: rgba(0,0,0,.65); padding: 8px 12px; border-radius: 8px; max-width: min(340px, 70vw); display: flex; flex-direction: column; gap: 3px; font-size: .85rem; color: #ffd27a; }
 .anlati { background: rgba(240,160,32,.2); border-left: 4px solid #f0a020; padding: 8px 12px; border-radius: 6px; }
+
+/* ── Defter: açık kitap ── */
+.kitap-arka { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.72); display: flex; align-items: center; justify-content: center; }
+.kitap-kutu { width: min(1000px, 96vw); display: flex; flex-direction: column; gap: 10px; }
+.kitap-ust, .kitap-alt { display: flex; justify-content: space-between; align-items: center; color: #e8dcc0; font-family: 'Caveat', 'Segoe Print', cursive; font-size: 1.4rem; }
+.kitap-sahne { perspective: 2000px; }
+.kitap { position: relative; padding: 18px; border-radius: 10px; background: #3a2218; box-shadow: 0 20px 60px rgba(0,0,0,.7), inset 0 0 0 2px #1f110b; }
+.kitap-kapak { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(90deg, #4a2c1e, #3a2218 50%, #4a2c1e); }
+.kitap-sayfalar { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: min(62vh, 560px); transform-style: preserve-3d; }
+.yarim { position: relative; background: #e8dfbf; overflow: hidden; }
+.yarim.sol { border-radius: 6px 0 0 6px; box-shadow: inset -26px 0 30px -18px rgba(60,40,20,.55); }
+.yarim.sag { border-radius: 0 6px 6px 0; box-shadow: inset 26px 0 30px -18px rgba(60,40,20,.55); }
+.yaprak { position: absolute; inset: 0; padding: 26px 34px 34px; color: #3b2f22; font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(110,90,60,.35) 35px, rgba(110,90,60,.35) 36px), #e8dfbf; background-position: 0 40px; overflow-x: hidden; overflow-y: auto; }
+.yaprak h4 { margin: 0 0 14px; font-size: 2rem; line-height: 36px; font-weight: 700; }
+.yaprak p { margin: 0; font-size: 1.45rem; line-height: 36px; }
+.yaprak p.bosluk { color: rgba(59,47,34,.5); font-style: italic; }
+.yaprak.bos { background: #e8dfbf; }
+.sayfa-no { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-size: 1.3rem; color: rgba(59,47,34,.6); }
+.cilt-golge { position: absolute; left: 50%; top: 0; bottom: 0; width: 40px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, rgba(40,25,10,.35), transparent); pointer-events: none; }
+.yaprak-donen { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; z-index: 5; }
+.yaprak-donen .yuz, .yaprak-donen .arka { position: absolute; inset: 0; backface-visibility: hidden; background: #e8dfbf; overflow: hidden; }
+.yaprak-donen .arka { transform: rotateY(180deg); }
+.yaprak-donen.ileri { left: 50%; transform-origin: left center; animation: cevirIleri .68s ease-in-out forwards; }
+.yaprak-donen.geri { left: 0; transform-origin: right center; animation: cevirGeri .68s ease-in-out forwards; }
+@keyframes cevirIleri { from { transform: rotateY(0deg); } to { transform: rotateY(-180deg); } }
+@keyframes cevirGeri { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
+.yanlis-liste { background: #e8dfbf; color: #3b2f22; border-radius: 8px; padding: 18px 24px; max-height: 62vh; overflow: auto; font-family: 'Caveat', cursive; font-size: 1.4rem; }
+.kitap-alt span { font-size: 1.5rem; }

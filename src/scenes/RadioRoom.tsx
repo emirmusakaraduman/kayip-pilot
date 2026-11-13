@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Environment, Lightformer, PerformanceMonitor, RoundedBox } from '@react-three/drei'
+import { Bloom, ChromaticAberration, EffectComposer, Noise, ToneMapping, Vignette } from '@react-three/postprocessing'
+import { BlendFunction, ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import { AssetModel } from '../components/AssetModel'
 import { DuvarHaritasi, ReliefMap, type Tiklama } from './ReliefMap'
@@ -795,6 +797,37 @@ function ArkaMasa({ x, varlik, ekranRenk, tahta }: { x: number; varlik: 'nuri' |
   )
 }
 
+/** Son işlem hata verirse (örn. WebGL kısıtı) bloomsuz düz render'a döner. */
+class EfektHatasi extends Component<{ kapat: () => void; children: ReactNode }, { hata: boolean }> {
+  state = { hata: false }
+  static getDerivedStateFromError() {
+    return { hata: true }
+  }
+  componentDidCatch(e: unknown) {
+    console.warn('[son işlem] kapatıldı, bloomsuz render kullanılıyor:', e)
+    this.props.kapat()
+  }
+  render() {
+    return this.state.hata ? null : this.props.children
+  }
+}
+
+/** Bloom (lamba halesi, harita ışıması), kromatik sapma, vinyet, film greni; ACES burada uygulanır. */
+function SonIslem({ kapat }: { kapat: () => void }) {
+  const sapma = useMemo(() => new THREE.Vector2(0.0012, 0.0009), [])
+  return (
+    <EfektHatasi kapat={kapat}>
+      <EffectComposer multisampling={0}>
+        <Bloom mipmapBlur intensity={0.85} luminanceThreshold={0.8} luminanceSmoothing={0.25} />
+        <ChromaticAberration offset={sapma} radialModulation modulationOffset={0.3} />
+        <Vignette eskil={false} offset={0.22} darkness={0.75} />
+        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.35} />
+        <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+      </EffectComposer>
+    </EfektHatasi>
+  )
+}
+
 export function RadioRoom({
   kamera,
   satir,
@@ -813,12 +846,15 @@ export function RadioRoom({
   onDefter: () => void
 }) {
   const { gl, setDpr } = useThree()
+  // son işlem: ?efekt=0 ile kapatılır; yavaşlama veya hatada kendiliğinden bloomsuz render'a düşer
+  const [efekt, setEfekt] = useState(() => new URLSearchParams(location.search).get('efekt') !== '0')
   const hemi = useRef<THREE.HemisphereLight>(null)
   const dolgu = useRef<THREE.AmbientLight>(null)
   useEffect(() => {
-    gl.toneMapping = THREE.ACESFilmicToneMapping
+    // efekt açıkken ACES, ToneMapping efektiyle uygulanır; kapalıyken oluşturucu uygular
+    gl.toneMapping = efekt ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping
     gl.toneMappingExposure = 1.15
-  }, [gl])
+  }, [gl, efekt])
   const masaDoku = useMemo(() => tahtaDoku('#4a3626', '#b89066', 3, 1, 7), [])
   const zeminDoku = useMemo(() => tahtaDoku('#2e231b', '#7d6248', 6, 5, 10), [])
   const arkaDoku = useMemo(() => tahtaDoku('#2a1f17', '#a58260', 1.2, 1, 5), [])
@@ -839,7 +875,7 @@ export function RadioRoom({
     <>
       <color attach="background" args={['#030407']} />
       <fog attach="fog" args={['#030407', 12, 28]} />
-      <PerformanceMonitor onChange={({ factor }) => setDpr(Math.min(1.75, Math.max(0.8, 0.8 + factor * 0.95)))} />
+      <PerformanceMonitor onChange={({ factor }) => setDpr(Math.min(1.75, Math.max(0.8, 0.8 + factor * 0.95)))} onFallback={() => setEfekt(false)} />
       <KameraKurgusu kamera={kamera} />
 
       {/* ışık: lamba ana, ortam çok düşük; ortam yansıması ≤ 0,45 */}
@@ -918,6 +954,7 @@ export function RadioRoom({
       <Pencere x={-2.9} y={2.55} />
 
       <Toz />
+      {efekt && <SonIslem kapat={() => setEfekt(false)} />}
     </>
   )
 }
