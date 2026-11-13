@@ -7,3 +7,28 @@ html, body, #root { margin: 0; height: 100%; background: #0b1016; color: #e8eef5
 h1 { letter-spacing: .15em; margin: 0; }
 button { padding: 12px 28px; font-size: 1.1rem; border: 0; border-radius: 8px; background: #f0a020; color: #111; cursor: pointer; }
 small { opacity: .7; }
+.oda { position: relative; height: 100%; overflow: hidden; }
+.oda canvas { position: absolute; inset: 0; }
+.hud { position: absolute; z-index: 2; font-size: .95rem; }
+.hud.ust { top: 10px; left: 10px; display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,.55); padding: 6px 12px; border-radius: 8px; }
+.hud.kameralar { top: 10px; right: 10px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+button.kucuk { padding: 5px 10px; font-size: .85rem; background: #2c3a4a; color: #e8eef5; }
+button.kucuk.secili { background: #f0a020; color: #111; }
+button:disabled { opacity: .4; cursor: default; }
+.hud.panel { background: rgba(8,12,18,.88); padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 75vh; overflow: auto; }
+.hud.panel.sol { top: 60px; left: 10px; width: min(380px, 92vw); }
+.hud.panel.orta { top: 8vh; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); }
+.konu { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.konu button { margin-left: 4px; }
+.sayfalar { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
+.sayfa { padding: 8px; background: #1b222b; border-radius: 6px; opacity: .5; }
+.sayfa.acik { opacity: 1; background: #3a3220; }
+.hud.alt { left: 50%; transform: translateX(-50%); bottom: 12px; width: min(760px, 96vw); display: flex; flex-direction: column; gap: 8px; }
+.altyazi, .soru, .mesaj, .ipucu { background: rgba(0,0,0,.78); padding: 10px 14px; border-radius: 8px; }
+.altyazi { color: #7dffa0; font-family: monospace; font-size: 1.05rem; min-height: 1.4em; }
+.ipucu { color: #ffd27a; }
+.mesaj.dogru { border-left: 4px solid #4caf50; } .mesaj.yanlis { border-left: 4px solid #e55; }
+.kartlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.kartlar button { background: #24415e; color: #fff; }
+.satir { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+input { padding: 8px; border-radius: 6px; border: 0; width: 110px; }

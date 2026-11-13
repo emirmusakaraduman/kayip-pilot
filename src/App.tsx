@@ -3,9 +3,8 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { AssetModel } from './components/AssetModel'
 import { atifSatiri } from './assets/registry'
-import { KONULAR } from './data/topics'
-import { VAKALAR } from './data/cases'
-import { useOyun } from './game/store'
+import { OdaSahnesi } from './scenes/OdaSahnesi'
+import { sesBaslat } from './game/audio'
 
 function Baslik({ basla }: { basla: () => void }) {
   const atif = atifSatiri()
@@ -37,13 +36,6 @@ function Baslik({ basla }: { basla: () => void }) {
 
 export default function App() {
   const [basladi, setBasladi] = useState(false)
-  const { pil, jeton, defter } = useOyun()
-  if (!basladi) return <Baslik basla={() => setBasladi(true)} />
-  return (
-    <div className="kutu">
-      <h2>Telsiz odası (yapım aşamasında)</h2>
-      <p>Pil %{pil} · Jeton {jeton} · Defter {defter.length}/15</p>
-      <p>{KONULAR.length} konu, {VAKALAR.length}/45 vaka yüklü.</p>
-    </div>
-  )
+  if (!basladi) return <Baslik basla={() => { sesBaslat(); setBasladi(true) }} />
+  return <OdaSahnesi />
 }
