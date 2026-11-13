@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGLTF } from '@react-three/drei'
 import { OdaSahnesi } from './scenes/OdaSahnesi'
 import { odaGecisSesi, sesBaslat } from './game/audio'
 import { Sinematik } from './cinematic/Sinematik'
@@ -6,7 +7,23 @@ import { ModelTest } from './dev/ModelTest'
 import { AnaEkran, type Acilis } from './components/AnaEkran'
 import { useOyun } from './game/store'
 
-type Sahne = 'baslik' | 'giris' | 'izle' | 'oda'
+// Sinematikteki modeller ilk kullanımdan önce indirilip çözülsün (ilk geçişteki takılmayı azaltır)
+for (const k of ['helikopter', 'nuri', 'ayse']) useGLTF.preload(`/models/${k}.glb`)
+
+/** Ana ekranda gizli, görünmez bir oda iframe'i: odanın betikleri, verisi ve shader'ları önceden ısınır. */
+function OdaIsitma() {
+  return (
+    <iframe
+      src="/oda/index.html?kp=bridge&warm=1"
+      title=""
+      aria-hidden
+      tabIndex={-1}
+      style={{ position: 'absolute', left: 0, top: 0, width: 960, height: 540, opacity: 0, pointerEvents: 'none', border: 0 }}
+    />
+  )
+}
+
+type Sahne ='baslik' | 'giris' | 'izle' | 'oda'
 
 export default function App() {
   const [sahne, setSahne] = useState<Sahne>('baslik')
@@ -24,17 +41,20 @@ export default function App() {
 
   if (sahne === 'baslik')
     return (
-      <AnaEkran
-        basla={(a) => {
-          sesBaslat()
-          setAcilis(a)
-          setSahne(girisIzlendi ? 'oda' : 'giris')
-        }}
-        izle={() => {
-          sesBaslat()
-          setSahne('izle')
-        }}
-      />
+      <>
+        <AnaEkran
+          basla={(a) => {
+            sesBaslat()
+            setAcilis(a)
+            setSahne(girisIzlendi ? 'oda' : 'giris')
+          }}
+          izle={() => {
+            sesBaslat()
+            setSahne('izle')
+          }}
+        />
+        <OdaIsitma />
+      </>
     )
   if (sahne === 'giris' || sahne === 'izle')
     return (

@@ -1432,6 +1432,7 @@
   }
   camBtns.forEach(function (b) { b.addEventListener('click', function () { setCam(b.getAttribute('data-cam')); }); });
 
+  var ssaoP = null, ssaoLast = new THREE.Vector3(), ssaoSlow = 0;
   var composer = null, composerOn = false, bloomPass = null, bokehPass = null, compFrames = 0;
   function onResize() {
     var w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
@@ -1492,9 +1493,10 @@
       rt.samples = 4;
       composer = new THREE.EffectComposer(renderer, rt);
       composer.addPass(new THREE.RenderPass(scene, camera));
-      if (THREE.SSAOPass && window.location.search.indexOf('ssao=0') < 0) {
+      if (THREE.SSAOPass && window.location.search.indexOf('ssao=1') >= 0) {
         // temas gölgesi: dolap çekmeceleri, masa üstü eşyaları, köşeler
         var ssaoPass = new THREE.SSAOPass(scene, camera, w, h);
+        ssaoP = ssaoPass;
         ssaoPass.kernelRadius = 0.25; ssaoPass.minDistance = 0.002; ssaoPass.maxDistance = 0.08;
         ssaoPass.normalMaterial.skinning = true;
         var ssaoRender = ssaoPass.render.bind(ssaoPass), ssaoHidden = [];
@@ -1838,8 +1840,12 @@
   var tmpOff = new THREE.Vector3(), sph = new THREE.Spherical(), tmpFocus = new THREE.Vector3();
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ?warm=1: ana ekranda gizlice ısınma yüklemesi. Betikler/veriler önbelleğe girer, shader'lar derlenir;
+  // ilk ~40 kareden sonra çizim durur (GPU/CPU harcamasın).
+  var WARM = window.location.search.indexOf('warm=1') >= 0, warmN = 0;
   function frame() {
     requestAnimationFrame(frame);
+    if (WARM && ++warmN > 40) return;
     var dt = Math.min(clock.getDelta(), 0.05);
     t += dt;
     if (dt > 0.042) slowF++; else slowF = Math.max(0, slowF - 1);
@@ -1857,6 +1863,16 @@
     camera.position.copy(camLook).add(tmpOff);
     if (!reduce && !drag) { camera.position.x += Math.sin(t * 0.45) * 0.006; camera.position.y += Math.sin(t * 0.31) * 0.004; }
     camera.lookAt(camLook);
+
+    // SSAO ekstra bir tam sahne geçişi: kamera sahneden sahneye giderken kapat (takılmayı önler),
+    // durunca aç. Kasma sürerse kalıcı kapat.
+    if (ssaoP) {
+      var moving = camera.position.distanceToSquared(ssaoLast) > 1e-7;
+      ssaoLast.copy(camera.position);
+      if (dt > 0.042) ssaoSlow++; else ssaoSlow = Math.max(0, ssaoSlow - 1);
+      if (ssaoSlow > 90) { ssaoP.enabled = false; ssaoP = null; }
+      else ssaoP.enabled = !moving;
+    }
 
     // bölgeler
     Object.keys(zoneInfo).forEach(function (k) {
