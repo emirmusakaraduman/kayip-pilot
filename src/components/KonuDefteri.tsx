@@ -38,12 +38,12 @@ export function KonuDefteri({ onSec, onArama }: { onSec: (v: Vaka) => void; onAr
   }, [kapat])
 
   const vakalarOf = (konu: string) => ZORLUKLAR.map((z) => VAKALAR.find((v) => v.konu === konu && v.zorluk === z.id))
-  // Ana ekrandaki defterle aynı ilerleme kuralı: tamam · aktif (ilk bitmemiş) · açık (daha önceki) · kilitli (aktiften sonra)
+  // Ana ekrandaki defterle aynı kural: tamam · aktif (ilk bitmemiş, önerilen) · açık (diğerleri). Kilit yok: öğrenci istediği konuya girer.
   const durumlar = useMemo(() => {
     const tamam = KONULAR.map((k) => vakalarOf(k.id).every((v) => !v || biten.includes(v.id)))
     let aktif = tamam.findIndex((t) => !t)
     if (aktif < 0) aktif = KONULAR.length - 1
-    return KONULAR.map((_k, i) => (tamam[i] ? 'tamam' : i === aktif ? 'aktif' : i < aktif ? 'acik' : 'kilitli'))
+    return KONULAR.map((_k, i) => (tamam[i] ? 'tamam' : i === aktif ? 'aktif' : 'acik'))
   }, [biten])
   const konu = KONULAR.find((k) => k.id === seciliKonu) ?? KONULAR[0]
   const vakalar = vakalarOf(konu.id)
@@ -58,19 +58,16 @@ export function KonuDefteri({ onSec, onArama }: { onSec: (v: Vaka) => void; onAr
           <ul>
             {KONULAR.map((k, i) => {
               const d = durumlar[i]
-              const kilitli = d === 'kilitli'
               const bitti = d === 'tamam'
               return (
                 <li key={k.id}>
                   <button
-                    className={'kd-konu' + (k.id === konu.id ? ' kd-sec' : '') + (bitti ? ' kd-bitti' : '') + (kilitli ? ' kd-kilit-satir' : '')}
-                    disabled={kilitli}
+                    className={'kd-konu' + (k.id === konu.id ? ' kd-sec' : '') + (bitti ? ' kd-bitti' : '')}
                     aria-current={k.id === konu.id}
                     onClick={() => konuSec(k.id)}
                   >
                     <span className="kd-no">{i + 1}.</span>
                     <span className="kd-ad">{k.ad}</span>
-                    {kilitli && <Kilit />}
                   </button>
                 </li>
               )
@@ -88,8 +85,7 @@ export function KonuDefteri({ onSec, onArama }: { onSec: (v: Vaka) => void; onAr
             {ZORLUKLAR.map((z, i) => {
               const v = vakalar[i]
               const cozuldu = !!v && biten.includes(v.id)
-              const onceki = i === 0 ? true : !vakalar[i - 1] || biten.includes(vakalar[i - 1]!.id)
-              const kilitli = !v || durumlar[KONULAR.indexOf(konu)] === 'kilitli' || !onceki
+              const kilitli = !v // yalnızca vakası yazılmamış kâğıt kapalı kalır; zorluk sırası kilidi yok
               return (
                 <button
                   key={z.id}

@@ -52,12 +52,12 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
   const olcek = useOlcek()
   const { jeton, defter, bitenVakalar, aramaIlerleme } = useOyun()
 
-  // konu durumu: tamam (vakaların hepsi bitti) · aktif (ilk bitmemiş) · acik (daha önceki, bitmemiş) · kilitli (aktiften sonra)
+  // konu durumu: tamam (vakaların hepsi bitti) · aktif (ilk bitmemiş, önerilen) · acik (diğerleri). Kilit yok: öğrenci istediği konuya girer.
   const durumlar = useMemo(() => {
     const tamam = KONULAR.map((k) => ZORLUKLAR.every(({ z }) => { const v = VAKALAR.find((x) => x.konu === k.id && x.zorluk === z); return !v || bitenVakalar.includes(v.id) }))
     let aktif = tamam.findIndex((t) => !t)
     if (aktif < 0) aktif = KONULAR.length - 1
-    return KONULAR.map((_k, i) => (tamam[i] ? 'tamam' : i === aktif ? 'aktif' : i < aktif ? 'acik' : 'kilitli') as 'tamam' | 'aktif' | 'acik' | 'kilitli')
+    return KONULAR.map((_k, i) => (tamam[i] ? 'tamam' : i === aktif ? 'aktif' : 'acik') as 'tamam' | 'aktif' | 'acik')
   }, [bitenVakalar])
   const aktifIdx = Math.max(0, durumlar.indexOf('aktif'))
   const [secili, setSecili] = useState<number | null>(null)
@@ -74,8 +74,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
   const kartlar = ZORLUKLAR.map(({ z, ad }, i) => {
     const vaka = VAKALAR.find((v) => v.konu === konu.id && v.zorluk === z)
     const biten = !!vaka && bitenVakalar.includes(vaka.id)
-    const onceki = i === 0 ? true : (() => { const p = VAKALAR.find((v) => v.konu === konu.id && v.zorluk === ZORLUKLAR[i - 1].z); return !p || bitenVakalar.includes(p.id) })()
-    const kilitli = !vaka || durumlar[idx] === 'kilitli' || !onceki
+    const kilitli = !vaka // yalnızca vakası hiç yazılmamış kart kapalı kalır; zorluk sırası kilidi yok
     return { z, ad, vaka, biten, kilitli, no: i + 1 }
   })
   // "Göreve başla": seçili konunun sıradaki oynanabilir vakası
@@ -117,11 +116,10 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
             const d = durumlar[i]
             return (
               <li key={k.id}>
-                <button className={'ae-konu ' + d + (i === idx ? ' sec' : '')} disabled={d === 'kilitli'} onClick={() => setSecili(i)} aria-current={i === idx}>
+                <button className={'ae-konu ' + d + (i === idx ? ' sec' : '')} onClick={() => setSecili(i)} aria-current={i === idx}>
                   <span className="ae-ad">{pad(k.sayfa)}. {k.ad}</span>
                   {d === 'tamam' && <Tik />}
                   {d === 'aktif' && <em className="ae-damga">AKTİF</em>}
-                  {d === 'kilitli' && <Kilit />}
                 </button>
               </li>
             )
