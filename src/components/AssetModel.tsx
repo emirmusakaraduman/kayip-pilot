@@ -81,14 +81,14 @@ export class YukleHatasi extends Component<{ yedek: ReactNode; children: ReactNo
 }
 
 /** Varlık kimliğiyle çağrılır: GLB varsa onu, yoksa yer tutucuyu gösterir. */
-export function AssetModel({ varlik, oturan = false, ...props }: { varlik: AssetId; oturan?: boolean } & React.ComponentProps<'group'>) {
+export function AssetModel({ varlik, oturan = false, yuklenirkenBos = false, ...props }: { varlik: AssetId; oturan?: boolean; yuklenirkenBos?: boolean } & React.ComponentProps<'group'>) {
   const slot: AssetSlot = ASSETS[varlik]
   const placeholder = <Placeholder kind={slot.placeholder} />
   return (
     <group {...props}>
       {yuklenebilirMi(slot) ? (
         <YukleHatasi yedek={placeholder}>
-          <Suspense fallback={placeholder}>
+          <Suspense fallback={yuklenirkenBos ? null : placeholder}>
             <GlbModel slot={slot} oturan={oturan} />
           </Suspense>
         </YukleHatasi>

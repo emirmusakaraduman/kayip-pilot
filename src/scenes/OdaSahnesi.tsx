@@ -52,11 +52,10 @@ function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
 
 type Asama = 'sec' | 'dinle' | 'sonuc'
 
-export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acilis; anaEkran?: () => void; giris?: boolean }) {
+export function OdaSahnesi({ acilis, anaEkran, giris = false, onSahneHazir }: { acilis?: Acilis; anaEkran?: () => void; giris?: boolean; onSahneHazir?: () => void }) {
   const oyun = useOyun()
   // Sinematikten gelindiyse masadaki telsizin yakın planıyla başlar, karartma açılırken odaya doğru açılır.
-  const [kamera, setKamera] = useState<Kamera>(giris ? 'telsiz' : 'oda')
-  const girisRef = useRef(giris)
+  const [kamera, setKamera] = useState<Kamera>('oda')
   const [vaka, setVaka] = useState<Vaka | null>(null)
   const [asama, setAsama] = useState<Asama>('sec')
   const [pilBas, setPilBas] = useState(100)
@@ -217,8 +216,8 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
   return (
     <div className="oda">
       <TelsizOdasi
-        baslangicKamera={giris ? 'telsiz' : undefined}
-        onHazir={() => { if (girisRef.current) { girisRef.current = false; setTimeout(() => setKamera('oda'), 1100) } }}
+        baslangicKamera={giris ? 'oda' : undefined} // sinematikten sonra doğrudan karakterlerin göründüğü oda planı
+        onHazir={() => onSahneHazir?.()}
         kamera={kamera}
         satir={metin}
         bitti={bitti}

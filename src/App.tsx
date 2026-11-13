@@ -29,6 +29,7 @@ type Sahne ='baslik' | 'giris' | 'izle' | 'oda'
 
 export default function App() {
   const [sahne, setSahne] = useState<Sahne>('baslik')
+  const [odaHazir, setOdaHazir] = useState(false) // oda ve karakterler yerleşti: geçiş karartması ancak şimdi açılır
   const [gecis, setGecis] = useState(false) // sinematikten odaya yumuşak geçiş
   const [acilis, setAcilis] = useState<Acilis>({}) // ana ekrandan seçilen vaka / Büyük Arama
   const girisIzlendi = useOyun((s) => s.girisIzlendi)
@@ -80,8 +81,8 @@ export default function App() {
     )
   return (
     <>
-      <OdaSahnesi giris={gecis} acilis={acilis} anaEkran={() => setSahne('baslik')} />
-      {gecis && <div className="oda-gecis" onAnimationEnd={() => setGecis(false)} />}
+      <OdaSahnesi giris={gecis} acilis={acilis} anaEkran={() => { setOdaHazir(false); setSahne('baslik') }} onSahneHazir={() => setOdaHazir(true)} />
+      {gecis && <div className={'oda-gecis' + (odaHazir ? ' ac' : '')} onAnimationEnd={() => { setGecis(false); setOdaHazir(false) }} />}
     </>
   )
 }

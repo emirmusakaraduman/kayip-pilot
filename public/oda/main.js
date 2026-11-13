@@ -1087,6 +1087,7 @@
     av.headBase = av.head.quaternion.clone();
     av.handBase = av.hands.map(function (h) { return h.quaternion.clone(); });
     avatars.push(av);
+    window.ODA_AVATAR_N = avatars.length; // React tarafı karakterler yerleşene kadar geçiş karartmasını tutar
 
     var cr = document.getElementById('credit');
     // model atfı ekranda gösterilmiyor (sunumda ve proje açıklamasında yer alır)

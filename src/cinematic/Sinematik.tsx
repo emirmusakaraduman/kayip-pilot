@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, Lightformer } from '@react-three/drei'
+import { Environment, Lightformer, useProgress } from '@react-three/drei'
 import { Bloom, EffectComposer, SSAO, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
@@ -57,8 +57,10 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
   const qs = useMemo(() => new THREE.Quaternion(), [])
   const gunes = useRef<THREE.DirectionalLight>(null)
   const ses = useRef<SinematikSes | null>(null)
+  const yukleniyor = useProgress((s) => s.active)
+  const bekleBasla = useRef(performance.now())
   const bitti = useRef(false)
-  const once = useRef({ poz: new THREE.Vector3(), t: baslangic, agacPatladi: false, tozPatladi: false, kirilma: 0, altyazi: '', kelime: 0 })
+  const once = useRef({ poz: new THREE.Vector3(), t: baslangic, agacPatladi: false, tozPatladi: false, kirilma: 0, altyazi: '', kelime: 0, isinma: 0 })
   const v = useMemo(() => new THREE.Vector3(), [])
   const biriken = useRef({ alev: 0, duman: 0, toz: 0, kivilcim: 0 })
   const orman = useMemo(() => ormanUret(ayar), [ayar])
@@ -89,6 +91,15 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
   }, [havuzlar])
 
   useFrame((_, dtHam) => {
+    // Modeller indirilip çözülene ve ilk kareler (shader derlemesi) çizilene kadar zaman akmaz, ekran siyah kalır:
+    // yer tutucu bloklar ve eksik model görünmez, sahne hazır başlar.
+    if (yukleniyor && performance.now() - bekleBasla.current < 6000) once.current.isinma = 0 // en çok 6 sn beklenir; yükleme takılırsa sinematik yine de başlar
+    else if (once.current.isinma < 24) once.current.isinma++
+    if (once.current.isinma < 24) {
+      if (kaplama.current) kaplama.current.style.background = '#000'
+      return
+    }
+
     const dt = Math.min(dtHam, 0.05)
     const hiz = import.meta.env.DEV && new URLSearchParams(location.search).has('dondur') ? 0 : kisa ? KISA.hiz : 1 // ?dondur: geliştirmede kareyi dondurur
     const t = (tRef.current += dt * hiz)
@@ -393,9 +404,9 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
       )}
 
       <group ref={heliRef}>
-        <AssetModel varlik="helikopter" />
+        <AssetModel varlik="helikopter" yuklenirkenBos />
         <group ref={deniz} position={DENIZ_KOLTUK}>
-          <AssetModel varlik="deniz" scale={DENIZ_OLCEK} />
+          <AssetModel varlik="deniz" scale={DENIZ_OLCEK} yuklenirkenBos />
         </group>
         <group ref={rotorRef} position={[0, 1, 0]}>
           <mesh castShadow>

@@ -80,9 +80,13 @@ export function TelsizOdasi({
 
   // sahne betikleri yüklenince window.ODA belirir
   useEffect(() => {
+    const basla = Date.now()
     const id = setInterval(() => {
-      const k = (frame.current?.contentWindow as (Window & { ODA?: OdaKopru }) | null)?.ODA
+      const w = frame.current?.contentWindow as (Window & { ODA?: OdaKopru; AVATAR_DATA?: unknown; ODA_AVATAR_N?: number }) | null
+      const k = w?.ODA
       if (!k) return
+      // Karakterler (Nuran, Fatma) asenkron kurulur; yerleşmeden "hazır" deme (en geç 10 sn beklenir)
+      if (w.AVATAR_DATA && (w.ODA_AVATAR_N ?? 0) < 2 && Date.now() - basla < 10000) return
       clearInterval(id)
       k.onHarita = (b, u, v) => {
         const bolge = SAHNE_BOLGE[b]
@@ -104,7 +108,7 @@ export function TelsizOdasi({
       k.onArama = () => cb.current.onArama?.()
       if (cb.current.baslangicKamera) k.snapCam(cb.current.baslangicKamera)
       setKopru(k)
-      cb.current.onHazir?.()
+      setTimeout(() => cb.current.onHazir?.(), 250) // ilk karelerde shader derlemesi bitsin
     }, 100)
     return () => clearInterval(id)
   }, [])
