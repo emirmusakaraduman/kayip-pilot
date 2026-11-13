@@ -170,8 +170,8 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
     }
   }
 
-  const ipucuIste = (kim: 'Nuri' | 'Ayşe') => {
-    const t = kim === 'Nuri' ? vaka?.ipucuNuri : vaka?.ipucuAyse
+  const ipucuIste = (kim: 'Nuran' | 'Fatma') => {
+    const t = kim === 'Nuran' ? vaka?.ipucuNuri : vaka?.ipucuAyse
     if (!t || !oyun.ipucuAl()) return
     setIpuclari((x) => [...x, `${kim}: ${t}`])
   }
@@ -317,8 +317,8 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
                 </div>
               )}
               <div className="satir">
-                {vaka.ipucuNuri && <button className="kucuk" onClick={() => ipucuIste('Nuri')}>Nuri'ye sor ({JETON.ipucu} jeton)</button>}
-                {vaka.ipucuAyse && <button className="kucuk" onClick={() => ipucuIste('Ayşe')}>Ayşe'ye sor ({JETON.ipucu} jeton)</button>}
+                {vaka.ipucuNuri && <button className="kucuk" onClick={() => ipucuIste('Nuran')}>Nuran'a sor ({JETON.ipucu} jeton)</button>}
+                {vaka.ipucuAyse && <button className="kucuk" onClick={() => ipucuIste('Fatma')}>Fatma'ya sor ({JETON.ipucu} jeton)</button>}
               </div>
             </div>
           )}

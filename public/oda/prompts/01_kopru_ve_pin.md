@@ -13,7 +13,7 @@ Kabul ölçütleri (tarayıcıda dene ve tek tek işaretleyerek raporla):
 - [ ] Haritada bir bölgeye dokununca panelde koordinat yazıyor, iğne görünüyor, Gönder açılıyor.
 - [ ] Doğru bölgede: "+N jeton", Sonraki vaka düğmesi çıkıyor.
 - [ ] Yanlışta: pil %5 düşüyor, telsiz pil göstergesi ve ekran paraziti güncelleniyor, `feedback.wrong` görünüyor.
-- [ ] İpucu düğmesi 1 jeton düşürüyor, ipucu metni Nuri/Ayşe adıyla çıkıyor.
+- [ ] İpucu düğmesi 1 jeton düşürüyor, ipucu metni Nuran/Fatma adıyla çıkıyor.
 - [ ] Sayfa yenilenince pil ve jeton korunuyor.
 - [ ] `node tests/run.js` yeşil.
 

@@ -25,7 +25,7 @@ const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies(
 await mkdir('public/models', { recursive: true })
 
 /**
- * Nuri iskeletsiz tek parça bir ağdır ve T-pozda durur. Kolları omuz ekleminde aşağı döndürerek (A-poz) oturur hâle uygun hale getirir.
+ * Nuran iskeletsiz tek parça bir ağdır ve T-pozda durur. Kolları omuz ekleminde aşağı döndürerek (A-poz) oturur hâle uygun hale getirir.
  * Ölçüler (dünya uzayı, boy ≈ 1,0): kollar y≈0,10–0,25 ve |z|>0,13; omuz ekleminde y=0,20, |z|=0,15.
  * Dönüş |z|'ye bağlı yumuşak ağırlıkla uygulanır; omuza yakın köşeler daha az döner.
  */

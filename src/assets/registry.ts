@@ -73,7 +73,7 @@ export const ASSETS = {
   deniz: { id: 'deniz', etiket: 'Karakter: Deniz (pilot)', placeholder: 'person', url: null, ...bos },
   nuri: {
     id: 'nuri',
-    etiket: 'Karakter: Nuri (meteorolog)',
+    etiket: 'Karakter: Nuran (meteorolog)',
     placeholder: 'person',
     url: '/models/nuri.glb',
     hedefBoy: 1.75,
@@ -87,7 +87,7 @@ export const ASSETS = {
   },
   ayse: {
     id: 'ayse',
-    etiket: 'Karakter: Ayşe (haritacı)',
+    etiket: 'Karakter: Fatma (haritacı)',
     placeholder: 'person',
     url: '/models/ayse.glb',
     hedefBoy: 1.7,

@@ -7,8 +7,8 @@ export const KAMERALAR: Record<Kamera, { ad: string }> = {
   oda: { ad: 'Oda' },
   telsiz: { ad: 'Telsiz' },
   harita: { ad: 'Harita' },
-  nuri: { ad: 'Nuri' },
-  ayse: { ad: 'Ayşe' },
+  nuri: { ad: 'Nuran' },
+  ayse: { ad: 'Fatma' },
 }
 
 export type Tiklama = { bolge: Bolge; enlem: number; boylam: number }

@@ -51,6 +51,7 @@ console.log('Arayüz akışları (sahte DOM)');
 var A = { calls: [], setMapMode: function (m) { A.calls.push('mode:' + m); }, enableMapPick: function (cb) { A.pick = cb; }, disableMapPick: function () { A.pick = null; }, addMarker: function () {}, clearMarkers: function () {}, drawRoute: function (p) { A.route = p; }, clearRoute: function () {}, showEndpoints: function () {},
   setCamera: function () {}, radioShow: function (l) { A.radio = l; }, flash: function (k) { A.flashed = k; }, setBattery: function (b) { A.battery = b; }, setCoins: function (j) { A.coins = j; }, openNotebookPage: function (n) { A.page = n; } };
 KP.scene = A;
+function hintOk() { KP.engine.hint(); if (KP.ui.speakEnd) KP.ui.speakEnd(); }
 function start(id) { KP.engine.reset(); KP.engine.cases = {}; KP.engine.order = []; KP.engine.addCases(cases); assert.ok(KP.engine.startCase(id)); return KP.ui.refs; }
 function inputs() { return H.find(KP.ui.P, function (n) { return n.tag === 'input'; }); }
 t('sayı vakası: yanlış cevap pili düşürür, doğru jeton verir', function () {
@@ -62,7 +63,7 @@ t('sayı vakası: yanlış cevap pili düşürür, doğru jeton verir', function
   assert.strictEqual(KP.engine.finished, true); assert.strictEqual(A.flashed, 'right');
   assert.strictEqual(KP.engine.state.jeton, 3 + 2 - 1, 'ikinci denemede ödül 1 azalır: ' + KP.engine.state.jeton);
 });
-t('ipucu jeton harcar ve bitince uyarır', function () { start('harita-01-olcek-km'); KP.engine.hint(); assert.strictEqual(KP.engine.state.jeton, 2); KP.engine.hint(); KP.engine.hint(); assert.strictEqual(KP.engine.state.jeton, 1); });
+t('ipucu jeton harcar ve bitince uyarır', function () { start('harita-01-olcek-km'); hintOk(); assert.strictEqual(KP.engine.state.jeton, 2); hintOk(); hintOk(); assert.strictEqual(KP.engine.state.jeton, 1); });
 t('ilk denemede ipucusuz doğru bonus verir', function () { start('harita-01-olcek-km'); inputs()[0].value = '20'; inputs()[0].fire('input'); KP.engine.submit(); assert.strictEqual(KP.engine.state.jeton, 3 + 2 + 1); });
 t('pil bitince gönderme kilitlenir, yedek pil verir', function () {
   start('harita-01-olcek-km'); var inp = inputs()[0]; inp.value = '1'; inp.fire('input');
@@ -72,7 +73,7 @@ t('pil bitince gönderme kilitlenir, yedek pil verir', function () {
 });
 t('seçenek kartı: kart seçilir, eleme ipucu kartı kapatır', function () {
   var r = start('ic-01-sarsinti-kart'), cards = H.find(KP.ui.P, function (n) { return n.tag === 'button' && H.hasClass(n, 'kp-card'); });
-  assert.strictEqual(cards.length, 4); KP.engine.hint(); KP.engine.hint();
+  assert.strictEqual(cards.length, 4); hintOk(); hintOk();
   var gone = cards.filter(function (c) { return /kp-gone/.test(c.attrs['class']); }); assert.strictEqual(gone.length, 1);
   cards[0].fire('click'); assert.strictEqual(KP.ui.refs.bSub.disabled, false); KP.engine.submit(); assert.strictEqual(KP.engine.finished, true);
 });
@@ -120,6 +121,20 @@ t('cevap anahtarı bozulursa selfTest yakalar', function () {
   });
 });
 
+console.log('İpucu: kime sorulur, kamera');
+t('ipucu: uzmana sorulursa verir, kamera ona döner, Okudum ile geri gelir; okunmadan ikinci ipucu alınamaz', function () {
+  var cams = [], oldSet = A.setCamera, oldGet = A.getCamera; A.getCamera = function () { return 'telsiz'; }; A.setCamera = function (n) { cams.push(n); };
+  start('harita-01-olcek-km'); cams.length = 0; assert.strictEqual(KP.engine.helperOf(KP.engine.cur), 'ayse');
+  var j0 = KP.engine.state.jeton; KP.engine.hint('ayse'); assert.strictEqual(cams[0], 'ayse'); assert.strictEqual(KP.engine.state.jeton, j0 - 1); assert.ok(KP.ui.speakEnd, 'altyazı yok');
+  KP.engine.hint('nuri'); assert.strictEqual(KP.engine.state.jeton, j0 - 1, 'okunmadan ikinci istek işlendi');
+  KP.ui.speakEnd(); assert.strictEqual(cams[cams.length - 1], 'telsiz'); assert.ok(!KP.engine.hintBusy);
+  A.setCamera = oldSet; A.getCamera = oldGet;
+});
+t('ipucu: uzman olmayana sorulursa ücretsiz yönlendirir, ipucu harcanmaz', function () {
+  start('harita-01-olcek-km'); var j = KP.engine.state.jeton; KP.engine.hint('nuri'); assert.strictEqual(KP.engine.state.jeton, j); assert.strictEqual(KP.engine.hintsUsed, 0); KP.ui.speakEnd();
+  start('ic-01-sarsinti-kart'); assert.strictEqual(KP.engine.helperOf(KP.engine.cur), 'nuri'); KP.engine.hint('ayse'); assert.strictEqual(KP.engine.hintsUsed, 0); KP.ui.speakEnd();
+  KP.engine.hint('nuri'); assert.strictEqual(KP.engine.hintsUsed, 1); KP.ui.speakEnd();
+});
 console.log('Plan uyumu');
 t('pin: alternatif hedeflerden biri doğru sayılır (karst)', function () {
   var c = cases.filter(function (x) { return x.id === 'dis-02-karst-pin'; })[0];

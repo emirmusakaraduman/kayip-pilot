@@ -27,7 +27,7 @@ function Model({ url, x }: { url: string; x: number }) {
 }
 
 export function ModelTest() {
-  const yakin = new URLSearchParams(location.search).get('modeller') === 'nuri' // Nuri'ye +x tarafından bak
+  const yakin = new URLSearchParams(location.search).get('modeller') === 'nuri' // Nuran'a +x tarafından bak
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
       <Canvas camera={{ position: yakin ? [-4.4, 0.7, 0] : [0, 3, 14], fov: 40 }} gl={{ preserveDrawingBuffer: true }}>

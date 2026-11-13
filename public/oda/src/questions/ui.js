@@ -16,7 +16,8 @@
       var refs = {
         body: U.el('div', { class: 'kp-body' }), hints: U.el('ul', { class: 'kp-hints' }),
         fb: U.el('div', { class: 'kp-fb', role: 'status', 'aria-live': 'polite' }), status: U.el('div', { class: 'kp-status' }),
-        bHint: U.el('button', { type: 'button', class: 'kp-btn', text: 'İpucu (1 jeton)', onclick: h.onHint }),
+        bHint: U.el('button', { type: 'button', class: 'kp-btn', text: 'Nuran’a sor (1 jeton)', onclick: function () { h.onHint('nuri'); } }),
+        bHint2: U.el('button', { type: 'button', class: 'kp-btn', text: 'Fatma’ya sor (1 jeton)', onclick: function () { h.onHint('ayse'); } }),
         bRef: U.el('button', { type: 'button', class: 'kp-btn', text: 'Pili doldur', onclick: h.onRefill, hidden: true }),
         bSub: U.el('button', { type: 'button', class: 'kp-btn kp-primary', text: 'Gönder', onclick: h.onSubmit, disabled: true }),
         bNext: U.el('button', { type: 'button', class: 'kp-btn kp-primary', text: 'Sonraki vaka', onclick: h.onNext, hidden: true })
@@ -26,14 +27,34 @@
         // telsiz kaydı: ekrandaki mesajlar kaybolsa da verilen bilgiler (saat, açı, ölçek...) panelde kalır
         U.el('details', { class: 'kp-radio', open: true }, [U.el('summary', { text: 'Telsiz kaydı' })].concat((c.radio || []).map(function (t) { return U.el('p', { text: t }); }))),
         refs.body, refs.hints, refs.fb, refs.status,
-        U.el('div', { class: 'kp-row' }, [refs.bHint, refs.bRef, refs.bSub, refs.bNext])
+        U.el('div', { class: 'kp-row', role: 'group', 'aria-label': 'İpucu iste' }, [refs.bHint, refs.bHint2]),
+        U.el('div', { class: 'kp-row' }, [refs.bRef, refs.bSub, refs.bNext])
       ]);
       host.appendChild(P); self.P = P; self.refs = refs;
       return refs;
     },
     setStatus: function (battery, jeton) { if (this.refs) this.refs.status.textContent = 'Telsiz pili %' + battery + ' · ' + jeton + ' jeton'; },
     setFeedback: function (kind, text) { if (!this.refs) return; this.refs.fb.setAttribute('class', 'kp-fb kp-' + kind); this.refs.fb.textContent = text; },
-    addHint: function (from, text) { if (this.refs) this.refs.hints.appendChild(U.el('li', {}, [U.el('strong', { text: (from === 'nuri' ? 'Nuri: ' : 'Ayşe: ') }), text])); },
+    addHint: function (from, text) { if (this.refs) this.refs.hints.appendChild(U.el('li', {}, [U.el('strong', { text: (from === 'nuri' ? 'Nuran: ' : 'Fatma: ') }), text])); },
+    // ipucu altyazısı: konuşan karakterin adı + metin + "Okudum". Panel gizlenir, okunca geri gelir ve done çağrılır.
+    speak: function (who, text, done) {
+      var self = this, doc = root.document, host = (doc.getElementById && doc.getElementById('stage')) || doc.body, box, btn, closed = false;
+      function close() {
+        if (closed) return; closed = true;
+        if (box.parentNode) box.parentNode.removeChild(box);
+        if (self.P && self.P.style) self.P.style.display = '';
+        self.speakEnd = null; if (done) done();
+      }
+      btn = U.el('button', { type: 'button', class: 'kp-btn kp-sm', text: 'Okudum', onclick: close });
+      box = U.el('div', { class: 'kp-sub', role: 'dialog', 'aria-live': 'polite', 'aria-label': 'İpucu' }, [
+        U.el('strong', { class: 'kp-sub-who', text: (who === 'nuri' ? 'Nuran' : 'Fatma') + ':' }), U.el('span', { class: 'kp-sub-text', text: ' ' + text }), btn
+      ]);
+      if (box.addEventListener) box.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+      if (self.P && self.P.style) self.P.style.display = 'none';
+      host.appendChild(box); self.speakEnd = close;
+      if (btn.focus) try { btn.focus(); } catch (e) {}
+      return close;
+    },
     // sahne üstünde kısa bilgi/uyarı şeridi (harita yüklenmedi, kayıt kapalı, vaka kalmadı...). Tıklayınca ya da 9 sn sonra kapanır.
     note: function (text) {
       var doc = root.document, host = (doc.getElementById && doc.getElementById('stage')) || doc.body, n;
@@ -41,6 +62,6 @@
       host.appendChild(n); if (root.setTimeout) root.setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 9000);
       return n;
     },
-    close: function () { if (this.P && this.P.parentNode) this.P.parentNode.removeChild(this.P); this.P = null; this.refs = null; }
+    close: function () { if (this.speakEnd) this.speakEnd(); if (this.P && this.P.parentNode) this.P.parentNode.removeChild(this.P); this.P = null; this.refs = null; }
   };
 })(typeof window !== 'undefined' ? window : globalThis);

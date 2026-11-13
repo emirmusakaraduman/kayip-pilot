@@ -37,7 +37,7 @@ export interface Vaka {
   baslik: string
   /** Deniz'in telsizle tarif ettiği ipuçları (sırayla yazılır). */
   telsiz: string[]
-  /** Nuri / Ayşe ipucu metinleri (her biri 1 jeton). */
+  /** Nuran / Fatma ipucu metinleri (her biri 1 jeton). */
   ipucuNuri?: string
   ipucuAyse?: string
   soru: string

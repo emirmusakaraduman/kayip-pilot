@@ -22,7 +22,7 @@
     if (!Array.isArray(c.radio) || !c.radio.length || c.radio.length > 4) e.push('radio: 1-4 telsiz mesajı');
     else c.radio.forEach(function (m) { if (typeof m !== 'string' || !m.trim()) e.push('radio mesajı boş'); else if (m.length > 240) e.push('radio mesajı çok uzun (en çok 240 karakter): ' + m.slice(0, 30)); });
     if (!c.question || c.question.length > 140) e.push('question gerekli (en çok 140 karakter)');
-    if (!Array.isArray(c.hints) || c.hints.length < 2 || c.hints.length > 3) e.push('hints: 2-3 ipucu (Nuri ya da Ayşe)');
+    if (!Array.isArray(c.hints) || c.hints.length < 2 || c.hints.length > 3) e.push('hints: 2-3 ipucu (Nuran ya da Fatma)');
     else c.hints.forEach(function (h, i) { if (['nuri', 'ayse'].indexOf(h.from) < 0) e.push('hints[' + i + '].from nuri|ayse'); if (!h.text || h.text.length > 200) e.push('hints[' + i + '].text gerekli (en çok 200 karakter)'); });
     var f = c.feedback || {};
     ['correct', 'wrong', 'explain'].forEach(function (k) { if (!f[k]) e.push('feedback.' + k + ' gerekli'); });
@@ -76,7 +76,7 @@
   E.refresh = function () {
     var r = KP.ui.refs; if (!E.cur || !r) return;
     r.bSub.disabled = E.finished || !E.ctrl || !E.ctrl.isReady() || E.state.battery <= 0;
-    r.bHint.disabled = E.finished;
+    r.bHint.disabled = r.bHint2.disabled = E.finished || !!E.hintBusy;
     r.bRef.hidden = !(E.state.battery <= 0 && !E.finished);
     KP.ui.setStatus(E.state.battery, E.state.jeton);
   };
@@ -113,7 +113,7 @@
       if (c.reward.notebookPage) E.state.pages[c.reward.notebookPage] = 1;
       E.finished = true; E.ctrl.lock(true);
       KP.ui.setFeedback('right', c.feedback.correct + ' ' + c.feedback.explain + ' (+' + gain + ' jeton)');
-      r.bNext.hidden = false; r.bSub.hidden = true; r.bHint.disabled = true;
+      r.bNext.hidden = false; r.bSub.hidden = true; r.bHint.disabled = r.bHint2.disabled = true;
       S('flash', 'right'); S('radioShow', [c.feedback.correct]); S('setCoins', E.state.jeton);
       if (c.reward.notebookPage) S('openNotebookPage', c.reward.notebookPage);
       E.save(); E.refresh(); KP.emit('correct', { case: c, attempts: E.attempts, hints: E.hintsUsed, gain: gain });
@@ -131,15 +131,32 @@
     }
     return res;
   };
-  E.hint = function () {
-    var c = E.cur; if (!c || E.finished) return;
-    var h = c.hints[E.hintsUsed];
-    if (!h) { KP.ui.setFeedback('info', 'Başka ipucu kalmadı.'); return; }
-    var cost = h.cost != null ? h.cost : CFG.hintCost;
-    if (E.state.jeton < cost) { KP.ui.setFeedback('info', 'İpucu için yeterli jetonun yok.'); return; }
-    E.state.jeton -= cost; E.hintsUsed++;
-    KP.ui.addHint(h.from, h.text); if (E.ctrl && E.ctrl.applyHint) E.ctrl.applyHint(h);
-    S('setCoins', E.state.jeton); E.save(); E.refresh();
+  // Hangi karakter hangi konuda iyi: Fatma haritacı (harita, konum, rota), Nuran diğer konular. Vakada helper:'nuri'|'ayse' ile ezilebilir.
+  E.helperOf = function (c) {
+    if (c.helper === 'nuri' || c.helper === 'ayse') return c.helper;
+    return (c.type === 'pin' || c.type === 'route' || c.topic === 'cografi-konum' || c.topic === 'harita-bilgisi') ? 'ayse' : 'nuri';
+  };
+  var NAME = { nuri: 'Nuran', ayse: 'Fatma' };
+  // who: ipucu istenen karakter. Alanı onunsa ipucu verir (jeton düşer); değilse "benim alanım değil" der (ücretsiz, ipucu harcanmaz).
+  E.hint = function (who) {
+    var c = E.cur; if (!c || E.finished || E.hintBusy) return;
+    if (who !== 'nuri' && who !== 'ayse') who = E.helperOf(c);
+    var h = c.hints[E.hintsUsed], expert = E.helperOf(c), prevCam = S('getCamera'), text, paid = false;
+    if (who !== expert) {
+      text = who === 'ayse' ? 'Bu harita sorusu değil, benim alanım değil. Nuran’a sor, o bu konuda daha iyi.' : 'Bu bir harita sorusu, o Fatma’nın alanı. Fatma’ya sor.';
+    } else {
+      if (!h) { KP.ui.setFeedback('info', 'Başka ipucu kalmadı.'); return; }
+      var cost = h.cost != null ? h.cost : CFG.hintCost;
+      if (E.state.jeton < cost) { KP.ui.setFeedback('info', 'İpucu için yeterli jetonun yok.'); return; }
+      E.state.jeton -= cost; E.hintsUsed++; paid = true; text = h.text;
+      KP.ui.addHint(who, text); if (E.ctrl && E.ctrl.applyHint) E.ctrl.applyHint(h);
+      S('setCoins', E.state.jeton); E.save();
+    }
+    // kamera konuşana döner, altyazı çıkar, "Okudum" ile kamera geri döner
+    if (prevCam) S('setCamera', who);
+    E.hintBusy = true;
+    KP.ui.speak(who, text, function () { E.hintBusy = false; if (prevCam) S('setCamera', prevCam); if (E.cur) E.refresh(); });
+    E.refresh();
   };
   E.refill = function () {
     if (E.state.battery > 0) return;

@@ -10,10 +10,10 @@ Amaç: TYT öğrencisi dedektif gibi düşünür: **ipucu → çıkarım → cev
 5. Gözlemler birbirini desteklesin ama tek başına yeterli olmasın (iki ya da üç ipucu birlikte cevabı verir).
 
 ## İpucu merdiveni (hints)
-- 1. ipucu (Nuri ya da Ayşe): konuyu hatırlatır, kuralı söyler, cevabı vermez.
+- 1. ipucu (Nuran ya da Fatma): konuyu hatırlatır, kuralı söyler, cevabı vermez.
 - 2. ipucu: yöntemi gösterir (formül, hangi veriye bakılacağı) ya da yanlış seçenekleri eler (`eliminate`).
 - 3. ipucu (isteğe bağlı): neredeyse cevabı verir.
-- Nuri hava ve iklim, hesap ve formül; Ayşe harita, koordinat, yer şekilleri konularında konuşur.
+- İpucunu oyuncu seçtiği kişiden alır: Fatma haritacıdır (pin ve rota vakaları, coğrafi konum, harita bilgisi), Nuran diğer konulara bakar. Alanı olmayana sorulursa “benim alanım değil” der, ücret alınmaz. Vakada `helper: "nuri"|"ayse"` ile uzman değiştirilebilir. `hints[].from` yalnızca veri olarak durur.
 
 ## Geri bildirim
 - `feedback.wrong`: tek cümle, ipucu niteliğinde, cevabı açıklamaz. İlk yanlışta yalnızca bu gösterilir, ikinci yanlıştan itibaren `explain` de eklenir.

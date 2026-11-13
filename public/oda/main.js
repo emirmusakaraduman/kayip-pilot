@@ -873,6 +873,31 @@
     var pn = mesh(new THREE.BoxGeometry(2.3, 1.2, 0.06), new THREE.MeshStandardMaterial({ color: 0x0f0b09, roughness: 0.8 }), x, 0.6, z + 0.47);
     pn.castShadow = true; scene.add(pn);
   }
+  // masanın ön yüzünde, ana masanın üstünde kalan şeritte pirinç isimlik (bilgisayarı kapatmaz)
+  function deskPlate(x, name, role) {
+    var tex = makeTex(1536, 192, function (g, w, h) {
+      function rr(px, py, pw, ph, r) { g.beginPath(); g.moveTo(px + r, py); g.arcTo(px + pw, py, px + pw, py + ph, r); g.arcTo(px + pw, py + ph, px, py + ph, r); g.arcTo(px, py + ph, px, py, r); g.arcTo(px, py, px + pw, py, r); g.closePath(); }
+      function spaced(t, sx, sy, sp) { for (var i = 0; i < t.length; i++) { g.fillText(t[i], sx, sy); sx += g.measureText(t[i]).width + sp; } return sx; }
+      function spanW(t, sp) { var s = 0; for (var i = 0; i < t.length; i++) s += g.measureText(t[i]).width + sp; return s - sp; }
+      var br = g.createLinearGradient(0, 0, 0, h); br.addColorStop(0, '#d9b872'); br.addColorStop(0.5, '#a98443'); br.addColorStop(1, '#6f5428');
+      rr(4, 4, w - 8, h - 8, 26); g.fillStyle = br; g.fill();                      // pirinç çerçeve
+      var bd = g.createLinearGradient(0, 0, 0, h); bd.addColorStop(0, '#241c15'); bd.addColorStop(1, '#14100c');
+      rr(22, 22, w - 44, h - 44, 14); g.fillStyle = bd; g.fill();                  // koyu ceviz zemin
+      g.strokeStyle = 'rgba(217,184,114,0.45)'; g.lineWidth = 2; rr(32, 32, w - 64, h - 64, 10); g.stroke();
+      g.fillStyle = '#c9a45c'; [60, w - 60].forEach(function (sx) { g.beginPath(); g.arc(sx, h / 2, 9, 0, 6.283); g.fill(); });   // vidalar
+      g.textBaseline = 'middle'; g.textAlign = 'left';
+      var n = name.toUpperCase(), r = role.toUpperCase();
+      g.font = '700 96px "Barlow Condensed", sans-serif'; var wn = spanW(n, 10);
+      g.font = '600 78px "Barlow Condensed", sans-serif'; var wr = spanW(r, 8), gap = 56, sx = (w - (wn + gap + wr)) / 2;
+      g.font = '700 96px "Barlow Condensed", sans-serif'; g.fillStyle = '#ecd08e'; g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 4; g.shadowOffsetY = 2;
+      spaced(n, sx, 100, 10);
+      g.shadowBlur = 0; g.shadowOffsetY = 0; g.fillStyle = 'rgba(217,184,114,0.55)'; g.fillRect(sx + wn + gap / 2 - 1, 54, 2, 86);    // ayırıcı çizgi
+      g.font = '600 78px "Barlow Condensed", sans-serif'; g.fillStyle = '#cdbf9f';
+      spaced(r, sx + wn + gap, 104, 8);
+    });
+    var pl = new THREE.Mesh(new THREE.PlaneGeometry(1.28, 0.16), new THREE.MeshBasicMaterial({ map: tex, color: 0xb8b8b8, toneMapped: false, fog: false }));
+    pl.position.set(x, 1.145, -1.895); scene.add(pl);
+  }
   function laptop(x, z, glow) {
     var g = new THREE.Group(); g.position.set(x, 1.275, z); g.scale.setScalar(1.25);
     var alu = new THREE.MeshStandardMaterial({ color: 0x2a2f31, roughness: 0.35, metalness: 0.8 });
@@ -886,14 +911,16 @@
     g.traverse(function (m) { if (m.isMesh) m.castShadow = true; });
     scene.add(g);
   }
-  // Nuri (gözlüklü)
+  // Nuran (gözlüklü)
   backDesk(0.2, -2.4);
+  deskPlate(0.2, 'Nuran', 'Meteorolog');
   var nuriProc = buildPerson({ x: 0.2, z: -3.02, ry: -0.06, skin: 0xd2a384, skinCss: '#d2a384', skinHi: '#dcb394', skinLo: '#b98a6c',
     iris: ['#6a4426', '#2a1a0c'], lid: '#2a1a14', brow: '#241810', browW: 1.2, lashes: false, stubble: true, lipU: '#a9615a', lipL: '#b86c64',
     hair: 0x2a1d14, hairLight: '120,90,60', shirt: 0x2f4a5c, pants: 0x1a1d22, female: false, glasses: true, light: 0x7fc8ff });
   laptop(0.2, -2.3, 0x9fd8ff);
-  // Ayşe (uzun saçlı)
+  // Fatma (uzun saçlı)
   backDesk(3.7, -2.4);
+  deskPlate(3.7, 'Fatma', 'Haritacı');
   var ayseProc = buildPerson({ x: 3.7, z: -3.02, ry: 0.08, skin: 0xe0b494, skinCss: '#e0b494', skinHi: '#e8c2a4', skinLo: '#c99d80',
     iris: ['#4a7a58', '#1a3a2a'], lid: '#1c100c', brow: '#1a110c', browW: 0.85, lashes: true, stubble: false, lipU: '#b04a4a', lipL: '#c25a58',
     hair: 0x1d130e, hairLight: '90,70,60', shirt: 0x6a3b2e, pants: 0x1a1d22, female: true, glasses: false, light: 0xffcf8a });
@@ -915,7 +942,7 @@
   scene.add(mesh(new THREE.PlaneGeometry(2.2, 1.115), wallMat, 3.7, 3.1, -3.96));
   scene.add(mesh(new THREE.BoxGeometry(2.32, 1.235, 0.04), new THREE.MeshStandardMaterial({ color: 0x1d1612, roughness: 0.6 }), 3.7, 3.1, -3.985));
 
-  /* ---------- Ayşe: gerçek 3D avatar (Avaturn modeli, rig'li) ---------- */
+  /* ---------- Fatma: gerçek 3D avatar (Avaturn modeli, rig'li) ---------- */
   var avatars = [];
   function b64ToBuf(b64) {
     var bin = atob(b64), n = bin.length, u = new Uint8Array(n);
@@ -1617,6 +1644,7 @@
     setBattery: function (p) { api.setPil(p, true); },
     setCoins: function (n) { api.setJeton(n); },
     setCamera: function (n) { api.setCam(n); },
+    getCamera: function () { return camName; },
     radioShow: function (lines) { KPS.q = (lines || []).slice(); KPS.prev = ''; kpTypeNext(); },
     flash: function (kind) { if (kind === 'right') KPS.okPulse = 1; else if (!reduce) triggerFlash(); },
     setMapMode: function (mode) {
