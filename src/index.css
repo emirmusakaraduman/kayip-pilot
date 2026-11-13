@@ -32,3 +32,10 @@ button:disabled { opacity: .4; cursor: default; }
 .kartlar button { background: #24415e; color: #fff; }
 .satir { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
 input { padding: 8px; border-radius: 6px; border: 0; width: 110px; }
+.sinema { position: relative; height: 100%; background: #000; overflow: hidden; }
+.sinema canvas { position: absolute; inset: 0; }
+.sinema-kaplama { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: #000; }
+.sinema-ust { position: absolute; z-index: 4; top: 12px; right: 12px; display: flex; gap: 8px; }
+.sinema-alt { position: absolute; z-index: 4; left: 50%; bottom: 7vh; transform: translateX(-50%); width: min(780px, 94vw); background: rgba(0,0,0,.62); padding: 10px 16px; border-radius: 6px; font-family: monospace; font-size: 1.1rem; text-align: left; }
+.sinema-alt .deniz { color: #7dffa0; } .sinema-alt .merkez { color: #ffd27a; }
+.baslik .kutu .satir2 { display: flex; gap: 8px; justify-content: center; }

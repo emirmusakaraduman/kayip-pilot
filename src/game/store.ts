@@ -10,11 +10,13 @@ interface Durum {
   bitenVakalar: string[]
   yanlisDefteri: string[] // yanlış yapılan vaka id'leri
   sesAcik: boolean
+  girisIzlendi: boolean
   yanlisYap: (vakaId: string) => void
   vakaBitir: (vakaId: string, konu: KonuId, jeton: number) => void
   ipucuAl: () => boolean
   pilDoldur: () => boolean
   sesDegistir: () => void
+  girisBitti: () => void
 }
 
 export const useOyun = create<Durum>()(
@@ -26,6 +28,7 @@ export const useOyun = create<Durum>()(
       bitenVakalar: [],
       yanlisDefteri: [],
       sesAcik: true,
+      girisIzlendi: false,
       yanlisYap: (vakaId) =>
         set((s) => ({
           pil: pilYanlis(s.pil),
@@ -48,6 +51,7 @@ export const useOyun = create<Durum>()(
         return true
       },
       sesDegistir: () => set((s) => ({ sesAcik: !s.sesAcik })),
+      girisBitti: () => set({ girisIzlendi: true }),
     }),
     { name: 'kayip-pilot-v1' },
   ),

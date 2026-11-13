@@ -8,6 +8,9 @@ export function sesBaslat() {
   if (ctx.state === 'suspended') void ctx.resume()
 }
 
+/** Web Audio bağlamı (sinematik sesleri için). Kullanıcı tıklamadan önce null olabilir. */
+export const baglam = () => ctx
+
 const acik = () => ctx && ctx.state === 'running' && useOyun.getState().sesAcik
 
 export function bip(frekans = 880, sure = 0.05, ses = 0.03) {

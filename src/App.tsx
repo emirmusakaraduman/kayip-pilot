@@ -5,15 +5,20 @@ import { AssetModel } from './components/AssetModel'
 import { atifSatiri } from './assets/registry'
 import { OdaSahnesi } from './scenes/OdaSahnesi'
 import { sesBaslat } from './game/audio'
+import { Sinematik } from './cinematic/Sinematik'
+import { useOyun } from './game/store'
 
-function Baslik({ basla }: { basla: () => void }) {
+function Baslik({ basla, izle }: { basla: () => void; izle: () => void }) {
   const atif = atifSatiri()
   return (
     <div className="baslik">
       <div className="kutu">
         <h1>KAYIP PİLOT</h1>
         <p>TC-KRT düştü. Telsizden gelen ipuçlarıyla Deniz'i bul.</p>
-        <button onClick={basla}>Başla</button>
+        <div className="satir2">
+          <button onClick={basla}>Başla</button>
+          <button className="kucuk" onClick={izle}>Girişi izle</button>
+        </div>
         <small>İçerik uyarısı: Kurgu bir uçak kazası ve yangın içerir.</small>
         <small className="atif">{atif || 'Varlık atıfları: (henüz varlık eklenmedi)'}</small>
       </div>
@@ -34,8 +39,39 @@ function Baslik({ basla }: { basla: () => void }) {
   )
 }
 
+type Sahne = 'baslik' | 'giris' | 'izle' | 'oda'
+
 export default function App() {
-  const [basladi, setBasladi] = useState(false)
-  if (!basladi) return <Baslik basla={() => { sesBaslat(); setBasladi(true) }} />
+  const [sahne, setSahne] = useState<Sahne>('baslik')
+  const girisIzlendi = useOyun((s) => s.girisIzlendi)
+  const girisBitti = useOyun((s) => s.girisBitti)
+
+  // Geliştirme: ?sinema=22 → sinematiği o saniyeden başlatır (yalnızca geliştirme sunucusunda)
+  const dev = import.meta.env.DEV ? new URLSearchParams(location.search) : null
+  if (dev?.has('sinema') && sahne === 'baslik')
+    return <Sinematik baslangic={Number(dev.get('sinema')) || 0} ortam={(dev.get('ortam') as 'akdeniz') || 'karadeniz'} onDone={() => setSahne('oda')} />
+
+  if (sahne === 'baslik')
+    return (
+      <Baslik
+        basla={() => {
+          sesBaslat()
+          setSahne(girisIzlendi ? 'oda' : 'giris')
+        }}
+        izle={() => {
+          sesBaslat()
+          setSahne('izle')
+        }}
+      />
+    )
+  if (sahne === 'giris' || sahne === 'izle')
+    return (
+      <Sinematik
+        onDone={() => {
+          girisBitti()
+          setSahne(sahne === 'giris' ? 'oda' : 'baslik')
+        }}
+      />
+    )
   return <OdaSahnesi />
 }

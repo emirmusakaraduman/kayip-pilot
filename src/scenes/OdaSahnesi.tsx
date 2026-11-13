@@ -9,6 +9,7 @@ import { VAKALAR } from '../data/cases'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
 import type { Vaka, Verilen, Zorluk } from '../game/types'
 import type { Tiklama } from './ReliefMap'
+import { Sinematik } from '../cinematic/Sinematik'
 
 /** Telsiz altyazısı: kelime kelime yazılır; pil azaldıkça kelimeler "[cızırtı]" olur. */
 function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
@@ -60,6 +61,7 @@ export function OdaSahnesi() {
   const [ipuclari, setIpuclari] = useState<string[]>([])
   const [mesaj, setMesaj] = useState<{ dogru: boolean; metin: string } | null>(null)
   const [panel, setPanel] = useState<'defter' | null>(null)
+  const [kisaSinema, setKisaSinema] = useState<Vaka | null>(null) // bölüm başı kısa sinematik
 
   const vakaBaslat = (v: Vaka) => {
     setVaka(v)
@@ -107,6 +109,19 @@ export function OdaSahnesi() {
   const rotaSecenekleri = c?.tur === 'rota' ? [...c.dogruSira].reverse() : []
   const sustu = oyun.pil <= 0
 
+  if (kisaSinema)
+    return (
+      <Sinematik
+        kisa
+        ortam={kisaSinema.ortam}
+        onDone={() => {
+          const v = kisaSinema
+          setKisaSinema(null)
+          vakaBaslat(v)
+        }}
+      />
+    )
+
   return (
     <div className="oda">
       <Canvas camera={{ position: KAMERALAR.genel.poz, fov: 50 }} dpr={[1, 1.75]}>
@@ -137,7 +152,7 @@ export function OdaSahnesi() {
         ))}
       </div>
 
-      {asama === 'sec' && <VakaSecici onSec={vakaBaslat} />}
+      {asama === 'sec' && <VakaSecici onSec={setKisaSinema} />}
 
       {vaka && asama !== 'sec' && (
         <div className="hud alt">
