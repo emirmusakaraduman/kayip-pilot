@@ -84,27 +84,38 @@
     }
   }, [4, 2]);
 
+  // sıva pürüzü: soluk, düzensiz benekli yükseklik haritası (yalnız bump; renk wallTex'te)
+  var plasterBump = makeTex(256, 256, function (g, w, h) {
+    g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
+    for (var i = 0; i < 5000; i++) {
+      var v = 90 + Math.floor(Math.random() * 80);
+      g.fillStyle = 'rgba(' + v + ',' + v + ',' + v + ',0.5)';
+      var s = 1 + Math.random() * 3;
+      g.fillRect(Math.random() * w, Math.random() * h, s, s);
+    }
+  }, [3, 1.5]);
+
   /* ---------- oda ---------- */
-  var floor = mesh(new THREE.PlaneGeometry(16, 16),
+  var floor =mesh(new THREE.PlaneGeometry(16, 16),
     new THREE.MeshStandardMaterial({ map: floorTex, bumpMap: floorTex, bumpScale: 0.6, roughness: 0.6, metalness: 0.0 }), 0, 0, 0);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
   var wall = mesh(new THREE.PlaneGeometry(16, 7),
-    new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.95 }), 0, 3.5, -4);
+    new THREE.MeshStandardMaterial({ map: wallTex, bumpMap: plasterBump, bumpScale: 0.8, roughness: 1, metalness: 0 }), 0, 3.5, -4);
   wall.receiveShadow = true;
   scene.add(wall);
 
   var sideWall = mesh(new THREE.PlaneGeometry(10, 7),
-    new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.95 }), -7, 3.5, 0);
+    new THREE.MeshStandardMaterial({ map: wallTex, bumpMap: plasterBump, bumpScale: 0.8, roughness: 1, metalness: 0 }), -7, 3.5, 0);
   sideWall.rotation.y = Math.PI / 2;
   scene.add(sideWall);
 
   var DY = 1.06; // masa üst yüzeyi
 
   /* ---------- masa ---------- */
-  var deskMat = new THREE.MeshStandardMaterial({ map: woodTex, roughness: 0.8, metalness: 0.03 });
+  var deskMat = new THREE.MeshStandardMaterial({ map: woodTex, bumpMap: woodTex, bumpScale: 0.5, roughness: 0.8, metalness: 0.03 });
   deskMat.bumpMap = woodTex; deskMat.bumpScale = 1.1;
   var desk = mesh(new THREE.BoxGeometry(11.0, 0.12, 3.3), deskMat, 0.3, DY - 0.06, 0.5);
   desk.castShadow = true; desk.receiveShadow = true;
@@ -619,8 +630,8 @@
   jar.scale.setScalar(1.0);
   scene.add(jar);
   jar.add(mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.42, 32, 1, true),
-    new THREE.MeshStandardMaterial({ color: 0xcfe8e0, transparent: true, opacity: 0.2, roughness: 0.08, metalness: 0.0, side: THREE.DoubleSide, depthWrite: false }), 0, 0.21, 0));
-  jar.add(mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.02, 32), new THREE.MeshStandardMaterial({ color: 0xcfe8e0, transparent: true, opacity: 0.3, roughness: 0.1 }), 0, 0.01, 0));
+    new THREE.MeshStandardMaterial({ color: 0xcfe8e0, transparent: true, opacity: 0.4, roughness: 0.05, metalness: 0.1, envMapIntensity: 1.6, side: THREE.DoubleSide, depthWrite: false }), 0, 0.21, 0));
+  jar.add(mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.02, 32), new THREE.MeshStandardMaterial({ color: 0xcfe8e0, transparent: true, opacity: 0.5, roughness: 0.1 }), 0, 0.01, 0));
   jar.add(mesh(new THREE.CylinderGeometry(0.185, 0.185, 0.035, 32), new THREE.MeshStandardMaterial({ color: 0x1b1b1b, roughness: 0.4, metalness: 0.7 }), 0, 0.44, 0));
   var coinMat = new THREE.MeshStandardMaterial({ color: 0xd9a24a, roughness: 0.3, metalness: 0.95 });
   [[0, 0.03, 0, 0], [0.04, 0.045, -0.03, 0.25], [-0.03, 0.062, 0.04, -0.2]].forEach(function (c) {
@@ -1103,6 +1114,10 @@
   var moon = new THREE.PointLight(0x6fa4bd, 0.4, 9, 2);
   moon.position.set(-3.0, 2.6, -3.0);
   scene.add(moon);
+  // pencereden sızan soğuk yağmur ışığı (gölgesiz, çok hafif): tungsten lambayla teal/turuncu kontrast
+  var winLight = new THREE.DirectionalLight(0x6f9fd8, 0.22);
+  winLight.position.set(-3.0, 3.2, -3.9); winLight.target.position.set(1.5, 1.0, 0.5);
+  scene.add(winLight); scene.add(winLight.target);
 
   /* ---------- gerçekçilik: ortam yansıması, parıltı, toz, temas gölgesi, gren ---------- */
   try {
@@ -1383,6 +1398,10 @@
     contact(0.85, 1.55, 0.2, 0.2, 0.5);
   })();
 
+  // referans odadaki ek ayrıntılar (mantar pano, dolap, raf, mikrofon, Büyük Arama klasörü...): dekor.js
+  var dekor = window.ODA_DEKOR ? window.ODA_DEKOR({ THREE: THREE, scene: scene, mesh: mesh, makeTex: makeTex, contact: contact, DY: DY, hash2: hash2 }) : null;
+  var aramaMeshes = (dekor && dekor.arama) || [];
+
   // karakterlerin arkasından soğuk kenar ışığı
   [[-0.9, 2.4, -3.7], [4.9, 2.4, -3.7]].forEach(function (pp) {
     var rl = new THREE.PointLight(0x7fa8c8, 0.3, 3.5, 2);
@@ -1473,6 +1492,23 @@
       rt.samples = 4;
       composer = new THREE.EffectComposer(renderer, rt);
       composer.addPass(new THREE.RenderPass(scene, camera));
+      if (THREE.SSAOPass && window.location.search.indexOf('ssao=0') < 0) {
+        // temas gölgesi: dolap çekmeceleri, masa üstü eşyaları, köşeler
+        var ssaoPass = new THREE.SSAOPass(scene, camera, w, h);
+        ssaoPass.kernelRadius = 0.25; ssaoPass.minDistance = 0.002; ssaoPass.maxDistance = 0.08;
+        ssaoPass.normalMaterial.skinning = true;
+        var ssaoRender = ssaoPass.render.bind(ssaoPass), ssaoHidden = [];
+        ssaoPass.render = function (r, wb, rb, d, m) {
+          scene.traverse(function (o) {
+            var mt = o.material;
+            if (o.visible && mt && !Array.isArray(mt) && mt.transparent && (mt.depthWrite === false || mt.opacity < 1)) { o.visible = false; ssaoHidden.push(o); }
+          });
+          ssaoRender(r, wb, rb, d, m);
+          for (var i = 0; i < ssaoHidden.length; i++) ssaoHidden[i].visible = true;
+          ssaoHidden.length = 0;
+        };
+        composer.addPass(ssaoPass);
+      }
       if (THREE.BokehPass && window.location.search.indexOf('dof=0') < 0) {
         // alan derinliği: odak masada; arkadaki karakterler ve pencere hafif flulaşır
         bokehPass = new THREE.BokehPass(scene, camera, { focus: 6.5, aperture: 0.0035, maxblur: 0.007, width: w, height: h });
@@ -1527,6 +1563,8 @@
     if (hits.length) { best = 'notebook'; bestD = hits[0].distance; }
     var rh = ray.intersectObjects(rdMeshes, false);
     if (rh.length && rh[0].distance < bestD) { best = 'radio'; bestD = rh[0].distance; }
+    var ah = aramaMeshes.length ? ray.intersectObjects(aramaMeshes, false) : [];
+    if (ah.length && ah[0].distance < bestD) { best = 'arama'; bestD = ah[0].distance; }
     if (gridG && ray.ray.direction.y < -1e-4) {
       var o = ray.ray.origin, d = ray.ray.direction;
       var tTop = (DY + 0.30 - o.y) / d.y, tBot = (DY + 0.02 - o.y) / d.y, cv = 255, tHit = 0;
@@ -1566,13 +1604,14 @@
     drag = null;
     if (wasClick) {
       var z = pick(e);
-      if (KPS.pickCb && z && z !== 'notebook' && pickUV) {
+      if (KPS.pickCb && z && z !== 'notebook' && z !== 'radio' && z !== 'arama' && pickUV) {
         // soru sistemi: seçimi enlem/boylama çevirip motora ver (eski seçim mantığı atlanır)
         var ll = window.KP.geo.localToLatLon((pickUV[0] - 0.5) * PWm, (pickUV[1] - 0.5) * PHm);
         KPS.pickCb({ lat: ll.lat, lon: ll.lon, x: (pickUV[0] - 0.5) * PWm, y: (pickUV[1] - 0.5) * PHm, zone: z });
       }
       else if (z === 'notebook') { if (api.onDefter) api.onDefter(); }
       else if (z === 'radio') { if (api.onTelsiz) api.onTelsiz(); }
+      else if (z === 'arama') { if (api.onArama) api.onArama(); }
       else if (z && pickUV && api.onHarita) api.onHarita(z, pickUV[0], pickUV[1]);
     }
   });
@@ -1595,6 +1634,7 @@
     onHarita: null, // function (bolge, u, v): bolge 'karasal' | 'akdeniz' | 'karadeniz' | 'sert'; u, v levha üzerinde 0..1 (v = 1 kuzey)
     onDefter: null, // function ()
     onTelsiz: null, // function (): masadaki telsize tıklandı
+    onArama: null, // function (): masadaki "Büyük Arama Modu" klasörüne tıklandı
     // React'teki karakter kartından ipucu iste: who 'nuri' | 'ayse' (açık vaka yoksa bir şey yapmaz)
     kpIpucu: function (who) { var E = window.KP && window.KP.engine; if (E && E.cur) E.hint(who); },
     // telsiz ekranında gösterilecek Deniz mesajları (açık vaka varsa onun telsiz metni)
@@ -1845,6 +1885,7 @@
       bokehPass.uniforms.focus.value = camera.position.distanceTo(tmpFocus.set(camLook.x, Math.min(camLook.y, 1.4), camLook.z));
     }
 
+    if (dekor) dekor.hoverArama(state.hover === 'arama');
     var nbTarget = state.hover === 'notebook' ? 0.3 : 0;
     pageTop.material.emissive.setHex(0xffc47a);
     pageTop.material.emissiveIntensity += (nbTarget - pageTop.material.emissiveIntensity) * 0.15;
