@@ -32,7 +32,7 @@ function Yaprak({ n, acik }: { n: number; acik: boolean }) {
   )
 }
 
-export function DefterKitabi({ kapat }: { kapat: () => void }) {
+export function DefterKitabi({ kapat, yanlisAc = false }: { kapat: () => void; yanlisAc?: boolean }) {
   const { defter, yanlisDefteri } = useOyun()
   const acikSayfalar = useMemo(() => new Set(KONULAR.filter((k) => defter.includes(k.id)).map((k) => k.sayfa)), [defter])
   // en son kazanılan sayfanın açılımıyla başla
@@ -41,7 +41,7 @@ export function DefterKitabi({ kapat }: { kapat: () => void }) {
     return Math.floor(son / 2)
   })
   const [anim, setAnim] = useState<{ yon: 1 | -1; hedef: number } | null>(null)
-  const [yanlis, setYanlis] = useState(false)
+  const [yanlis, setYanlis] = useState(yanlisAc) // "Hata Defteri" düğmesi doğrudan yanlış listesiyle açar
 
   const cevir = (yon: 1 | -1) => {
     if (anim) return

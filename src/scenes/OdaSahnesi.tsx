@@ -62,7 +62,7 @@ export function OdaSahnesi() {
   const [sira, setSira] = useState<string[]>([])
   const [ipuclari, setIpuclari] = useState<string[]>([])
   const [mesaj, setMesaj] = useState<{ dogru: boolean; metin: string } | null>(null)
-  const [panel, setPanel] = useState<'defter' | 'arama' | null>(null)
+  const [panel, setPanel] = useState<'defter' | 'yanlis' | 'arama' | null>(null)
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
@@ -97,10 +97,10 @@ export function OdaSahnesi() {
     setKamera('oda')
   }
 
-  // masadaki deftere tıklama: vaka seçerken menüyü aç/kapat, vaka sırasında defteri aç
-  const defterTikla = () => {
-    if (asama === 'sec') setVakaPaneli((x) => !x)
-    else setPanel('defter')
+  // masadaki deftere tıklama ve "Defter" düğmesi: Deniz'in defterini açar
+  const defterAc = () => {
+    setVakaPaneli(false)
+    setPanel('defter')
   }
 
   const haritaTikla = (t: Tiklama) => {
@@ -170,8 +170,16 @@ export function OdaSahnesi() {
         vurgu={[...secBolgeler, ...aramaVurgu]}
         onHarita={haritaTikla}
         defter={oyun.defter.length}
-        onDefter={defterTikla}
+        onDefter={defterAc}
       />
+
+      <div className="hud defterler">
+        <button className="kucuk" onClick={defterAc}>Pilotun Defteri</button>
+        <button className="kucuk" onClick={() => { setVakaPaneli(false); setPanel('yanlis') }}>Hata Defteri</button>
+        {asama === 'sec' && (
+          <button className={'kucuk' + (vakaPaneli ? ' secili' : '')} onClick={() => setVakaPaneli((x) => !x)}>Konu Defteri</button>
+        )}
+      </div>
 
       <div className="hud kameralar">
         <button className="kucuk" onClick={oyun.sesDegistir} aria-label="Ses">{oyun.sesAcik ? '🔊' : '🔇'}</button>
@@ -182,11 +190,10 @@ export function OdaSahnesi() {
         ))}
       </div>
 
-      {asama === 'sec' && vakaPaneli && panel !== 'defter' && panel !== 'arama' && (
+      {asama === 'sec' && vakaPaneli && panel === null && (
         <VakaSecici
           onSec={(v) => { setVakaPaneli(false); setArama(null); setKisaSinema(v) }}
           onArama={() => { setVakaPaneli(false); setPanel('arama') }}
-          onDefter={() => { setVakaPaneli(false); setPanel('defter') }}
           kapat={() => setVakaPaneli(false)}
         />
       )}
@@ -297,19 +304,19 @@ export function OdaSahnesi() {
         </div>
       )}
 
-      {panel === 'defter' && <DefterKitabi kapat={() => setPanel(null)} />}
+      {(panel === 'defter' || panel === 'yanlis') && <DefterKitabi key={panel} yanlisAc={panel === 'yanlis'} kapat={() => setPanel(null)} />}
     </div>
   )
 }
 
-function VakaSecici({ onSec, onArama, onDefter, kapat }: { onSec: (v: Vaka) => void; onArama: () => void; onDefter: () => void; kapat: () => void }) {
+function VakaSecici({ onSec, onArama, kapat }: { onSec: (v: Vaka) => void; onArama: () => void; kapat: () => void }) {
   const biten = useOyun((s) => s.bitenVakalar)
   const ilerleme = useOyun((s) => s.aramaIlerleme)
   const zorluklar: Zorluk[] = ['kolay', 'orta', 'zor']
   return (
     <div className="hud panel sol">
       <button className="kucuk kapat" onClick={kapat}>Kapat</button>
-      <h3>Konu Modu</h3>
+      <h3>Konu Defteri</h3>
       <div className="konular">
         {KONULAR.map((k) => (
           <div key={k.id} className="konu">
@@ -327,9 +334,7 @@ function VakaSecici({ onSec, onArama, onDefter, kapat }: { onSec: (v: Vaka) => v
           </div>
         ))}
       </div>
-      <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>
-      <button className="kucuk" onClick={onDefter}>Deniz'in defterini oku</button>
-    </div>
+      <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>    </div>
   )
 }
 

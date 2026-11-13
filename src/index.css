@@ -11,12 +11,14 @@ small { opacity: .7; }
 .oda canvas { position: absolute; inset: 0; }
 .hud { position: absolute; z-index: 2; font-size: .95rem; }
 .hud.ust { top: 10px; left: 10px; display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,.55); padding: 6px 12px; border-radius: 8px; }
+.hud.defterler { top: 10px; left: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
 .hud.kameralar { top: 10px; right: 10px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 button.kucuk { padding: 5px 10px; font-size: .85rem; background: #2c3a4a; color: #e8eef5; }
 button.kucuk.secili { background: #f0a020; color: #111; }
 button:disabled { opacity: .4; cursor: default; }
 .hud.panel { background: rgba(8,12,18,.88); padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 75vh; overflow: auto; }
 .hud.panel.sol { top: 60px; left: 10px; width: min(380px, 92vw); }
+@media (max-width: 900px) { .hud.kameralar { top: 52px; } .hud.panel.sol { top: 100px; } }
 .hud.panel.orta { top: 8vh; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); }
 .konu { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .konu button { margin-left: 4px; }
