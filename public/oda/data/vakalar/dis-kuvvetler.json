@@ -2,123 +2,147 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "dis-02-obruk-pin",
+   "id": "dis-02-karst-pin",
    "topic": "dis-kuvvetler",
-   "difficulty": 1,
+   "difficulty": 2,
    "type": "pin",
-   "title": "Çöken Zemin",
+   "title": "Kaybolan Dere",
    "radio": [
-    "Deniz: Düz bir bozkırın ortasındayım, ağaç yok. Zeminde derin, dik kenarlı, yuvarlak çöküntüler var; bazılarının dibinde su göllenmiş.",
-    "Deniz: Yağış çok az. Altında kalın bir kalker tabakası olduğunu söylediler."
+    "Deniz: Kalkerli bir platodayım. Yerde çukurlar var, bir dere yere gömülüp kayboluyor; yakında mağaralar görünüyor.",
+    "Deniz: Akdeniz buradan çok uzak değil."
    ],
-   "question": "Bu şekiller hangi bölgede görülür? Deniz’in konumunu işaretle.",
+   "question": "Bu şekillerin yaygın olduğu bölgeyi bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 37.65,
-    "lon": 33.2,
-    "radiusKm": 110
+    "lat": 36.7,
+    "lon": 33,
+    "radiusKm": 80,
+    "alts": [
+     {
+      "lat": 37.1,
+      "lon": 30.5,
+      "radiusKm": 80
+     },
+     {
+      "lat": 37.8,
+      "lon": 30.7,
+      "radiusKm": 80
+     }
+    ]
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Kalkerin yağmur suyunda çözünmesiyle oluşan çöküntülere ne denir?"
+     "text": "Kalkerli (kireçtaşı) arazide suyun çözmesiyle çukurlar, kaybolan dereler ve mağaralar oluşur."
     },
     {
      "from": "ayse",
-     "text": "Kalkerli, kurak ve düz bir iç kesim ara; Konya Kapalı Havzası’nı düşün."
+     "text": "Türkiye’de bu şekiller en çok Akdeniz’e bakan yüksek dağ kuşağında yaygındır."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Konya Ovası’nın güneyindeyim, çöküntüler burada.",
-    "wrong": "Deniz: Burada kalker çözünmesi görünmüyor, kurak ve düz bir bozkır arıyorum.",
-    "explain": "Kalkerli arazide suyun çözmesiyle karstik şekiller oluşur; kurak Konya Kapalı Havzası’ndaki obruklar buna örnektir."
+    "correct": "Deniz: Karstik bir bölgedeyim, düdenler ve mağaralar burada çok.",
+    "wrong": "Deniz: Burada kalkerli plato görmüyorum, Akdeniz’e daha yakın yüksek bir kuşak ara.",
+    "explain": "Karstik şekiller kalkerli arazide çözünmeyle oluşur. Türkiye’de en yaygın olduğu yer Toroslar’dır: Taşeli, Teke ve Göller Yöresi’nin her biri doğru sayılır."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Obruk alanının (Karapınar–Çumra, Konya) koordinatını atlasla kontrol et."
+    "status": "dogrulandi",
+    "note": "Karst yayılışı geniş: Taşeli, Teke, Göller Yöresi. Cevapta birden çok kabul alanı (alts) kullanıldı (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 37.7,
-      "lon": 33.5
+      "lat": 36.7,
+      "lon": 33
+     },
+     {
+      "lat": 37.1,
+      "lon": 30.5
+     },
+     {
+      "lat": 37.8,
+      "lon": 30.7
      }
     ],
     "wrong": [
      {
       "lat": 41,
-      "lon": 29
+      "lon": 40.5
      },
      {
-      "lat": 39.9,
-      "lon": 41.2
+      "lat": 41.7,
+      "lon": 26.5
      }
     ]
    }
   },
   {
-   "id": "dis-03-buzul-pin",
+   "id": "dis-03-buzul-kackar-pin",
    "topic": "dis-kuvvetler",
    "difficulty": 3,
    "type": "pin",
-   "title": "Kaşık Biçimli Çukurlar",
+   "title": "Karlı Sirk",
    "radio": [
-    "Deniz: Zirvelere yakın kaşık biçimli çukurlar var, içlerinde göl. Aşağı inen vadi U biçiminde, tabanında moloz yığınları dizilmiş.",
-    "Deniz: Yazın bile kar lekeleri duruyor. Daha aşağıda sağanak, sis ve çay tarlaları var."
+    "Deniz: Yaz ortasında bile zirvelerde kar var. Çanak biçimli çukurlar, U biçimli vadiler ve küçük göller görüyorum.",
+    "Deniz: Aşağıdan Karadeniz’in nemli havası geliyor; deniz çok uzakta değil."
    ],
-   "question": "Bu şekillerin görüldüğü yüksek dağ hangi bölgede? Deniz’in konumunu işaretle.",
+   "question": "Bu buzul şekillerinin görüldüğü dağı bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 40.85,
-    "lon": 41.1,
-    "radiusKm": 100
+    "lat": 40.84,
+    "lon": 41.15,
+    "radiusKm": 80
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Kaşık biçimli çukur (sirk), U vadi ve moren, buzulların işidir. Buzul yalnızca çok yüksek dağlarda kalır."
+     "text": "Çanak biçimli çukur (sirk), U vadi ve buzul gölü buzul aşındırmasının ürünleridir; buzul ancak çok yüksek dağlarda kalır."
     },
     {
      "from": "ayse",
-     "text": "Çay ve bol yağış doğu Karadeniz’i gösterir; kıyıya paralel uzanan en yüksek sıradağı ara."
+     "text": "Karadeniz’e yakın olan, kıyıya paralel uzanan en yüksek sıradağı düşün."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Kaçkarlar’dayım, buzul gölleri burada.",
-    "wrong": "Deniz: Buzul şekilleri için yeterince yüksek bir dağ ve çayın yetiştiği yağışlı kıyı gerekiyor.",
-    "explain": "Sirk, U vadi ve moren buzul aşındırma ve biriktirme şekilleridir. Çay yetişen yağışlı doğu Karadeniz’in arkasındaki Kaçkarlar’da görülür."
+    "correct": "Deniz: Kaçkarlar’dayım, göller buzuldan kalma.",
+    "wrong": "Deniz: Buzul şekilleri için burası yeterince yüksek değil; Karadeniz’e yakın yüksek bir sıradağ ara.",
+    "explain": "Sirk, U vadi ve buzul gölleri buzul aşındırmasının ürünüdür. Karadeniz’e yakın buzullu yüksek dağ Kaçkar Dağları’dır."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
     "status": "dogrulandi",
-    "note": "Kaçkar Dağları’nda buzul gölleri ve buzul şekilleri."
+    "note": "Kaçkar Dağları’nda sirk, U vadi, buzul gölleri ve güncel buzullar var. Buzulların en zengin olduğu yer Güneydoğu Toroslar olduğundan “Karadeniz’e yakın” ipucu şart (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 40.85,
+      "lat": 40.84,
       "lon": 41.15
+     },
+     {
+      "lat": 40.6,
+      "lon": 41.5
      }
     ],
     "wrong": [
      {
-      "lat": 37.2,
-      "lon": 29.5
+      "lat": 37.5,
+      "lon": 43.8
      },
      {
-      "lat": 37.9,
-      "lon": 32.5
+      "lat": 37.1,
+      "lon": 30.5
      }
     ]
    }

@@ -2,41 +2,35 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "nufus-02-yogunluk-kart",
+   "id": "nufus-02-yogun-nufus-nedeni-kart",
    "topic": "nufus-yerlesme",
    "difficulty": 1,
    "type": "cards",
-   "title": "Kaç Kişi Düşüyor?",
+   "title": "Kalabalık Kıyı",
    "radio": [
-    "Deniz: Muhtar ilçenin alanının 2.000 km², nüfusunun 100.000 olduğunu söyledi.",
-    "Deniz: Bir kilometrekareye kaç kişi düştüğünü merak ediyorum."
+    "Deniz: Marmara kıyılarındayım, her yerde fabrika, liman ve işlek yollar var.",
+    "Deniz: Nüfus çok yoğun. Bunun nedenini bulur musun?"
    ],
-   "question": "Bu ilçenin nüfus yoğunluğu kaç kişi/km²’dir?",
+   "question": "Bu bölgede nüfusun yoğun olmasının asıl nedeni hangisidir?",
    "board": {
     "multi": false,
     "cards": [
      {
       "id": "a",
-      "title": "50 kişi/km²",
-      "text": "Nüfus ÷ alan"
+      "title": "Sanayi, ticaret ve ulaşım",
+      "text": "Sanayi, ticaret ve ulaşımın gelişmiş olması"
      },
      {
       "id": "b",
-      "title": "5 kişi/km²",
-      "text": "Nüfus ÷ 20.000",
-      "why": "100.000 ÷ 2.000 = 50 eder; 5 değeri bölmede bir sıfır eksik kalmasından çıkar."
+      "title": "Engebeli arazi",
+      "text": "Arazinin dağlık ve yüksek olması",
+      "why": "Engebe yerleşmeyi güçleştirir, nüfusu azaltır; yoğunluk nedeni olamaz."
      },
      {
       "id": "c",
-      "title": "500 kişi/km²",
-      "text": "Nüfus ÷ 200",
-      "why": "500 değeri alanı 200 km² almakla bulunur; ilçenin alanı 2.000 km²."
-     },
-     {
-      "id": "d",
-      "title": "200.000 kişi/km²",
-      "text": "Nüfus × alan",
-      "why": "Nüfus yoğunluğu nüfusu alana bölerek bulunur; çarpmakla bulunmaz."
+      "title": "Sert iklim",
+      "text": "Kışların çok soğuk geçmesi",
+      "why": "Sert iklim nüfusu seyrekleştirir; yoğunluğu açıklamaz."
      }
     ]
    },
@@ -48,27 +42,28 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Nüfus yoğunluğu, nüfusun alana bölünmesiyle bulunur."
+     "text": "Nüfus iş ve geçim imkânı olan yerlerde toplanır."
     },
     {
      "from": "ayse",
-     "text": "100.000’i 2.000’e böl.",
+     "text": "Engebe ve sert iklim nüfusu azaltan etkenlerdir.",
      "eliminate": [
-      "d"
+      "b",
+      "c"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: 50 kişi/km², pek kalabalık değil.",
-    "wrong": "Deniz: Sonuç tutmuyor, nüfus ile alanı doğru işleme sokmayı dene.",
-    "explain": "Nüfus yoğunluğu = nüfus ÷ alan. 100.000 ÷ 2.000 = 50 kişi/km² bulunur."
+    "correct": "Deniz: İş ve ticaret insanları buraya çekiyor, anladım.",
+    "wrong": "Deniz: Bu etken nüfusu azaltır, çoğaltmaz; tekrar düşün.",
+    "explain": "Sanayi, ticaret ve ulaşımın gelişmiş olması nüfusu toplar. Engebe ve sert iklim nüfusu azaltır."
    },
    "reward": {
-    "jeton": 2
+    "jeton": 1
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Nüfus yoğunluğu hesabı."
+    "status": "dogrulanacak",
+    "note": "Nüfus yoğunluğunu etkileyen faktörler ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
@@ -82,98 +77,102 @@
      ],
      [
       "c"
-     ],
-     [
-      "d"
      ]
     ]
    }
   },
   {
-   "id": "nufus-03-toplu-yerlesme-kart",
+   "id": "nufus-03-yer-secimi-kart",
    "topic": "nufus-yerlesme",
    "difficulty": 3,
    "type": "cards",
-   "title": "Tek Çeşme",
+   "title": "Köyün Yeri",
    "radio": [
-    "Deniz: Evler birbirine yapışık, tek merkezde toplanmış. Çevresi geniş ve düz bir ova.",
-    "Deniz: Köyün suyu tek bir kuyu ve çeşmeden geliyor. Ağaç yok, tarlalar köyün çevresine yayılmış."
+    "Deniz: Köy bir akarsuyun kıyısında, düz ve verimli bir ovada kurulmuş.",
+    "Deniz: Çevrede ne maden ocağı ne de turistik bir tesis var."
    ],
-   "question": "Köydeki yerleşmenin toplu olmasının başlıca nedeni nedir?",
+   "question": "Bu köyün kuruluş yerini en çok hangi iki faktör belirlemiştir? İki doğru var.",
    "board": {
-    "multi": false,
+    "multi": true,
     "cards": [
      {
       "id": "a",
-      "title": "Su kaynağının tek noktada olması",
-      "text": "Evler suya yakın kurulur"
+      "title": "Su kaynağı",
+      "text": "Akarsuya yakınlık"
      },
      {
       "id": "b",
-      "title": "Bol yağış ve çok sayıda dere",
-      "text": "Her yerde su bulunur",
-      "why": "Su her yerde olursa evler dağılır; burada su tek bir noktada."
+      "title": "Düz tarım arazisi",
+      "text": "Tarıma elverişli, verimli düz alan"
      },
      {
       "id": "c",
-      "title": "Engebeli arazi",
-      "text": "Düzlük az",
-      "why": "Engebeli arazi yerleşmeyi dağıtır; burada geniş ve düz bir ova var."
+      "title": "Maden yatağı",
+      "text": "Yer altı zenginliği",
+      "why": "Çevrede maden ocağı yok; köy madene bağlı kurulmamış."
      },
      {
       "id": "d",
-      "title": "Geniş ormanlık alanlar",
-      "text": "Evler ormana yayılır",
-      "why": "Geniş ormanlar dağınık yerleşmeyi getirir; burada ağaç yok."
+      "title": "Turizm",
+      "text": "Turistik çekicilik",
+      "why": "Çevrede turistik tesis yok; köyün kuruluşunda turizm etkili değil."
      }
     ]
    },
    "answer": {
     "correct": [
-     "a"
+     "a",
+     "b"
     ]
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Su azsa evler ne yapar: suya yaklaşır mı, uzaklaşır mı?"
+     "text": "Yerleşme yeri seçiminde su ve geçim kaynağı birinci sıradadır."
     },
     {
      "from": "ayse",
-     "text": "Burada bol yağış, engebe ve orman anlatılmıyor.",
+     "text": "Çevrede maden ve turistik tesis yok.",
      "eliminate": [
-      "b",
       "c",
       "d"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: Su tek yerde, evler de onun çevresinde.",
-    "wrong": "Deniz: Bu neden Deniz’in anlattıklarıyla uyuşmuyor, çevreye bir daha bak.",
-    "explain": "Suyun az olduğu ve tek noktada toplandığı düz ovalarda evler suya yakın kurulur; bu toplu yerleşmeyi doğurur. Bol su, engebe ve orman dağınık yerleşmeyi getirir."
+    "correct": "Deniz: Su ve verimli ova, köy için ideal.",
+    "wrong": "Deniz: Birini eksik ya da fazla seçtin, çevrede olmayanlara bakma.",
+    "explain": "Yerleşme yerini en çok su kaynağı ve tarıma elverişli düz arazi belirler. Maden ve turizm bu köyün kuruluşunda etkili değildir."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Toplu ve dağınık yerleşmeyi etkileyen faktörler."
+    "status": "dogrulanacak",
+    "note": "Yerleşme yeri seçimi faktörleri ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      [
-      "a"
+      "a",
+      "b"
      ]
     ],
     "wrong": [
      [
-      "b"
+      "a"
      ],
      [
+      "a",
       "c"
      ],
      [
+      "c",
+      "d"
+     ],
+     [
+      "a",
+      "b",
       "d"
      ]
     ]

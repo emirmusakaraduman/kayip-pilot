@@ -2,21 +2,21 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "goc-03-goc-alan-sehir-grafik",
+   "id": "goc-03-koyden-goc-piramit",
    "topic": "goc",
    "difficulty": 3,
    "type": "graph",
-   "title": "Sanayi Kentinin Piramidi",
+   "title": "Boşalan Orta Yaşlar",
    "radio": [
-    "Deniz: Büyük bir sanayi kentinin nüfus piramidini buldum. Çalışma çağındaki gruplar çok kalabalık; taban ve tepe daha dar.",
-    "Deniz: Erkekler kadınlardan belirgin biçimde fazla."
+    "Deniz: Köyün nüfus piramidini buldum. Genç ve orta yaş erkek çubukları belirgin biçimde dar.",
+    "Deniz: Köyde iş az; erkekler başka yerlere çalışmaya gidiyor."
    ],
-   "question": "Bu piramit kentin nüfus hareketi hakkında neyi gösterir?",
+   "question": "Göçten en çok etkilenen iki yaş grubunu işaretle.",
    "board": {
     "kind": "pyramid",
-    "pickMode": "choice",
+    "pickMode": "bars",
     "data": {
-     "title": "Örnek nüfus piramidi (yaklaşık değerler)",
+     "title": "Köyün nüfus piramidi (yaklaşık değerler)",
      "groups": [
       "0-14",
       "15-29",
@@ -25,77 +25,79 @@
       "60+"
      ],
      "male": [
-      8,
-      17,
-      16,
-      8,
-      3.5
+      11,
+      5,
+      5.5,
+      9,
+      7
      ],
      "female": [
-      7.5,
-      12,
-      11,
-      7.5,
-      4.5
+      10.5,
+      9,
+      9.5,
+      9,
+      7.5
      ]
-    },
-    "choices": [
-     {
-      "id": "alan",
-      "text": "Dışarıdan göç alıyor"
-     },
-     {
-      "id": "veren",
-      "text": "Dışarıya göç veriyor",
-      "why": "Göç veren yerde çalışma çağındaki genç nüfus azalır; burada o gruplar tam tersine kalabalık."
-     },
-     {
-      "id": "genc",
-      "text": "Doğum oranı çok yüksek, nüfus genç",
-      "why": "Genç nüfusta taban en geniş olur; bu piramidin tabanı dar."
-     }
-    ]
+    }
    },
    "answer": {
-    "choice": "alan"
+    "bars": [
+     1,
+     2
+    ]
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Çalışma çağındaki nüfusun ve erkeklerin fazlalığı iş için gelen insanları düşündürür."
+     "text": "İş için göç edenler genellikle çalışma çağındaki genç yetişkinlerdir."
     },
     {
      "from": "ayse",
-     "text": "Piramidin tabanı dar; yani yüksek doğum oranı nedeni olamaz."
+     "text": "Erkek çubuklarının en dar olduğu iki grubu bul."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Göç alan bir kent, iş için gelenler çok.",
-    "wrong": "Deniz: Piramidin şekli başka bir şeyi anlatıyor, orta yaşlara dikkat et.",
-    "explain": "Çalışma çağındaki grupların kabarık, erkeklerin fazla olduğu piramit iş için gelen göçü gösterir. Dar taban doğumun yüksek olmadığını gösterir."
+    "correct": "Deniz: 15-29 ve 30-44 yaş grupları boşalmış, göçün izi bu.",
+    "wrong": "Deniz: Bu gruplar göçten etkilenmemiş, çubukların darlığına bak.",
+    "explain": "İş için göç eden genç yetişkinler köyden ayrıldığı için 15-29 ve 30-44 yaş gruplarında erkekler azalır. Çocuk ve yaşlı grupları yerinde kalır."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
     "status": "dogrulanacak",
-    "note": "Örnek (yaklaşık) veri; ders kitabındaki gerçek piramitle değiştir."
+    "note": "Veri örnek (yaklaşık); kitaptaki piramitle değiştirilebilir (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      {
-      "choice": "alan"
+      "bars": [
+       1,
+       2
+      ]
      }
     ],
     "wrong": [
      {
-      "choice": "veren"
+      "bars": [
+       1
+      ]
      },
      {
-      "choice": "genc"
+      "bars": [
+       0,
+       4
+      ]
      },
      {
-      "choice": null
+      "bars": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "bars": []
      }
     ]
    }

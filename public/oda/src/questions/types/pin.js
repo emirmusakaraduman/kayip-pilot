@@ -3,11 +3,16 @@
   'use strict';
   var KP = root.KP, U = KP.util;
   KP.registerType('pin', {
-    mapNeeded: true,
+    // board.mapMode:'hidden' → koordinat hesaplatılan vaka: harita gizli, cevap enlem/boylam kutularına yazılır
+    mapNeeded: function (c) { return !(c && c.board && c.board.mapMode === 'hidden'); },
     checkCase: function (c) {
       var e = [], a = c.answer || {};
       if (a.mode === 'zone') { if (['karasal', 'akdeniz', 'karadeniz', 'sert'].indexOf(a.zone) < 0) e.push('answer.zone: karasal|akdeniz|karadeniz|sert'); }
-      else if (a.mode === 'point') { if (typeof a.lat !== 'number' || typeof a.lon !== 'number' || typeof a.radiusKm !== 'number') e.push('answer: lat, lon, radiusKm gerekli'); }
+      else if (a.mode === 'point') {
+        if (typeof a.lat !== 'number' || typeof a.lon !== 'number' || typeof a.radiusKm !== 'number') e.push('answer: lat, lon, radiusKm gerekli');
+        // answer.alts: birden çok kabul alanı (ör. karst: Taşeli, Teke, Göller)
+        (a.alts || []).forEach(function (t, i) { if (!t || typeof t.lat !== 'number' || typeof t.lon !== 'number' || typeof t.radiusKm !== 'number') e.push('answer.alts[' + i + ']: lat, lon, radiusKm gerekli'); });
+      }
       else e.push('answer.mode: zone|point');
       return e;
     },
@@ -19,25 +24,30 @@
         var z = a.zone || KP.geo.zoneNear(a.lat, a.lon, 30), ok = z === ans.zone;
         return { ok: ok, score: ok ? 1 : 0, detail: { zone: z } };
       }
-      var d = KP.geo.distanceKm(a, ans), ok2 = d <= ans.radiusKm;
-      return { ok: ok2, score: ok2 ? 1 : 0, detail: { distKm: Math.round(d), near: !ok2 && d <= ans.radiusKm * 2 } };
+      // ana hedef + (varsa) alternatif hedefler; en uygun olana göre karar verilir
+      var targets = [ans].concat(ans.alts || []), best = null;
+      targets.forEach(function (t) { var dd = KP.geo.distanceKm(a, t); if (!best || dd - t.radiusKm < best.d - best.r) best = { d: dd, r: t.radiusKm }; });
+      var d = best.d, ok2 = d <= best.r;
+      return { ok: ok2, score: ok2 ? 1 : 0, detail: { distKm: Math.round(d), near: !ok2 && d <= best.r * 2 } };
     },
     mount: function (ctx) {
       var c = ctx.case, A = ctx.adapter || {}, last = null;
       var sel = U.el('div', { class: 'kp-sel', text: 'Henüz bir yer seçmedin.' });
-      ctx.host.appendChild(U.el('div', { class: 'kp-info', text: 'Masadaki haritaya dokunarak Deniz’in konumunu işaretle. Değiştirmek için başka bir yere dokun.' }));
+      var noMap = !!(c.board && c.board.mapMode === 'hidden');
+      if (!noMap) ctx.host.appendChild(U.el('div', { class: 'kp-info', text: 'Masadaki haritaya dokunarak Deniz’in konumunu işaretle. Değiştirmek için başka bir yere dokun.' }));
+      if (noMap) sel.textContent = 'Henüz bir konum yazmadın.';
       ctx.host.appendChild(sel);
       if (A.setMapMode) A.setMapMode((c.board && c.board.mapMode) || 'neutral', c.board || {});
       function choose(pt) {
         last = pt;
-        sel.textContent = 'Seçtiğin yer: ' + pt.lat.toFixed(2) + '°K, ' + pt.lon.toFixed(2) + '°D' + (pt.zoneName ? ' (' + pt.zoneName + ')' : '');
+        sel.textContent = (noMap ? 'Yazdığın konum: ' : 'Seçtiğin yer: ') + pt.lat.toFixed(2) + '°K, ' + pt.lon.toFixed(2) + '°D' + (pt.zoneName ? ' (' + pt.zoneName + ')' : '');
         if (A.clearMarkers) A.clearMarkers();
-        if (A.addMarker) A.addMarker(pt.lat, pt.lon);
+        if (A.addMarker && !noMap) A.addMarker(pt.lat, pt.lon);
         ctx.changed();
       }
-      if (A.enableMapPick) A.enableMapPick(function (p) { choose({ lat: p.lat, lon: p.lon, zone: p.zone }); });
+      if (A.enableMapPick && !noMap) A.enableMapPick(function (p) { choose({ lat: p.lat, lon: p.lon, zone: p.zone }); });
       // klavye / dokunamayanlar için: koordinat girişi ve (bölge sorularında) bölge düğmeleri
-      if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Haritada işaretle', cities: !(c.board && c.board.cities === false), onSubmit: function (a, o) { choose({ lat: a, lon: o }); } }));
+      if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: noMap ? 'Konumu yaz' : 'Haritada işaretle', info: noMap ? 'Hesapladığın enlem ve boylamı yaz.' : null, cities: !noMap && !(c.board && c.board.cities === false), onSubmit: function (a, o) { choose({ lat: a, lon: o }); } }));
       if (c.answer && c.answer.mode === 'zone' && KP.ZONE_POINTS) {
         var zr = U.el('div', { class: 'kp-row', role: 'group', 'aria-label': 'İklim bölgesi seç' });
         Object.keys(KP.ZONE_POINTS).forEach(function (k) {

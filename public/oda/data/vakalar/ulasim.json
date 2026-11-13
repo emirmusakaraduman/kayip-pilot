@@ -2,64 +2,64 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "ulasim-02-agir-yuk-karar",
+   "id": "ulasim-02-tasima-turu-karar",
    "topic": "ulasim",
    "difficulty": 1,
    "type": "decision",
-   "title": "Çimento Sevkiyatı",
+   "title": "Hangi Taşıma?",
    "radio": [
-    "Deniz: Kasabaya 500 ton çimento götürmemiz gerekiyor, mesafe 600 km. Acelemiz yok ama maliyet önemli.",
-    "Deniz: Hangi taşıma yolunu seçelim?"
+    "Deniz: 20 kg tıbbi malzeme bana iki saat içinde ulaşmalı.",
+    "Deniz: Yanımda ağır erzak da bekliyor ama önce tıbbi malzeme gerekiyor."
    ],
-   "question": "Deniz’e hangi taşıma yolunu önerirsin?",
+   "question": "Deniz’e hangi taşıma yolunu ve yükleme sırasını önerirsin?",
    "board": {
     "start": "s1",
     "steps": [
      {
       "id": "s1",
-      "text": "Ağır bir yükü 600 km uzağa göndereceksin. Acelen yok, maliyet önemli. Hangi taşıma?",
+      "text": "20 kg tıbbi malzeme 2 saat içinde Deniz’e ulaşmalı. Hangi taşıma?",
       "options": [
        {
         "id": "s1a",
-        "text": "Uçak kargosu",
-        "end": "bad",
-        "note": "Havayolu hızlıdır ama çok pahalıdır; ağır ve acelesiz yük için uygun değildir."
+        "text": "Hava yolu (helikopter)",
+        "next": "s2",
+        "note": "Doğru: acil ve hafif yük için hava yolu en hızlıdır."
        },
        {
         "id": "s1b",
         "text": "Demiryolu",
-        "next": "s2",
-        "note": "Doğru: ağır yükü uzun mesafede taşımada demiryolu ucuz ve verimlidir."
+        "end": "bad",
+        "note": "Tren ağır yük için ucuzdur ama iki saatte Deniz’e ulaşamaz."
        },
        {
         "id": "s1c",
-        "text": "Küçük kamyonetlerle tek tek taşımak",
+        "text": "Deniz yolu",
         "end": "bad",
-        "note": "Çok sayıda küçük araç maliyeti artırır ve yolları yorar."
+        "note": "Gemi çok yavaştır ve her yere ulaşamaz."
        }
       ]
      },
      {
       "id": "s2",
-      "text": "Tren en yakın istasyona kadar gidiyor; istasyondan kasabaya 20 km kaldı. Ne yapalım?",
+      "text": "Helikopterde yük kapasitesi sınırlı. Neleri yüklersin?",
       "options": [
        {
         "id": "s2a",
-        "text": "Yükü helikopterle taşımak",
-        "end": "bad",
-        "note": "Helikopter çok pahalıdır ve ağır yük için uygun değildir."
+        "text": "Önce hafif ve acil tıbbi malzemeyi yükle, ağır erzağı sonraya bırak",
+        "end": "best",
+        "note": "Doğru: sınırlı kapasite acil ve hafif yüke ayrılır."
        },
        {
         "id": "s2b",
-        "text": "İstasyondan kasabaya karayoluyla kamyonla taşımak",
-        "end": "best",
-        "note": "Doğru: kısa mesafede karayolu kapıdan kapıya esnek taşıma sağlar."
+        "text": "Önce ağır erzağı yükle",
+        "end": "bad",
+        "note": "Ağır yük kapasiteyi doldurur, acil malzeme geride kalır."
        },
        {
         "id": "s2c",
-        "text": "Yükü istasyonda bekletmek",
+        "text": "Hepsini birden yükle",
         "end": "bad",
-        "note": "Yükün beklemesi teslimi geciktirir; kısa mesafe için esnek bir yol seçilmeli."
+        "note": "Kapasiteyi aşmak helikopteri tehlikeye atar."
        }
       ]
      }
@@ -73,65 +73,69 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Ağır yük ve uzun mesafede hangi taşıma türü ucuzdur?"
+     "text": "Hız gereken, hafif ve acil bir yük için hangi taşıma türü uygundur?"
     },
     {
      "from": "ayse",
-     "text": "Tren her yere gitmez; son kısa mesafeyi hangi yolla bitirirsin?"
+     "text": "Kapasite sınırlıysa önceliği hangi yük alır?"
     }
    ],
    "feedback": {
-    "correct": "Deniz: Çimento kasabaya ulaştı, harika.",
-    "wrong": "Deniz: Bu seçim ya pahalı ya yavaş, başka yol düşünelim.",
-    "explain": "Ağır yükü uzun mesafede taşımak için demiryolu ucuz ve verimlidir. İstasyondan sonraki kısa mesafede karayolu esnek bir çözümdür."
+    "correct": "Deniz: Malzeme zamanında geldi, teşekkürler.",
+    "wrong": "Deniz: Bu seçim ya çok yavaş ya da güvensiz, tekrar düşünelim.",
+    "explain": "Acil ve hafif yük için hava yolu en uygunudur. Sınırlı kapasitede önce acil ve hafif malzeme yüklenir, ağır erzak sonraya bırakılır."
    },
    "reward": {
-    "jeton": 2
+    "jeton": 1
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Taşıma türlerinin özellikleri: demiryolu, karayolu, havayolu."
+    "status": "dogrulanacak",
+    "note": "Taşıma türlerinin hız, kapasite ve maliyet özellikleri ders kitabıyla karşılaştırılmalı (günlükte yok)."
    },
    "selfTest": {
     "correct": [
      [
-      "s1b",
-      "s2b"
+      "s1a",
+      "s2a"
      ]
     ],
     "wrong": [
      [
-      "s1a"
-     ],
-     [
-      "s1b",
-      "s2a"
+      "s1b"
      ],
      [
       "s1c"
+     ],
+     [
+      "s1a",
+      "s2b"
+     ],
+     [
+      "s1a",
+      "s2c"
      ]
     ]
    }
   },
   {
-   "id": "ulasim-03-izmir-ankara-rota",
+   "id": "ulasim-03-gulek-gecidi-rota",
    "topic": "ulasim",
    "difficulty": 2,
    "type": "route",
-   "title": "Karlı Yol",
+   "title": "Toros Geçidi",
    "radio": [
-    "Deniz: Erzak İzmir’den Ankara’ya gidecek. Eskişehir çevresinde yollar karla kapanmış, kamyonlar o hattan geçemiyor.",
-    "Deniz: Afyonkarahisar üzerinden güneyi dolaşarak Ankara’ya ulaşmalılar. Rotayı çizer misin?"
+    "Deniz: Yardım malzemesi Mersin limanından Ankara’ya kara yoluyla gidecek.",
+    "Deniz: Önde Toroslar bir duvar gibi yükseliyor; kamyonların bir geçit bulması gerek."
    ],
-   "question": "İzmir’den Ankara’ya, Afyonkarahisar’dan geçen ve kapalı bölgeden kaçınan rotayı çiz.",
+   "question": "Mersin’den Ankara’ya, Toroslar’ı doğal geçitten aşan rotayı çiz.",
    "board": {
     "mode": "map",
     "mapMode": "neutral",
     "start": {
-     "lat": 38.42,
-     "lon": 27.14,
+     "lat": 36.8,
+     "lon": 34.64,
      "radiusKm": 70,
-     "name": "İzmir"
+     "name": "Mersin"
     },
     "end": {
      "lat": 39.93,
@@ -142,57 +146,50 @@
     "ordered": true,
     "waypoints": [
      {
-      "lat": 38.76,
-      "lon": 30.54,
-      "radiusKm": 70,
-      "name": "Afyonkarahisar"
+      "lat": 37.28,
+      "lon": 34.77,
+      "radiusKm": 40,
+      "name": "Gülek Boğazı"
      }
     ],
-    "forbidden": [
-     {
-      "lat": 39.77,
-      "lon": 30.52,
-      "radiusKm": 70,
-      "name": "Kar nedeniyle kapalı bölge"
-     }
-    ],
-    "maxLengthKm": 900,
+    "forbidden": [],
+    "maxLengthKm": 600,
     "maxPoints": 8
    },
    "answer": {},
    "hints": [
     {
-     "from": "ayse",
-     "text": "Önce İzmir’den Afyonkarahisar’a git, sonra oradan Ankara’ya dön."
+     "from": "nuri",
+     "text": "Çukurova’yı İç Anadolu’ya bağlayan, Toroslar’ın en önemli doğal geçidini düşün."
     },
     {
-     "from": "nuri",
-     "text": "Kırmızı daireye değmeyecek biçimde rotanı güneyden geçir."
+     "from": "ayse",
+     "text": "Bu geçit Mersin’in kuzeyindedir; rotayı oradan geçir, sonra Ankara’ya yönel."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Rotayı aldım, kamyonlar güvenle geçer.",
-    "wrong": "Deniz: Bu rota kapalı bölgeye giriyor ya da Afyonkarahisar’ı atlıyor.",
-    "explain": "Rotada ara nokta ve yasak bölge birlikte düşünülür: önce güneydeki Afyonkarahisar’a, oradan Ankara’ya giden hat kapalı bölgenin dışında kalır."
+    "correct": "Deniz: Rotayı aldım, kamyonlar geçide yöneliyor.",
+    "wrong": "Deniz: Bu rota Toroslar’ı geçitsiz aşıyor ya da çok uzun, geçidi atlama.",
+    "explain": "Çukurova’dan İç Anadolu’ya Toroslar Gülek Boğazı’ndan aşılır. Rota Mersin → Gülek Boğazı → Ankara sırasıyla çizilir."
    },
    "reward": {
-    "jeton": 3
+    "jeton": 2
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Şehir koordinatları ve yasak dairenin yarıçapı atlasla kontrol edilmeli (örnek senaryo, gerçek yol durumu değil)."
+    "status": "dogrulandi",
+    "note": "Gülek Boğazı: Toroslar’ın en önemli geçidi, ≈37°17′K 34°47′D (doğrulama günlüğü). Geçit kara içinde olduğundan ara nokta yarıçapı 40 km (70 km kuralı kıyı içindir)."
    },
    "selfTest": {
     "correct": [
      {
       "points": [
        {
-        "lat": 38.42,
-        "lon": 27.14
+        "lat": 36.8,
+        "lon": 34.64
        },
        {
-        "lat": 38.76,
-        "lon": 30.54
+        "lat": 37.28,
+        "lon": 34.77
        },
        {
         "lat": 39.93,
@@ -205,8 +202,12 @@
      {
       "points": [
        {
-        "lat": 38.42,
-        "lon": 27.14
+        "lat": 36.8,
+        "lon": 34.64
+       },
+       {
+        "lat": 37.18,
+        "lon": 33.22
        },
        {
         "lat": 39.93,
@@ -217,16 +218,16 @@
      {
       "points": [
        {
-        "lat": 38.42,
-        "lon": 27.14
-       },
-       {
-        "lat": 39.77,
-        "lon": 30.52
+        "lat": 36.8,
+        "lon": 34.64
        },
        {
         "lat": 39.93,
         "lon": 32.86
+       },
+       {
+        "lat": 37.28,
+        "lon": 34.77
        }
       ]
      }

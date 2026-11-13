@@ -2,16 +2,16 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "ekonomi-01-cay-pin",
+   "id": "ekon-01-cay-pin",
    "topic": "ekonomik-faaliyetler",
    "difficulty": 1,
    "type": "pin",
-   "title": "Basamaklı Yamaçlar",
+   "title": "Yeşil Sıralar",
    "radio": [
-    "Deniz: Yamaçlarda basamak basamak yeşil sıralar var; toplayıcılar taze yaprak koparıyor.",
-    "Deniz: Hava sisli, neredeyse her gün yağmur yağıyor. Deniz kıyısına çok yakınım."
+    "Deniz: Yamaçlarda sıra sıra yeşil çalılar var, işçiler yaprak topluyor.",
+    "Deniz: Burada her gün yağış ve sis oluyor."
    ],
-   "question": "Bu ürün hangi yörede yetiştirilir? Deniz’in konumunu işaretle.",
+   "question": "Bu ürünün yetiştiği bölgeyi bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
@@ -19,167 +19,187 @@
     "mode": "point",
     "lat": 41,
     "lon": 40.5,
-    "radiusKm": 100
+    "radiusKm": 70
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Taze yaprağı toplanan, yağışı bol sisli yamaçlarda yetişen bitkiyi düşün."
+     "text": "Bu bitki bol ve düzenli yağış ile nemli yamaç ister."
     },
     {
      "from": "ayse",
-     "text": "Türkiye’nin çay üretimi doğu Karadeniz kıyısındadır."
+     "text": "Türkiye’de bu koşullar Karadeniz’in doğusunda bulunur."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Rize çevresindeyim, çay tarlaları göz alabildiğine.",
-    "wrong": "Deniz: Bu ürün için bol yağış ve sis gerekiyor, burası öyle değil.",
-    "explain": "Çay, yıl boyu yağışlı ve nemli yamaçlarda yetişir; Türkiye’de üretim Rize ve çevresindedir."
+    "correct": "Deniz: Çay tarlalarının ortasındayım, hava nemli.",
+    "wrong": "Deniz: Burada bu kadar yağış ve sis yok, Karadeniz’in doğusuna bak.",
+    "explain": "Çay bol, düzenli yağış ve nemli yamaç ister; Türkiye’de Doğu Karadeniz’de, Rize çevresinde yetişir."
    },
    "reward": {
-    "jeton": 2
+    "jeton": 1
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Çay: Rize ve çevresi, doğu Karadeniz."
+    "status": "dogrulanacak",
+    "note": "Rize çayı ve koordinat bilgisi ders kitabından hızlı kontrol önerilir (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      {
       "lat": 41,
       "lon": 40.5
+     },
+     {
+      "lat": 40.9,
+      "lon": 40.1
      }
     ],
     "wrong": [
      {
-      "lat": 37,
-      "lon": 35
+      "lat": 37.2,
+      "lon": 38.1
      },
      {
       "lat": 38.4,
-      "lon": 27
+      "lon": 27.1
      }
     ]
    }
   },
   {
-   "id": "ekonomi-02-tashomur-pin",
+   "id": "ekon-02-antep-fistigi-pin",
    "topic": "ekonomik-faaliyetler",
    "difficulty": 2,
    "type": "pin",
-   "title": "Kıyıdaki Fabrika",
+   "title": "Kuru Tepelerde Fıstık",
    "radio": [
-    "Deniz: Kıyıda dev bir demir-çelik tesisi var. Yakındaki yer altı galerilerinden çıkarılan siyah, yanıcı bir kayaç taşınıyor.",
-    "Deniz: İşçilerin çoğu madenci, kasaba kıyıya kurulmuş."
+    "Deniz: Kurak, kireçli ve taşlık tepelerde sıra sıra fıstık ağaçları var.",
+    "Deniz: Yazlar çok sıcak ve kurak geçiyor."
    ],
-   "question": "Bu ekonomik faaliyet hangi yörede? Deniz’in konumunu işaretle.",
+   "question": "Bu ürünün yetiştiği bölgeyi bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 41.4,
-    "lon": 31.8,
-    "radiusKm": 90
+    "lat": 37.2,
+    "lon": 38.1,
+    "radiusKm": 110
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Siyah, yanıcı, yer altından çıkarılan kayaç kömürdür; demir-çelik üretiminde kullanılır."
+     "text": "Bu ağaç sıcak, kurak yazlara ve kireçli taşlık topraklara dayanır."
     },
     {
      "from": "ayse",
-     "text": "Türkiye’nin taş kömürü havzası batı Karadeniz kıyısındadır."
+     "text": "Türkiye’de bu koşullar Güneydoğu Anadolu’da bulunur."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Zonguldak çevresindeyim, galeriler burada.",
-    "wrong": "Deniz: Burada madencilik ve demir-çelik bir arada görünmüyor.",
-    "explain": "Türkiye’nin taş kömürü havzası batı Karadeniz’de Zonguldak çevresindedir; kömür demir-çelik tesislerinde kullanılır."
+    "correct": "Deniz: Güneydoğu’dayım, fıstık bahçeleri tepeleri kaplıyor.",
+    "wrong": "Deniz: Burası bu ürün için fazla yağışlı ya da serin, güneydoğuya bak.",
+    "explain": "Antep fıstığı sıcak ve kurak yazlara, kireçli taşlık topraklara dayanır. Türkiye’de Güneydoğu Anadolu’da, başta Gaziantep, Şanlıurfa ve Siirt çevresinde yetişir."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
     "status": "dogrulandi",
-    "note": "Zonguldak taş kömürü havzası; Karabük ve Ereğli demir-çelik."
+    "note": "Antep fıstığı: Güneydoğu Anadolu; Şanlıurfa en geniş alan, Gaziantep ve Siirt önemli. “Kışlar ılık” ifadesi kaldırıldı, kabul alanı Şanlıurfa’yı kapsayacak biçimde kaydırıldı (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 41.4,
-      "lon": 31.8
+      "lat": 37.2,
+      "lon": 38.1
+     },
+     {
+      "lat": 37.1,
+      "lon": 37.4
+     },
+     {
+      "lat": 37.2,
+      "lon": 38.8
      }
     ],
     "wrong": [
      {
-      "lat": 37.9,
-      "lon": 32.5
+      "lat": 41,
+      "lon": 40.5
      },
      {
-      "lat": 40,
-      "lon": 42
+      "lat": 38.4,
+      "lon": 27.1
      }
     ]
    }
   },
   {
-   "id": "ekonomi-03-findik-pin",
+   "id": "ekon-03-bor-pin",
    "topic": "ekonomik-faaliyetler",
    "difficulty": 3,
    "type": "pin",
-   "title": "Bodur Kümeler",
+   "title": "Beyaz Maden",
    "radio": [
-    "Deniz: Yamaçlarda yarım gövdeli, çok dallı bodur kümelerden meyve topluyorlar; kabuklu, yağlı, kuru bir yemiş.",
-    "Deniz: Sis ve yağmur var ama basamaklı çay tarlası görmüyorum. Üretim kıyıya yakın ve yağışlı yamaçlarda."
+    "Deniz: Açık ocaklardan beyaz, ince bir toz çıkarılıyor. Bu madenin dünyadaki en büyük rezervi bu ülkede.",
+    "Deniz: Batı Anadolu’dayım; ocaklar birkaç ilin sınırında dağılmış."
    ],
-   "question": "Bu ürün hangi yörede yetiştirilir? Deniz’in konumunu işaretle.",
+   "question": "Bu madenin çıkarıldığı bölgeyi bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 40.9,
-    "lon": 38.2,
-    "radiusKm": 110
+    "lat": 39.4,
+    "lon": 29.3,
+    "radiusKm": 130
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Çay ve bu ürün aynı iklimi sever ama aynı yerde yetişmez; çay doğunun en ucuna yakındır."
+     "text": "Dünya rezervinin büyük bölümü Türkiye’de olan beyaz madenin adı bordur."
     },
     {
      "from": "ayse",
-     "text": "Kabuklu, yağlı yemiş olan fındık; Karadeniz’in orta-doğu kıyısında yoğundur."
+     "text": "Yataklar Batı Anadolu’da Eskişehir, Kütahya, Balıkesir ve Bursa çevresindedir."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Fındık bahçelerinin ortasındayım.",
-    "wrong": "Deniz: Burada çay da var olabilir, ürünün yoğun olduğu yöreyi tekrar düşün.",
-    "explain": "Fındık Karadeniz’in nemli ve ılık yamaçlarında yetişir; Ordu–Giresun çevresi yoğun üretim alanıdır. Basamaklı çay tarlaları ise daha doğuda yoğundur."
+    "correct": "Deniz: Bor ocaklarının ortasındayım, her yer beyaz.",
+    "wrong": "Deniz: Burada bor yatağı yok, Batı Anadolu’nun iç kesimine bak.",
+    "explain": "Türkiye’nin bor yatakları Eskişehir (Kırka), Kütahya (Emet), Balıkesir (Bigadiç) ve Bursa (Kestelek) çevresinde yoğundur."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Fındık üretim merkezinin (Ordu–Giresun) koordinatı ve yarıçapı atlasla kontrol edilmeli."
+    "status": "dogrulandi",
+    "note": "Bor: Kırka, Emet, Bigadiç, Kestelek; kabul alanı dört yatağı kapsayacak biçimde genişletildi, metinde sayı verilmedi (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 40.9,
-      "lon": 38.2
+      "lat": 39.3,
+      "lon": 30.5
+     },
+     {
+      "lat": 39.3,
+      "lon": 29.2
+     },
+     {
+      "lat": 39.4,
+      "lon": 28.1
      }
     ],
     "wrong": [
      {
-      "lat": 37,
-      "lon": 35
+      "lat": 41,
+      "lon": 40.5
      },
      {
-      "lat": 41,
-      "lon": 40.9
+      "lat": 37,
+      "lon": 35
      }
     ]
    }

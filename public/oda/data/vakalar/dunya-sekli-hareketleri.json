@@ -2,156 +2,157 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "dunya-02-ekinoks-gunes-acisi",
+   "id": "dunya-02-kutup-dairesi",
    "topic": "dunya-sekli-hareketleri",
    "difficulty": 1,
    "type": "number",
-   "title": "Ekinoks Öğlesi",
+   "title": "Kutup Dairesi",
    "radio": [
-    "Deniz: 21 Mart, öğle vakti. Merkez, bu tarihte Güneş ışınlarının ekvatora dik geldiğini söylemişti.",
-    "Deniz: Ben 30° kuzey enlemindeyim. Işınlar yere hangi açıyla düşüyor, hesaplar mısın?"
+    "Deniz: Uçuş eğitimi defterimde Dünya’nın eksen eğikliği 23°27′ olarak yazıyor.",
+    "Deniz: Kuzey Kutup Dairesi’nin enlemini bu değerden hesaplar mısın?"
    ],
-   "question": "Öğle Güneş ışınlarının yere geliş açısı kaç derecedir?",
-   "board": {
-    "unit": "°",
-    "placeholder": "Örn. 45",
-    "given": [
-     "Tarih: 21 Mart, öğle vakti",
-     "Deniz’in enlemi: 30° Kuzey"
-    ]
-   },
-   "answer": {
-    "value": 60,
-    "tolerance": 0.3,
-    "angle": true
-   },
-   "hints": [
-    {
-     "from": "nuri",
-     "text": "21 Mart ve 23 Eylül’de ışınlar ekvatora dik gelir (ekinoks)."
-    },
-    {
-     "from": "ayse",
-     "text": "Dik geldiği yerden uzaklaştıkça açı küçülür: açı = 90° − enlem farkı."
-    }
-   ],
-   "feedback": {
-    "correct": "Deniz: 60°, ışınlar epey eğik geliyor, anladım.",
-    "wrong": "Deniz: Bu açı tutmuyor, ışınların dik geldiği enlemi bir daha düşün.",
-    "explain": "21 Mart’ta ışınlar ekvatora dik gelir. Enlem farkı 30° olduğundan açı 90° − 30° = 60° olur."
-   },
-   "reward": {
-    "jeton": 2
-   },
-   "source": {
-    "status": "dogrulandi",
-    "note": "Ekinoks tarihlerinde ışınlar ekvatora diktir."
-   },
-   "selfTest": {
-    "correct": [
-     {
-      "raw": "60"
-     },
-     {
-      "raw": "60°"
-     }
-    ],
-    "wrong": [
-     {
-      "raw": "30"
-     },
-     {
-      "raw": "90"
-     },
-     {
-      "raw": "120"
-     }
-    ]
-   }
-  },
-  {
-   "id": "dunya-03-aralik-gunes-acisi-enlem",
-   "topic": "dunya-sekli-hareketleri",
-   "difficulty": 3,
-   "type": "number",
-   "title": "Kuzeye Uzanan Gölge",
-   "radio": [
-    "Deniz: 21 Aralık, öğle vakti. Güneş ışınlarının yere geliş açısını ölçtüm: 29°33′.",
-    "Deniz: Gölgem kuzeye uzanıyor. Hangi enlemde olduğumu bulabilir misin?"
-   ],
-   "question": "Deniz hangi enlemde? (derece ve yön)",
+   "question": "Kuzey Kutup Dairesi hangi enlemdedir? (derece ve yön)",
    "board": {
     "unit": "°",
     "dirs": [
      "K",
      "G"
     ],
-    "placeholder": "Örn. 30",
+    "placeholder": "Örn. 45",
     "given": [
-     "Tarih: 21 Aralık, öğle vakti",
-     "Ölçülen Güneş ışını açısı: 29°33′",
-     "Öğle gölgesi kuzeye düşüyor"
+     "Eksen eğikliği: 23°27′"
     ]
    },
    "answer": {
-    "value": 37,
-    "tolerance": 0.3,
+    "value": 66.55,
+    "tolerance": 0.1,
     "dir": "K",
     "angle": true
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "21 Aralık’ta ışınlar Oğlak Dönencesi’ne (23°27′ G) dik gelir."
+     "text": "Kutup daireleri ile kutuplar arasındaki uzaklık eksen eğikliğine eşittir."
     },
     {
      "from": "ayse",
-     "text": "Gölge kuzeye düşüyorsa Güneş güneydedir; yani Deniz dönencenin kuzeyindedir."
-    },
-    {
-     "from": "nuri",
-     "text": "Önce 90° − açıyı bul; bu farkın 23°27′’sı dönenceye kadar olan kısımdır."
+     "text": "Kutup dairesi enlemi = 90° − eksen eğikliği. Dereceyi ve dakikayı ayrı çıkar."
     }
    ],
    "feedback": {
-    "correct": "Deniz: 37° kuzey. Gölge ipucu işe yaradı.",
-    "wrong": "Deniz: Hesap tutmuyor, dönencenin hangi tarafında olduğuma bir daha bak.",
-    "explain": "90° − 29°33′ = 60°27′ fark vardır. Gölge kuzeye düştüğü için Oğlak Dönencesi’nin kuzeyindedir: 60°27′ − 23°27′ = 37° K."
+    "correct": "Deniz: 66°33′ kuzey, defterime yazıyorum.",
+    "wrong": "Deniz: Bu enlem tutmuyor, kutuba olan uzaklığı bir daha düşün.",
+    "explain": "Kutup dairesi enlemi 90° − eksen eğikliğidir. 90° − 23°27′ = 66°33′ K."
    },
    "reward": {
-    "jeton": 3
+    "jeton": 1
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Dönence değeri ders kitabında 23°27′ mi 23°26′ mı kontrol et."
+    "status": "dogrulandi",
+    "note": "Eksen eğikliği 23°27′, Kuzey Kutup Dairesi 66°33′ (MEB 9. sınıf materyalleri, doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
-      "raw": "37",
+      "raw": "66°33′",
       "dir": "K"
      },
      {
-      "raw": "37°",
+      "raw": "66.55",
       "dir": "K"
      }
     ],
     "wrong": [
      {
-      "raw": "84",
-      "dir": "G"
-     },
-     {
-      "raw": "37",
-      "dir": "G"
-     },
-     {
-      "raw": "53",
+      "raw": "23°27′",
       "dir": "K"
      },
      {
-      "raw": "60",
+      "raw": "66.55",
+      "dir": "G"
+     },
+     {
+      "raw": "90",
       "dir": "K"
+     },
+     {
+      "raw": "",
+      "dir": "K"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dunya-03-aralik-gunes-acisi",
+   "topic": "dunya-sekli-hareketleri",
+   "difficulty": 3,
+   "type": "number",
+   "title": "Kış Güneşi",
+   "radio": [
+    "Deniz: Şu an 42° kuzey enlemindeyim. Tarih 21 Aralık, öğle vakti; gölgem epey uzun.",
+    "Deniz: Güneş ışınları yere kaç derecelik açıyla geliyor, hesaplar mısın?"
+   ],
+   "question": "Güneş ışınlarının yere geliş açısı kaç derecedir?",
+   "board": {
+    "unit": "°",
+    "placeholder": "Örn. 40",
+    "given": [
+     "Tarih: 21 Aralık, öğle vakti",
+     "Deniz’in enlemi: 42° Kuzey"
+    ]
+   },
+   "answer": {
+    "value": 24.55,
+    "tolerance": 0.1,
+    "angle": true
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "21 Aralık’ta Güneş ışınları Güney Yarım Küre’deki bir dönencenin üzerine dik gelir. Hangisi?"
+    },
+    {
+     "from": "ayse",
+     "text": "Işınların dik geldiği enlem ile Deniz’in enlemi arasındaki farkı bul; ikisi ekvatorun zıt yanlarında, farkı toplayarak bul."
+    },
+    {
+     "from": "nuri",
+     "text": "Açı = 90° − enlem farkı."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 24°33′, gölgemin uzun olması bununla uyumlu.",
+    "wrong": "Deniz: Bu açı tutmuyor, ışınların dik geldiği yerin yönüne dikkat et.",
+    "explain": "21 Aralık’ta ışınlar Oğlak Dönencesi’ne (23°27′ G) dik gelir. Enlem farkı 42° + 23°27′ = 65°27′; açı 90° − 65°27′ = 24°33′."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Dönence 23°27′; 21 Aralık’ta ışınlar Oğlak Dönencesi’ne dik (doğrulama günlüğü)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "24°33′"
+     },
+     {
+      "raw": "24.55"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "65°27′"
+     },
+     {
+      "raw": "71.45"
+     },
+     {
+      "raw": "48"
+     },
+     {
+      "raw": ""
      }
     ]
    }

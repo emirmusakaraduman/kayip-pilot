@@ -22,7 +22,10 @@
         bNext: U.el('button', { type: 'button', class: 'kp-btn kp-primary', text: 'Sonraki vaka', onclick: h.onNext, hidden: true })
       };
       P = U.el('section', { class: 'kp-panel', 'data-type': c.type, role: 'region', 'aria-label': 'Vaka paneli' }, [
-        head, U.el('div', { class: 'kp-title', text: c.title }), U.el('div', { class: 'kp-q', text: c.question }), refs.body, refs.hints, refs.fb, refs.status,
+        head, U.el('div', { class: 'kp-title', text: c.title }), U.el('div', { class: 'kp-q', text: c.question }),
+        // telsiz kaydı: ekrandaki mesajlar kaybolsa da verilen bilgiler (saat, açı, ölçek...) panelde kalır
+        U.el('details', { class: 'kp-radio', open: true }, [U.el('summary', { text: 'Telsiz kaydı' })].concat((c.radio || []).map(function (t) { return U.el('p', { text: t }); }))),
+        refs.body, refs.hints, refs.fb, refs.status,
         U.el('div', { class: 'kp-row' }, [refs.bHint, refs.bRef, refs.bSub, refs.bNext])
       ]);
       host.appendChild(P); self.P = P; self.refs = refs;

@@ -63,3 +63,6 @@
 /* klavye alternatifleri */
 .kp-coord{margin:6px 0}.kp-coord .kp-row{flex-wrap:wrap;gap:6px}.kp-coord select.kp-sm,.kp-coord input.kp-sm{min-height:44px;min-width:0;flex:1 1 92px;font-size:14px}
 .kp-contour:focus-visible{outline:2px solid #ffc47a;outline-offset:2px}.kp-cur{stroke:#ffc47a;stroke-width:2;fill:none}
+
+/* telsiz kaydı */
+.kp-radio{margin:6px 0;padding:6px 10px;border:1px solid #33463c;border-radius:8px;background:rgba(140,255,193,.05)}.kp-radio summary{cursor:pointer;font-size:13px;color:#8cffc1;min-height:28px;line-height:28px}.kp-radio p{margin:4px 0;font:13px/1.45 'IBM Plex Mono',ui-monospace,monospace;color:#cfe0d4}

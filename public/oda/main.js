@@ -1605,19 +1605,19 @@
     clearTimeout(KPS.qTimer);
     var msg = KPS.q.shift();
     if (msg == null) return;
-    var i = 0;
+    var i = 0, before = KPS.prev ? KPS.prev + ' ' : ''; // önceki mesajlar ekranda kalır: veri (saat, açı...) kaybolmasın
     (function step() {
       i = reduce ? msg.length : Math.min(msg.length, i + 2);
-      api.setText(msg.slice(0, i), i >= msg.length);
+      api.setText(before + msg.slice(0, i), i >= msg.length);
       if (i < msg.length) KPS.qTimer = setTimeout(step, 28);
-      else if (KPS.q.length) KPS.qTimer = setTimeout(kpTypeNext, 4200);
+      else { KPS.prev = before + msg; if (KPS.q.length) KPS.qTimer = setTimeout(kpTypeNext, 1500); }
     })();
   }
   window.KPScene = {
     setBattery: function (p) { api.setPil(p, true); },
     setCoins: function (n) { api.setJeton(n); },
     setCamera: function (n) { api.setCam(n); },
-    radioShow: function (lines) { KPS.q = (lines || []).slice(); kpTypeNext(); },
+    radioShow: function (lines) { KPS.q = (lines || []).slice(); KPS.prev = ''; kpTypeNext(); },
     flash: function (kind) { if (kind === 'right') KPS.okPulse = 1; else if (!reduce) triggerFlash(); },
     setMapMode: function (mode) {
       // 'climate': renkli bölgeler + etiket + vurgu. 'hidden': harita gizli. 'neutral': renksiz harita, etiket ve vurgu yok.
@@ -1710,7 +1710,7 @@
   // ?kp=bridge: React oyunu içinde gömülü; kayıt, menü ve defter React'te kalır, vakayı React ister (api.kpBaslat), olaylar api.onKp ile döner.
   var kpBridge = /[?&]kp=bridge/.test(location.search);
   if ((kpBridge || /[?&]kp=1/.test(location.search)) && window.KP && window.KP.engine) {
-    var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([w-]+)/) || [])[1];
+    var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([\w-]+)/) || [])[1];
     KPS.bridge = kpBridge;
     document.body.classList.add('kp-on');
     var kpMapOk = false;
@@ -1754,7 +1754,7 @@
         return id;
       };
       api.kpDur = function () {
-        clearTimeout(KPS.qTimer); KPS.q = []; api.setText('', false); // telsiz ekranı boşa dönsün
+        clearTimeout(KPS.qTimer); KPS.q = []; KPS.prev = ''; api.setText('', false); // telsiz ekranı boşa dönsün
         KPE.stop(); window.KPScene.setMapMode('climate'); window.KPScene.clearMarkers(); window.KPScene.clearRoute();
       };
       kpEmit({ tur: 'hazir', vakalar: KPE.order.length });

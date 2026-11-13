@@ -9,7 +9,7 @@
    "title": "Kayan Yamaç",
    "radio": [
     "Deniz: Üç gündür sürekli yağmur yağıyor. Evim yamacın eteğinde.",
-    "Deniz: Yamaçta yeni çatlaklar, eğilmiş ağaçlar var; pınarın suyu çamurlu akıyor. Ne yapmalıyım?"
+    "Deniz: Yamaçta yeni çatlaklar, eğilmiş ağaçlar ve yeni su sızıntıları var. Ne yapmalıyım?"
    ],
    "question": "Deniz’e ne yapmasını söylersin?",
    "board": {
@@ -17,7 +17,7 @@
     "steps": [
      {
       "id": "s1",
-      "text": "Üç gündür yağmur var. Yamaçta yeni çatlaklar, eğilmiş ağaçlar ve çamurlu pınar suyu görülüyor. Deniz yamaç eteğindeki evde. Ne yapsın?",
+      "text": "Üç gündür yağmur var. Yamaçta yeni çatlaklar, eğilmiş ağaçlar ve yeni su sızıntıları görülüyor. Deniz yamaç eteğindeki evde. Ne yapsın?",
       "options": [
        {
         "id": "s1a",
@@ -97,7 +97,7 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Heyelan belirtileri (çatlak, eğik ağaç, çamurlu su) varsa yamaçtan hemen uzaklaşılır."
+     "text": "Heyelan belirtileri (çatlak, eğik ağaç, yeni su sızıntısı) varsa yamaçtan hemen uzaklaşılır."
     },
     {
      "from": "ayse",

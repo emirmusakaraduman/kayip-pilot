@@ -47,7 +47,9 @@ ya da
 ```
 - `mapMode: "climate"` yalnızca iklim bölgesi seçtirilen sorularda (renkler bölgeleri gösterir). Diğer pin sorularında `neutral`: harita renksiz, bölge etiketi yok, bölge vurgusu yok.
 - Haritanın ölçeği ve kıyı çizgisi sadeleştirilmiştir. Nokta cevaplarında `radiusKm` en az 70 olsun (kıyı şehirleri haritada hafif içeri kayar).
+- `answer.alts`: isteğe bağlı ek kabul alanları `[{lat,lon,radiusKm}]` (ör. karst: Taşeli, Teke, Göller). Oyuncu ana alanın ya da alternatiflerden birinin içindeyse doğrudur.
 - `selfTest` cevabı: `{lat, lon, zone?}`.
+- `mapMode: "hidden"`: koordinat hesaplatılan vakalarda masadaki harita gizlenir, kamera telsize gider, cevap enlem/boylam kutularına yazılır (`answer.mode: "point"`).
 - `board.cities: false`: klavye/koordinat formunda şehir listesi gösterilmez. Koordinat okunarak bulunan vakalarda (ör. GPS, saat farkı) şehir adı cevabı vereceği için kullan.
 
 ### number

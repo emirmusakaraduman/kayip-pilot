@@ -2,52 +2,56 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "tr-01-agri-dagi-pin",
+   "id": "tyer-01-van-golu-pin",
    "topic": "turkiye-yer-sekilleri-iklimi",
    "difficulty": 1,
    "type": "pin",
-   "title": "Tek Başına Dev",
+   "title": "Sodalı Göl",
    "radio": [
-    "Deniz: Önümde tek başına yükselen, külah biçimli, karlı bir dev dağ var. Zirvesinde kar yaz kış duruyor.",
-    "Deniz: Çevresi geniş ve yüksek bir plato. Hava çok soğuk, uzakta bir sınır görünüyor."
+    "Deniz: Yükseltim 1600 m’nin üstünde, kışlar çok sert geçiyor.",
+    "Deniz: Tuzlu ve sodalı büyük bir gölün kıyısındayım; çevrede sönmüş volkanlar var."
    ],
-   "question": "Bu dağ hangi bölgede? Deniz’in konumunu işaretle.",
+   "question": "Bu gölün çevresini bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 39.7,
-    "lon": 44.3,
-    "radiusKm": 90
+    "lat": 38.65,
+    "lon": 42.95,
+    "radiusKm": 80
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Külah biçimli, tek başına yükselen karlı dağ volkanik bir dağdır."
+     "text": "Yüksek, soğuk ve volkanik dağlarla çevrili plato Doğu Anadolu’yu gösterir."
     },
     {
      "from": "ayse",
-     "text": "Türkiye’nin en yüksek dağı, doğu sınırına yakın, yüksek platoların ortasında."
+     "text": "Ülkenin en büyük gölü bu bölgededir."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Ağrı Dağı’nın eteğindeyim, görüntü çok etkileyici.",
-    "wrong": "Deniz: Burası değil, en yüksek volkanik dağın yakınında olmalıyım.",
-    "explain": "Türkiye’nin en yüksek dağı olan Ağrı Dağı, Doğu Anadolu’da tek başına yükselen sönmüş bir volkandır. Çevresi yüksek platolarla çevrilidir."
+    "correct": "Deniz: Van Gölü’nün kıyısındayım, volkanlar karşımda.",
+    "wrong": "Deniz: Burası yeterince yüksek ve soğuk değil, daha doğuda ara.",
+    "explain": "Doğu Anadolu yüksek, soğuk ve volkanik bir bölgedir. Ülkenin en büyük gölü, sodalı ve volkanik set gölü olan Van Gölü’dür."
    },
    "reward": {
-    "jeton": 2
+    "jeton": 1
    },
    "source": {
     "status": "dogrulandi",
-    "note": "Ağrı Dağı: Türkiye’nin en yüksek dağı, volkanik."
+    "note": "Van Gölü: en büyük, sodalı, volkanik set/tektonik-volkanik, yaklaşık 1646 m (Ankara Üniv. ders notları). Yükselti ifadesi “1600 m’nin üstü”."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 39.7,
-      "lon": 44.2
+      "lat": 38.65,
+      "lon": 42.95
+     },
+     {
+      "lat": 38.5,
+      "lon": 43.3
      }
     ],
     "wrong": [
@@ -56,130 +60,138 @@
       "lon": 29
      },
      {
-      "lat": 37.2,
-      "lon": 29.5
+      "lat": 37,
+      "lon": 30.7
      }
     ]
    }
   },
   {
-   "id": "tr-02-graben-ova-pin",
+   "id": "tyer-02-konya-ovasi-pin",
    "topic": "turkiye-yer-sekilleri-iklimi",
    "difficulty": 2,
    "type": "pin",
-   "title": "Paralel Çukurlar",
+   "title": "Kapalı Havza",
    "radio": [
-    "Deniz: Doğu-batı doğrultusunda uzanan geniş, düz tabanlı ovalar görüyorum. İki yanı dik yamaçlı dağlarla çevrili, ovalar birbirine paralel.",
-    "Deniz: Ovada pamuk, incir ve zeytin yetişiyor, kışlar ılık."
+    "Deniz: Geniş, dümdüz bir havzadayım. Denize hiçbir akarsu ulaşmıyor; kışlar soğuk, yağış az, ağaç yok.",
+    "Deniz: Sulama için yeraltı suyu çekiliyor, kuyular her yerde."
    ],
-   "question": "Bu ova ve dağ dizilişi hangi yörede görülür? Deniz’in konumunu işaretle.",
+   "question": "Bu kapalı havzayı bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
-    "lat": 38.2,
-    "lon": 28.5,
-    "radiusKm": 110
+    "lat": 37.9,
+    "lon": 32.5,
+    "radiusKm": 80
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Faylarla çöken çukurlara graben, yüksekte kalan bloklara horst denir."
+     "text": "Dışarıya akışı olmayan havzaya kapalı havza denir; ağaçsız, az yağışlı bozkır iç kesimleri gösterir."
     },
     {
      "from": "ayse",
-     "text": "Doğu-batı doğrultulu grabenler batı Anadolu’da; Gediz ve Büyük Menderes ovalarını düşün."
+     "text": "Çevresi dağlarla çevrili bu geniş ova İç Anadolu’nun güneyindedir."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Ege’de graben ovalarındayım.",
-    "wrong": "Deniz: Burada ova ile dağlar paralel uzanmıyor, batıya bak.",
-    "explain": "Batı Anadolu’da fay hatlarıyla çöken grabenler Gediz ve Büyük Menderes gibi ovaları oluşturur. Aralarındaki yükselen bloklar horsttur."
+    "correct": "Deniz: Konya Ovası’ndayım, ufuk dümdüz.",
+    "wrong": "Deniz: Burası kapalı bir havza gibi durmuyor, iç kesimin güneyine bak.",
+    "explain": "Dağlarla çevrili, denize akışı olmayan geniş ova İç Anadolu’nun güneyindeki Konya Ovası’dır."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Ege Bölgesi grabenleri."
+    "status": "dogrulanacak",
+    "note": "Konya kapalı havzası bilgisi ders kitabıyla kısmen kontrol edildi, tam doğrulama önerilir (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 38.4,
-      "lon": 28
+      "lat": 37.9,
+      "lon": 32.5
+     },
+     {
+      "lat": 37.7,
+      "lon": 33.1
      }
     ],
     "wrong": [
      {
-      "lat": 40,
-      "lon": 42
+      "lat": 41,
+      "lon": 40.5
      },
      {
-      "lat": 37,
-      "lon": 35
+      "lat": 38.4,
+      "lon": 27.1
      }
     ]
    }
   },
   {
-   "id": "tr-03-ege-kiyisi-pin",
+   "id": "tyer-03-ege-enine-daglar-pin",
    "topic": "turkiye-yer-sekilleri-iklimi",
    "difficulty": 3,
    "type": "pin",
-   "title": "Girintili Kıyı",
+   "title": "Denize Dik Dağlar",
    "radio": [
-    "Deniz: Kıyı çok girintili çıkıntılı; koylar ve yarımadalar birbirini izliyor. Dağlar denize dik uzanıyor, vadiler denize iniyor.",
-    "Deniz: Birkaç ada görünüyor. Yaz kurak, çevrede zeytin ve kızılçam var."
+    "Deniz: Dağlar denize dik uzanıyor, vadiler batıya açılıyor.",
+    "Deniz: Kıyı çok girintili çıkıntılı; deniz etkisi iç kesimlere kadar sokuluyor."
    ],
-   "question": "Bu kıyı tipi hangi kıyıda görülür? Deniz’in konumunu işaretle.",
+   "question": "Bu özelliklere sahip bölgeyi bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral"
    },
    "answer": {
     "mode": "point",
     "lat": 38.4,
-    "lon": 27,
+    "lon": 28.2,
     "radiusKm": 120
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Dağların kıyıya dik uzandığı kıyılar girintili çıkıntılı olur (Ege tipi kıyı)."
+     "text": "Dağların kıyıya dik uzandığı kıyıda iklim etkisi iç kesimlere sokulabilir."
     },
     {
      "from": "ayse",
-     "text": "Zeytin ve kızılçam yalnızca iklimi gösterir; kıyıdaki dağların yönüne bak, Akdeniz kıyısı daha düzdür."
+     "text": "Çukur ovaların (grabenlerin) batıya, denize açıldığı bölgeyi ara."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Ege kıyısındayım, her yerde koy var.",
-    "wrong": "Deniz: Kıyı çizgisi burada bu kadar girintili değil, dağların yönüne bak.",
-    "explain": "Dağların kıyıya dik uzandığı Ege’de denizin sokulmasıyla girintili çıkıntılı kıyı oluşur. Zeytin ve kızılçam Akdeniz iklimini gösterir, kıyı tipini değil."
+    "correct": "Deniz: Ege’deyim, vadiler denize açılıyor.",
+    "wrong": "Deniz: Burada dağlar kıyıya paralel; vadilerin batıya açıldığı bir bölge ara.",
+    "explain": "Dağların kıyıya dik uzandığı ve çukur ovaların denize açıldığı bölge Ege Bölgesi’dir. Bu yüzden deniz etkisi iç kesimlere kadar sokulur."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
     "status": "dogrulanacak",
-    "note": "Ege kıyısının merkezi (İzmir çevresi) ve yarıçap atlasla kontrol edilmeli."
+    "note": "Bölge geniş: merkez ve yarıçap atlasla ayarlanmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      {
       "lat": 38.4,
-      "lon": 27.2
+      "lon": 27.1
+     },
+     {
+      "lat": 37.9,
+      "lon": 28.5
      }
     ],
     "wrong": [
      {
-      "lat": 36.9,
-      "lon": 30.7
+      "lat": 41,
+      "lon": 40.5
      },
      {
-      "lat": 41,
-      "lon": 36
+      "lat": 37.9,
+      "lon": 32.5
      }
     ]
    }

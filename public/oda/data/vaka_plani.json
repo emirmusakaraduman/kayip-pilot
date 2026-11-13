@@ -1,0 +1,1407 @@
+{
+ "surum": 1,
+ "aciklama": "45 vakalık plan (15 konu x 3 zorluk). durum=yazildi olanlar data/vakalar altında vardır; planli olanlar adım adım yazılacak. tur-konu uyumu KP.TYPE_TOPICS ile aynıdır. hesap.ifade sayı vakalarının cevabını doğrulayan aritmetik ifadedir.",
+ "ek": [
+  "iklim-03-kurak-aylar-grafik"
+ ],
+ "turler": {
+  "pin": "Haritaya pin",
+  "number": "Sayı girişi",
+  "cards": "Seçenek kartı",
+  "route": "Rota çizme",
+  "decision": "Karar verme",
+  "graph": "Grafik okuma"
+ },
+ "dogrulamaGunlugu": [
+  {
+   "vaka": "dunya-02, dunya-01, dunya-03",
+   "bilgi": "Dönence 23°27′, kutup dairesi 66°33′; 21 Haziran’da Yengeç, 21 Aralık’ta Oğlak Dönencesi’ne dik",
+   "sonuc": "Doğrulandı",
+   "kaynak": "MEB 9. sınıf materyalleri, Ankara Üniv. açık ders notları"
+  },
+  {
+   "vaka": "konum-02",
+   "bilgi": "1° boylam = 4 dakika (Türkiye’nin 19° boylam farkı = 76 dk ile tutarlı)",
+   "sonuc": "Doğrulandı",
+   "kaynak": "MEB 9. sınıf Türkiye’nin coğrafi konumu"
+  },
+  {
+   "vaka": "konum-01, konum-03",
+   "bilgi": "Türkiye 36°-42° K, 26°-45° D arasında; en kuzey nokta Sinop–İnceburun (42°05′43″K)",
+   "sonuc": "Doğrulandı",
+   "kaynak": "MEB 9. sınıf kitabı. Bazı kaynaklar Kırklareli sınırını (42°06′21″K) gösterir, vakada kitap esas alındı"
+  },
+  {
+   "vaka": "harita-01",
+   "bilgi": "Ölçek hesabı: harita uzaklığı × paydası",
+   "sonuc": "Doğrulandı",
+   "kaynak": "MEB 9. sınıf ölçek örnekleri"
+  },
+  {
+   "vaka": "harita-03",
+   "bilgi": "Eğim (%) = yükselti farkı ÷ yatay uzaklık × 100",
+   "sonuc": "Doğrulandı",
+   "kaynak": "TYT ders notları. Bazı kaynaklar binde (‰) kullanır, vakada formül açıkça yazıldı"
+  },
+  {
+   "vaka": "elemanlar-01, elemanlar-03",
+   "bilgi": "Yükseldikçe her 200 m’de yaklaşık 1°C azalma; indirgenmiş sıcaklık = gerçek sıcaklık + yükseltiden kaybedilen",
+   "sonuc": "Doğrulandı",
+   "kaynak": "MEB/TYT kaynakları, Ankara Üniv. ders notları"
+  },
+  {
+   "vaka": "elemanlar-03 (eski sürüm)",
+   "bilgi": "Basınç: her 10 m’de 1 mb azalma",
+   "sonuc": "Düzeltildi",
+   "kaynak": "Türkçe kaynaklar 10,5 m’de 1 mm Hg ya da yaklaşık 11 m’de 1 mb veriyor. Kural kitaplar arasında değiştiği için vaka kaldırıldı, yerine indirgenmiş sıcaklık vakası yazıldı"
+  },
+  {
+   "vaka": "su-01",
+   "bilgi": "Eğirdir Gölü tektonik göldür",
+   "sonuc": "Düzeltildi",
+   "kaynak": "Birçok kaynakta Eğirdir ve Beyşehir “karma (tektonik-karstik)” sayılıyor. Örnek olarak İznik, Burdur, Hazar kullanıldı"
+  },
+  {
+   "vaka": "tyer-01",
+   "bilgi": "Van Gölü: en büyük, sodalı, volkanik set/tektonik-volkanik, yaklaşık 1646 m",
+   "sonuc": "Doğrulandı",
+   "kaynak": "Ankara Üniv. ders notları, haber ve ansiklopedi kaynakları. Yükselti ifadesi “1600 m’nin üstü” yapıldı"
+  },
+  {
+   "vaka": "ulasim-03",
+   "bilgi": "Gülek Boğazı: Toroslar’ın en önemli geçidi, Akdeniz’i İç Anadolu’ya bağlar, ≈37°17′K 34°47′D",
+   "sonuc": "Doğrulandı",
+   "kaynak": "Akademik makale ve Cilician Gates kaydı"
+  },
+  {
+   "vaka": "dis-03",
+   "bilgi": "Kaçkar Dağları’nda sirk, tekne (U) vadi, buzul gölleri, güncel buzullar",
+   "sonuc": "Doğrulandı",
+   "kaynak": "Ankara Üniv. ders notu, dergipark makaleleri. Buzulların en zengin olduğu yer Güneydoğu Toroslar’dır, bu yüzden vakada “Karadeniz’e yakın” ipucu şart"
+  },
+  {
+   "vaka": "dis-02",
+   "bilgi": "Karstik şekiller: Taşeli, Teke, Göller Yöresi; Konya obruk platosu",
+   "sonuc": "Düzeltildi",
+   "kaynak": "Tek merkezli cevap haksız yanlış üretirdi; birden çok kabul alanı (alternatif hedef) eklendi"
+  },
+  {
+   "vaka": "ekon-03",
+   "bilgi": "Bor yatakları: Kırka (Eskişehir), Emet (Kütahya), Bigadiç (Balıkesir), Kestelek (Bursa); dünya rezervinin ≈%72-73’ü",
+   "sonuc": "Düzeltildi",
+   "kaynak": "Kabul alanı dört yatağı kapsayacak şekilde genişletildi, metinde sayı verilmedi"
+  },
+  {
+   "vaka": "ekon-02",
+   "bilgi": "Antep fıstığı: Güneydoğu Anadolu; Şanlıurfa en geniş alan, Gaziantep ve Siirt önemli",
+   "sonuc": "Düzeltildi",
+   "kaynak": "“Kışlar ılık” ifadesi kaldırıldı, kabul alanı Şanlıurfa’yı kapsayacak şekilde kaydırıldı"
+  },
+  {
+   "vaka": "su-03",
+   "bilgi": "Akdeniz ve Ege akarsuları yağmur rejimli ve düzensiz; Doğu Anadolu ve Doğu Karadeniz akarsuları kar rejimli",
+   "sonuc": "Doğrulandı",
+   "kaynak": "Ankara Üniv. ders notu. “Karadeniz akarsuları düzenli” ifadesi kaynaklarda tartışmalı olduğu için çıkarıldı"
+  },
+  {
+   "vaka": "afet-01, afet-02, afet-03",
+   "bilgi": "Çök-kapan-tutun; sel sırasında suyun içinden geçmeme, aracı terk etme; heyelan belirtileri ve kayma hattından yana uzaklaşma",
+   "sonuc": "Doğrulandı",
+   "kaynak": "AFAD kaynaklı özetler"
+  },
+  {
+   "vaka": "ulasim-01",
+   "bilgi": "Doğu Ekspresi: Ankara–Kırıkkale–Kayseri–Sivas–Erzincan–Erzurum–Kars (1310 km)",
+   "sonuc": "Düzeltildi",
+   "kaynak": "Hat bugün Ankara’dan başlıyor ve Kayseri’den geçiyor (İstanbul çıkışı 1936’daki ilk seferdi). Vaka Ankara başlangıçlı yazıldı"
+  },
+  {
+   "vaka": "konum-01, dis-01, kayac-01, kayac-02, kayac-03, ekon-01, tyer-02, tyer-03",
+   "bilgi": "Koordinatlar ve bilgiler: Adana yöresi, Kapadokya tüf aşınması, Tuz Gölü (tuzlu toprak), Zonguldak taşkömürü, Ağrı Dağı volkanik, Rize çayı, Konya kapalı havzası, Ege’de dağların dik uzanışı",
+   "sonuc": "Kontrol edilmedi",
+   "kaynak": "Genel bilgi; bu oturumda ayrı kaynakla tek tek denetlenmedi (Konya kapalı havzası ve Ağrı Dağı kısmen kaynaklarda görüldü). Ders kitabından hızlı kontrol önerilir"
+  },
+  {
+   "vaka": "ic-01, ic-02, ic-03, nufus-02, nufus-03, goc-01, goc-03",
+   "bilgi": "İç kuvvet tanımları (deprem, kıvrım, horst, graben), nüfus yoğunluğu ve yerleşme yeri faktörleri, mevsimlik göç, göçün piramit etkisi",
+   "sonuc": "Kontrol edilmedi",
+   "kaynak": "Temel kavramlar; bu oturumda ayrı kaynakla denetlenmedi. Ders kitabıyla karşılaştırılmalı"
+  },
+  {
+   "vaka": "iklim-03, iklim-04, goc-02, goc-03",
+   "bilgi": "Grafik verileri (iklim ve nüfus piramidi)",
+   "sonuc": "Kontrol edilmedi",
+   "kaynak": "Verilerin tamamı örnek (yaklaşık) değerlerdir, gerçek istasyon verisi değildir"
+  }
+ ],
+ "vakalar": [
+  {
+   "konu": "dunya-sekli-hareketleri",
+   "zorluk": 1,
+   "id": "dunya-02-kutup-dairesi",
+   "baslik": "Kutup Dairesi",
+   "kazanim": "Eksen eğikliği ile dönence ve kutup dairesi enlemleri",
+   "tur": "number",
+   "durum": "planli",
+   "gozlem": "Deniz’in uçuş eğitimi defterinde eksen eğikliği 23°27′ yazıyor; Kuzey Kutup Dairesi’nin enlemini soruyor.",
+   "cozum": "Kutup dairesi enlemi = 90° − eksen eğikliği. 90° − 23°27′ hesaplanır.",
+   "cevap": "66°33′ K (66,55°)",
+   "parametre": {
+    "board": {
+     "unit": "°",
+     "dirs": [
+      "K",
+      "G"
+     ],
+     "given": [
+      "Dünya’nın eksen eğikliği: 23°27′"
+     ]
+    },
+    "answer": {
+     "value": 66.55,
+     "tolerance": 0.1,
+     "dir": "K",
+     "angle": true
+    }
+   },
+   "hesap": {
+    "ifade": "90-(23+27/60)",
+    "sonuc": 66.55
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dunya-sekli-hareketleri",
+   "zorluk": 2,
+   "id": "dunya-01-gunes-acisi-enlem",
+   "baslik": "Öğle Güneşi",
+   "kazanim": "21 Haziran öğle güneş açısından enlem bulma",
+   "tur": "number",
+   "durum": "yazildi",
+   "gozlem": "Deniz 21 Haziran öğle vakti güneş ışınlarının yere geliş açısını 71°27′ ölçmüş.",
+   "cozum": "Açı = 90° − (enlem ile dönence arasındaki fark). Fark = 90° − 71°27′ = 18°33′. Kuzey yarım kürede dönencenin kuzeyi: 23°27′ + 18°33′.",
+   "cevap": "42° K",
+   "parametre": {
+    "answer": {
+     "value": 42,
+     "tolerance": 0.3,
+     "dir": "K",
+     "angle": true
+    }
+   },
+   "hesap": {
+    "ifade": "(23+27/60)+(90-(71+27/60))",
+    "sonuc": 42
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dunya-sekli-hareketleri",
+   "zorluk": 3,
+   "id": "dunya-03-aralik-gunes-acisi",
+   "baslik": "Kış Güneşi",
+   "kazanim": "21 Aralık’ta güneş ışınlarının geliş açısını hesaplama",
+   "tur": "number",
+   "durum": "planli",
+   "gozlem": "Deniz 42° K enleminde. 21 Aralık öğle vakti güneş ışınlarının yere geliş açısını soruyor.",
+   "cozum": "21 Aralık’ta ışınlar Oğlak Dönencesi’ne (23°27′ G) dik gelir. Aradaki enlem farkı 42° + 23°27′ = 65°27′. Açı = 90° − 65°27′.",
+   "cevap": "24°33′ (24,55°)",
+   "parametre": {
+    "board": {
+     "unit": "°",
+     "given": [
+      "Enlem: 42° K",
+      "Tarih: 21 Aralık, öğle vakti"
+     ]
+    },
+    "answer": {
+     "value": 24.55,
+     "tolerance": 0.3,
+     "angle": true
+    }
+   },
+   "hesap": {
+    "ifade": "90-(42+23+27/60)",
+    "sonuc": 24.55
+   },
+   "dogrula": "",
+   "kaynakNotu": "Dönence ve 21 Aralık/Oğlak Dönencesi doğrulandı."
+  },
+  {
+   "konu": "cografi-konum",
+   "zorluk": 1,
+   "id": "konum-01-gps-adana",
+   "baslik": "GPS’teki Rakamlar",
+   "kazanim": "Mutlak konum: enlem ve boylamdan yer bulma",
+   "tur": "pin",
+   "durum": "yazildi",
+   "gozlem": "GPS ekranında 37° kuzey, 35° doğu yazıyor; çevre geniş bir ova, uzakta dağlar.",
+   "cozum": "Önce 37° K enlemi, sonra 35° D boylamı bulunur, kesiştikleri nokta işaretlenir.",
+   "cevap": "Adana çevresi (37,0°K 35,0°D)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 37.0,
+     "lon": 35.0,
+     "radiusKm": 90
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Türkiye 36°-42°K, 26°-45°D (MEB). Adana 37°K 35,3°D."
+  },
+  {
+   "konu": "cografi-konum",
+   "zorluk": 2,
+   "id": "konum-02-yerel-saat-boylam",
+   "baslik": "Saat Farkı",
+   "kazanim": "Yerel saat farkından boylam bulma",
+   "tur": "number",
+   "durum": "yazildi",
+   "gozlem": "Deniz’in yerel saati 14.12, Greenwich saati 12.00.",
+   "cozum": "Fark 2 sa 12 dk = 132 dk. 1° = 4 dk olduğundan 132 ÷ 4 = 33°. Yerel saat ileri, yani Doğu.",
+   "cevap": "33° D",
+   "parametre": {
+    "answer": {
+     "value": 33,
+     "tolerance": 0.3,
+     "dir": "D",
+     "angle": true
+    }
+   },
+   "hesap": {
+    "ifade": "(14*60+12-12*60)/4",
+    "sonuc": 33
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "cografi-konum",
+   "zorluk": 3,
+   "id": "konum-03-en-kuzey-nokta-pin",
+   "baslik": "Kuzeyin Ucu",
+   "kazanim": "Türkiye’nin uç noktaları (mutlak konum)",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Pusula kuzeye bakıyor, önünde yalnızca deniz var. GPS enlem yaklaşık 42° K, boylam yaklaşık 35° D.",
+   "cozum": "Enlem ve boylam birlikte okunur; 42° K Türkiye’nin en kuzey enlemidir. Karadeniz kıyısında bu enlem ve boylama denk gelen burun bulunur.",
+   "cevap": "Sinop çevresi, İnceburun (≈42,1°K 35°D)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 42.0,
+     "lon": 35.0,
+     "radiusKm": 80
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "MEB kitabı en kuzey noktayı Sinop–İnceburun (42°05′43″K) kabul eder; bazı kaynaklar Kırklareli sınırını (42°06′K) gösterir, vakada kitap esas alındı."
+  },
+  {
+   "konu": "harita-bilgisi",
+   "zorluk": 1,
+   "id": "harita-01-olcek-km",
+   "baslik": "Haritadaki Dört Santim",
+   "kazanim": "Kesirli ölçekle gerçek uzaklık bulma",
+   "tur": "number",
+   "durum": "yazildi",
+   "gozlem": "Ölçek 1/500.000, haritada iki nokta arası 4 cm.",
+   "cozum": "Gerçek uzaklık = harita uzaklığı × ölçek paydası = 4 × 500.000 = 2.000.000 cm = 20 km.",
+   "cevap": "20 km",
+   "parametre": {
+    "answer": {
+     "value": 20,
+     "tolerance": 0.1
+    }
+   },
+   "hesap": {
+    "ifade": "4*500000/100000",
+    "sonuc": 20
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "harita-bilgisi",
+   "zorluk": 2,
+   "id": "harita-03-egim-yuzde",
+   "baslik": "Dik Yamaç",
+   "kazanim": "Eş yükselti noktalarından eğim (%) hesabı",
+   "tur": "number",
+   "durum": "planli",
+   "gozlem": "A noktası 300 m, B noktası 500 m. Haritada aralarında 4 cm var, ölçek 1/50.000.",
+   "cozum": "Yatay uzaklık = 4 × 50.000 = 200.000 cm = 2000 m. Eğim (%) = yükselti farkı ÷ yatay uzaklık × 100 = 200 ÷ 2000 × 100.",
+   "cevap": "% 10",
+   "parametre": {
+    "board": {
+     "unit": "%",
+     "given": [
+      "A noktasının yüksekliği: 300 m",
+      "B noktasının yüksekliği: 500 m",
+      "Haritadaki uzaklık: 4 cm",
+      "Ölçek: 1/50.000",
+      "Eğim (%) = yükselti farkı ÷ yatay uzaklık × 100"
+     ]
+    },
+    "answer": {
+     "value": 10,
+     "tolerance": 0.2
+    }
+   },
+   "hesap": {
+    "ifade": "(500-300)/(4*50000/100)*100",
+    "sonuc": 10
+   },
+   "dogrula": "",
+   "kaynakNotu": "Eğim (%) formülü doğrulandı; bazı kaynaklar binde (‰) kullanır, vakada formül ve yüzde açıkça yazılı."
+  },
+  {
+   "konu": "harita-bilgisi",
+   "zorluk": 3,
+   "id": "harita-02-esyukselti-rota",
+   "baslik": "En Az Tırmanış",
+   "kazanim": "Eş yükselti eğrilerini okuyup en uygun güzergâhı seçme",
+   "tur": "route",
+   "durum": "yazildi",
+   "gozlem": "Helikopterin motor gücü az; A noktasından B’ye en az tırmanışla gidecek rota isteniyor.",
+   "cozum": "Çizgilerin sık olduğu yer diktir. Tepeyi aşmak yerine çizgilerin seyrek olduğu alçak sahadan dolaşılır; toplam tırmanış 150 m’yi geçmemeli.",
+   "cevap": "Kuzey ya da vadi dolaşımı (tırmanış < 150 m)",
+   "parametre": {
+    "board": {
+     "mode": "contour",
+     "maxAscentM": 150,
+     "maxLengthKm": 20
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-elemanlari",
+   "zorluk": 1,
+   "id": "elemanlar-02-yillik-sicaklik-farki",
+   "baslik": "İki Uç",
+   "kazanim": "Yıllık sıcaklık farkı (en sıcak ay − en soğuk ay)",
+   "tur": "number",
+   "durum": "planli",
+   "gozlem": "İstasyonun aylık ortalama sıcaklık listesinde en sıcak ay 27°C, en soğuk ay −3°C.",
+   "cozum": "Yıllık sıcaklık farkı = en sıcak ay − en soğuk ay = 27 − (−3). Eksi işaretine dikkat.",
+   "cevap": "30 °C",
+   "parametre": {
+    "board": {
+     "unit": "°C",
+     "given": [
+      "En sıcak ay ortalaması: 27°C",
+      "En soğuk ay ortalaması: −3°C"
+     ]
+    },
+    "answer": {
+     "value": 30,
+     "tolerance": 0.1
+    }
+   },
+   "hesap": {
+    "ifade": "27-(-3)",
+    "sonuc": 30
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-elemanlari",
+   "zorluk": 2,
+   "id": "elemanlar-01-sicaklik-yukselti",
+   "baslik": "Soğuyan Termometre",
+   "kazanim": "Yükselti ile sıcaklık azalışı",
+   "tur": "number",
+   "durum": "yazildi",
+   "gozlem": "Kıyıda 24°C, Deniz’in yerinde 12°C ölçülmüş.",
+   "cozum": "Sıcaklık farkı 12°C. Her 200 m’de 1°C azaldığı için 12 × 200 m.",
+   "cevap": "2400 m",
+   "parametre": {
+    "answer": {
+     "value": 2400,
+     "tolerance": 50
+    }
+   },
+   "hesap": {
+    "ifade": "(24-12)*200",
+    "sonuc": 2400
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-elemanlari",
+   "zorluk": 3,
+   "id": "elemanlar-03-indirgenmis-sicaklik",
+   "baslik": "Haritadaki Sıcaklık",
+   "kazanim": "İndirgenmiş sıcaklık: yükselti etkisini ayıklayıp karşılaştırma (iki adımlı)",
+   "tur": "number",
+   "durum": "planli",
+   "gozlem": "Deniz 1600 m yükseklikte ve termometre 11°C gösteriyor. Kıyıdaki istasyon 24°C ölçmüş. Yükseltinin etkisi çıkarılınca iki yer arasında kaç derece fark kalır?",
+   "cozum": "Önce Deniz’in sıcaklığı deniz seviyesine indirgenir: 1600 ÷ 200 = 8°C eklenir, 11 + 8 = 19°C. Sonra kıyıdaki 24°C ile fark alınır: 24 − 19.",
+   "cevap": "5 °C",
+   "parametre": {
+    "board": {
+     "unit": "°C",
+     "given": [
+      "Deniz’in yüksekliği: 1600 m, sıcaklığı: 11°C",
+      "Kıyıdaki istasyonun sıcaklığı: 24°C",
+      "Yükseldikçe her 200 m’de sıcaklık 1°C azalır"
+     ]
+    },
+    "answer": {
+     "value": 5,
+     "tolerance": 0.2
+    }
+   },
+   "hesap": {
+    "ifade": "24-(11+1600/200)",
+    "sonuc": 5
+   },
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-tipleri",
+   "zorluk": 1,
+   "id": "iklim-01-akdeniz-pin",
+   "baslik": "Kurak Yaz",
+   "kazanim": "Akdeniz iklimi özellikleri ve bitki örtüsü",
+   "tur": "pin",
+   "durum": "yazildi",
+   "gozlem": "Yazın hiç yağmur yok, kışlar ılık ve yağmurlu; kızılçam ve maki.",
+   "cozum": "Yağış rejimi ve bitki örtüsünden iklim tipi bulunur, haritada o bölge seçilir.",
+   "cevap": "Akdeniz iklim bölgesi",
+   "parametre": {
+    "board": {
+     "mapMode": "climate"
+    },
+    "answer": {
+     "mode": "zone",
+     "zone": "akdeniz"
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-tipleri",
+   "zorluk": 2,
+   "id": "iklim-02-karadeniz-pin",
+   "baslik": "Sis ve Çay",
+   "kazanim": "Karadeniz iklimi özellikleri ve bitki örtüsü",
+   "tur": "pin",
+   "durum": "yazildi",
+   "gozlem": "Her mevsim yağış, sis; çay tarlaları ve kayın ormanı.",
+   "cozum": "Kurak mevsimin olmaması ve çay, kayın bitki örtüsü Karadeniz iklimini gösterir.",
+   "cevap": "Karadeniz iklim bölgesi",
+   "parametre": {
+    "board": {
+     "mapMode": "climate"
+    },
+    "answer": {
+     "mode": "zone",
+     "zone": "karadeniz"
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "iklim-tipleri",
+   "zorluk": 3,
+   "id": "iklim-04-grafik-iklim-sec",
+   "baslik": "Hangi İklim?",
+   "kazanim": "Yağış-sıcaklık grafiğinden iklim tipi yorumlama",
+   "tur": "graph",
+   "durum": "yazildi",
+   "gozlem": "İstasyon grafiğinde yağış çubukları yıl boyu yüksek, kurak ay yok.",
+   "cozum": "Kurak mevsimin olup olmadığına bakılır; yıl boyu yüksek yağış ve ılıman sıcaklık Karadeniz iklimidir.",
+   "cevap": "Karadeniz iklimi",
+   "parametre": {
+    "board": {
+     "kind": "climograph",
+     "pickMode": "choice"
+    },
+    "answer": {
+     "choice": "karadeniz"
+    }
+   },
+   "hesap": null,
+   "dogrula": "Grafik verisi örnek (yaklaşık); gerçek istasyon grafiğiyle değiştirilebilir.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ic-kuvvetler",
+   "zorluk": 1,
+   "id": "ic-01-sarsinti-kart",
+   "baslik": "Ani Sarsıntı",
+   "kazanim": "Deprem, orojenez, epirojenez ve volkanizmayı ayırma",
+   "tur": "cards",
+   "durum": "yazildi",
+   "gozlem": "Zemin birkaç saniye sarsıldı, yarıklar açıldı, taşlar yuvarlandı.",
+   "cozum": "Olay ani ve kırılma kaynaklı: deprem. Orojenez ve epirojenez yavaş, volkanizma magma çıkışıdır.",
+   "cevap": "Deprem",
+   "parametre": {
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ic-kuvvetler",
+   "zorluk": 2,
+   "id": "ic-02-kivrim-kart",
+   "baslik": "Bükülen Tabakalar",
+   "kazanim": "Kıvrım şekilleri: antiklinal ve senklinal",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Deniz’in önündeki kat kat tabakalar yukarı doğru kemer gibi bükülmüş.",
+   "cozum": "Tabakaların yukarı kemerlenmesi antiklinaldir. Senklinal aşağı çukurdur; horst ve graben ise bükülme değil kırılma şekilleridir.",
+   "cevap": "Antiklinal (yukarı kıvrım)",
+   "parametre": {
+    "board": {
+     "multi": false,
+     "kartlar": [
+      "Antiklinal",
+      "Senklinal",
+      "Horst",
+      "Graben"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    },
+    "yanlisNedeni": {
+     "Senklinal": "Aşağı doğru çukur kıvrımdır; burada yukarı kemer var.",
+     "Horst": "Kırılmayla yükselmiş bloktur, tabakalar bükülmemiştir.",
+     "Graben": "Kırılmayla çökmüş çukurluktur."
+    }
+   },
+   "hesap": null,
+   "dogrula": "Antiklinal/senklinal ve horst/graben tanımlarını kitapla karşılaştır.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ic-kuvvetler",
+   "zorluk": 3,
+   "id": "ic-03-kirik-sekilleri-kart",
+   "baslik": "Fayların İzi",
+   "kazanim": "Kırık hareketleriyle oluşan şekiller (horst, graben)",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Çevrede yükselmiş sert bir blok, çökmüş uzun bir ova, bükülmüş tabakalar ve bir volkan konisi görünüyor.",
+   "cozum": "Kırık (fay) hareketleriyle horst ve graben oluşur. Bükülmüş tabakalar kıvrım, volkan konisi magma çıkışı ürünüdür. İki doğru kart seçilir.",
+   "cevap": "Horst ve Graben (çoklu seçim)",
+   "parametre": {
+    "board": {
+     "multi": true,
+     "kartlar": [
+      "Horst",
+      "Graben",
+      "Antiklinal",
+      "Volkan konisi"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a",
+      "b"
+     ]
+    },
+    "yanlisNedeni": {
+     "Antiklinal": "Kıvrılmayla oluşur, kırılmayla değil.",
+     "Volkan konisi": "Magmanın yüzeye çıkışıyla oluşur."
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dis-kuvvetler",
+   "zorluk": 1,
+   "id": "dis-01-peribacalari-pin",
+   "baslik": "Taştan Kuleler",
+   "kazanim": "Rüzgâr ve yağmurla aşınma şekilleri (peribacası)",
+   "tur": "pin",
+   "durum": "yazildi",
+   "gozlem": "Konik kayadan kuleler, tepelerinde sert taş şapka; yumuşak soluk taş.",
+   "cozum": "Volkanik tüflerin aşınmasıyla peribacası oluşur; bu şekiller İç Anadolu’da Kapadokya çevresinde görülür.",
+   "cevap": "Kapadokya (Nevşehir çevresi)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 38.64,
+     "lon": 34.83,
+     "radiusKm": 90
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Peribacası ve Kapadokya doğrulandı. (Vaka difficulty değeri 1 olarak güncellendi.)"
+  },
+  {
+   "konu": "dis-kuvvetler",
+   "zorluk": 2,
+   "id": "dis-02-karst-pin",
+   "baslik": "Kaybolan Dere",
+   "kazanim": "Kimyasal çözünme: karstik şekiller",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Kalkerli platoda çukurlar (düden, dolin), yere gömülüp kaybolan dere, mağaralar; Akdeniz’e uzak değil.",
+   "cozum": "Karstik şekiller kalkerli (kireçtaşı) arazide çözünmeyle oluşur. Türkiye’de en yaygın olduğu yer Toroslardır: Taşeli Platosu, Teke Yöresi ve Göller Yöresi. Bu üç bölgenin her biri doğru kabul edilir.",
+   "cevap": "Toroslar (Taşeli, Teke ve Göller Yöresi)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 36.9,
+     "lon": 33.4,
+     "radiusKm": 110,
+     "alternatives": [
+      {
+       "lat": 36.9,
+       "lon": 30.6,
+       "radiusKm": 100
+      },
+      {
+       "lat": 37.7,
+       "lon": 30.7,
+       "radiusKm": 90
+      }
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Karst Toroslarda yaygın (Taşeli, Teke, Göller); cevap birden çok alanı kabul eder."
+  },
+  {
+   "konu": "dis-kuvvetler",
+   "zorluk": 3,
+   "id": "dis-03-buzul-kackar-pin",
+   "baslik": "Karlı Sirk",
+   "kazanim": "Buzul aşındırması: sirk, U vadi, buzul gölü",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Yaz ortasında bile karlı yüksek zirveler; çanak biçimli çukurlar (sirk), U biçimli vadiler ve küçük göller; Karadeniz’e yakın.",
+   "cozum": "Sirk, U vadi ve buzul gölleri buzul aşındırması ürünüdür. Türkiye’de Karadeniz’e yakın yüksek buzullu dağ Kaçkar Dağları’dır.",
+   "cevap": "Kaçkar Dağları (Rize–Artvin)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 40.85,
+     "lon": 41.15,
+     "radiusKm": 90
+    }
+   },
+   "hesap": null,
+   "dogrula": "Kaçkar zirve koordinatının (≈40,84°K 41,15°D) atlasla kontrolü.",
+   "kaynakNotu": "Kaçkar buzul şekilleri doğrulandı."
+  },
+  {
+   "konu": "kayaclar-topraklar",
+   "zorluk": 1,
+   "id": "kayac-01-tuz-golu-pin",
+   "baslik": "Beyaz Kabuk",
+   "kazanim": "Tuzlu topraklar ve kuru göl çevresi",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Zemin beyaz tuz kabuğuyla kaplı, bitki yok; sığ bir gölün kıyısındayım.",
+   "cozum": "Kurak kapalı havzada buharlaşma tuz biriktirir (tuzlu toprak). İç Anadolu’daki büyük tuz gölü çevresi.",
+   "cevap": "Tuz Gölü çevresi",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 38.75,
+     "lon": 33.4,
+     "radiusKm": 90
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "kayaclar-topraklar",
+   "zorluk": 2,
+   "id": "kayac-02-taskomuru-pin",
+   "baslik": "Kara Taş",
+   "kazanim": "Tortul (organik) kayaç: taşkömürü",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Siyah, yanabilen, tabaka tabaka bir kayaç; yeraltı ocakları deniz kıyısına yakın, Karadeniz’in batısında.",
+   "cozum": "Taşkömürü bitkisel kökenli tortul kayaçtır; Türkiye’de Zonguldak havzasında çıkarılır.",
+   "cevap": "Zonguldak çevresi",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 41.45,
+     "lon": 31.8,
+     "radiusKm": 80
+    }
+   },
+   "hesap": null,
+   "dogrula": "Havza yayılışı atlasla doğrulansın.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "kayaclar-topraklar",
+   "zorluk": 3,
+   "id": "kayac-03-volkanik-agri-pin",
+   "baslik": "Siyah Bazalt",
+   "kazanim": "Volkanik (püskürük) kayaç: bazalt",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Taban siyah, gözenekli bazalt akıntılarıyla kaplı; tepe her mevsim karlı bir koni.",
+   "cozum": "Bazalt volkanik kayaçtır; karlı, uzun, sönmüş yanardağ konisi Türkiye’nin en yüksek dağı olan Ağrı’dır.",
+   "cevap": "Ağrı Dağı çevresi",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 39.7,
+     "lon": 44.3,
+     "radiusKm": 80
+    }
+   },
+   "hesap": null,
+   "dogrula": "Ağrı Dağı haritanın doğu ucunda kalır; tıklanabilirlik tarayıcıda denenmeli.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "su-kaynaklari",
+   "zorluk": 1,
+   "id": "su-02-kaynak-kart",
+   "baslik": "Soğuk Su",
+   "kazanim": "Yeraltı suyu türleri: kaynak, artezyen, gayzer",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Yamaçta kayanın dibinden kendiliğinden süzülen soğuk bir su var; çevrede delik ya da kuyu yok.",
+   "cozum": "Yeraltı suyunun doğal olarak yüzeye çıktığı yer kaynaktır. Artezyen kuyuyla basınçlı çıkar, gayzer sıcak su-buhar fışkırtır.",
+   "cevap": "Kaynak (pınar)",
+   "parametre": {
+    "board": {
+     "multi": false,
+     "kartlar": [
+      "Kaynak",
+      "Artezyen",
+      "Gayzer",
+      "Akarsu"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    },
+    "yanlisNedeni": {
+     "Artezyen": "Kuyu açılınca basınçla fışkırır; burada kuyu yok.",
+     "Gayzer": "Sıcak su ve buhar püskürtür; burada su soğuk.",
+     "Akarsu": "Geniş, sürekli akan bir yatak anlatılmıyor."
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "su-kaynaklari",
+   "zorluk": 2,
+   "id": "su-01-gol-turu-kart",
+   "baslik": "Dar ve Uzun Göl",
+   "kazanim": "Göl türleri: tektonik göl",
+   "tur": "cards",
+   "durum": "yazildi",
+   "gozlem": "Uzun, dar, dik yamaçlı gölde fay izleri; çukur yerin çökmesiyle oluşmuş.",
+   "cozum": "Fayların oluşturduğu çukurluktaki göl tektonik göldür.",
+   "cevap": "Tektonik göl",
+   "parametre": {
+    "answer": {
+     "correct": [
+      "b"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "su-kaynaklari",
+   "zorluk": 3,
+   "id": "su-03-akarsu-rejimi-kart",
+   "baslik": "Kabaran ve Çekilen",
+   "kazanim": "Akarsu rejimi (yağmur, kar, karma)",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Akarsu kışın ve ilkbaharda coşkun, yazın neredeyse kuruyor; yüksek dağlarda kalıcı kar yok.",
+   "cozum": "Yağışa bağlı, yazın kuruyan düzensiz rejim Akdeniz ve Ege tipi akarsulara özgüdür. Kar rejiminde su ilkbahar sonu ve yazın yükselir (Doğu Anadolu).",
+   "cevap": "Düzensiz yağmur rejimi (Akdeniz–Ege tipi)",
+   "parametre": {
+    "board": {
+     "multi": false,
+     "kartlar": [
+      "Düzensiz yağmur rejimi",
+      "Kar erimesine bağlı rejim",
+      "Düzenli rejim"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    },
+    "yanlisNedeni": {
+     "Kar erimesine bağlı rejim": "Kar rejiminde su ilkbahar sonunda kabarır; burada yüksek kar yok.",
+     "Düzenli rejim": "Düzenli rejimde akarsu yıl boyu birbirine yakın su taşır; burada yaz kuruyor."
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Akarsu rejimi dağılımı doğrulandı."
+  },
+  {
+   "konu": "turkiye-yer-sekilleri-iklimi",
+   "zorluk": 1,
+   "id": "tyer-01-van-golu-pin",
+   "baslik": "Sodalı Göl",
+   "kazanim": "Doğu Anadolu: yüksek plato, volkanik dağlar, büyük göl",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Yükselti 1600 m’nin üstü, kışlar çok sert; tuzlu ve sodalı büyük bir gölün kıyısı, çevrede sönmüş volkanlar.",
+   "cozum": "Doğu Anadolu’da yüksek, soğuk ve volkanik bir bölge; ülkenin en büyük gölü Van Gölü’dür.",
+   "cevap": "Van Gölü çevresi",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 38.6,
+     "lon": 43.0,
+     "radiusKm": 80
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Van Gölü doğrulandı."
+  },
+  {
+   "konu": "turkiye-yer-sekilleri-iklimi",
+   "zorluk": 2,
+   "id": "tyer-02-konya-ovasi-pin",
+   "baslik": "Kapalı Havza",
+   "kazanim": "İç Anadolu: kapalı havza, bozkır iklimi",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Denize hiçbir akarsu ulaşmıyor, geniş düz bir havza; kışlar soğuk, yağış az, ağaçsız bozkır; sulama için yer altı suyu çekiliyor.",
+   "cozum": "Çevresi dağlarla çevrili, dışarıya akışı olmayan geniş ova İç Anadolu’nun güneyindeki Konya Ovası’dır.",
+   "cevap": "Konya Ovası",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 37.9,
+     "lon": 32.5,
+     "radiusKm": 90
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "turkiye-yer-sekilleri-iklimi",
+   "zorluk": 3,
+   "id": "tyer-03-ege-enine-daglar-pin",
+   "baslik": "Denize Dik Dağlar",
+   "kazanim": "Ege: dağların denize dik uzanışı, girintili kıyı, iklimin iç kesime sızışı",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Dağlar denize dik uzanıyor, vadiler batıya açılıyor, kıyı çok girintili çıkıntılı; deniz etkisi iç kesimlere kadar sokuluyor.",
+   "cozum": "Dağların kıyıya dik uzandığı, çukur ovaların (grabenlerin) denize açıldığı bölge Ege Bölgesi’dir.",
+   "cevap": "Ege Bölgesi (İzmir–Manisa–Aydın)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 38.3,
+     "lon": 27.6,
+     "radiusKm": 100
+    }
+   },
+   "hesap": null,
+   "dogrula": "Bölge geniş: merkez ve yarıçap atlasla ayarlanmalı.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "nufus-yerlesme",
+   "zorluk": 1,
+   "id": "nufus-02-yogun-nufus-nedeni-kart",
+   "baslik": "Kalabalık Kıyı",
+   "kazanim": "Nüfus yoğunluğunu etkileyen faktörler",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Marmara kıyılarında nüfus çok yoğun; Deniz nedenini soruyor.",
+   "cozum": "Sanayi, ticaret ve ulaşımın gelişmiş olması nüfusu toplar; engebe ve sert iklim nüfusu azaltır.",
+   "cevap": "Sanayi, ticaret ve ulaşımın gelişmiş olması",
+   "parametre": {
+    "board": {
+     "multi": false,
+     "kartlar": [
+      "Sanayi, ticaret ve ulaşımın gelişmiş olması",
+      "Arazinin dağlık ve engebeli olması",
+      "Kışların uzun ve çok soğuk geçmesi",
+      "Madenlerin çokluğu"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    },
+    "yanlisNedeni": {
+     "Arazinin dağlık ve engebeli olması": "Engebeli arazi nüfusu azaltır.",
+     "Kışların uzun ve çok soğuk geçmesi": "Sert iklim nüfusu azaltır.",
+     "Madenlerin çokluğu": "Marmara kıyısının kalabalığı madenden değil sanayi ve ticaretten gelir."
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "nufus-yerlesme",
+   "zorluk": 2,
+   "id": "nufus-01-yerlesme-tipi-kart",
+   "baslik": "Evler Nerede?",
+   "kazanim": "Dağınık ve toplu yerleşme",
+   "tur": "cards",
+   "durum": "yazildi",
+   "gozlem": "Evler birbirinden uzak, ormanlık yamaçlara dağılmış; bol yağış, çok dere.",
+   "cozum": "Bol yağış, bol su ve engebeli ormanlık arazi evlerin dağınık kurulmasına yol açar.",
+   "cevap": "Dağınık yerleşme",
+   "parametre": {
+    "answer": {
+     "correct": [
+      "b"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "nufus-yerlesme",
+   "zorluk": 3,
+   "id": "nufus-03-yer-secimi-kart",
+   "baslik": "Köyün Yeri",
+   "kazanim": "Yerleşme yeri seçimini etkileyen doğal faktörler (çoklu seçim)",
+   "tur": "cards",
+   "durum": "planli",
+   "gozlem": "Köy akarsu kıyısında, düz ve verimli bir ovada kurulmuş; çevrede maden ve turistik tesis yok.",
+   "cozum": "Yerleşme yerini en çok su kaynağı ve tarıma elverişli düz arazi belirler. Maden ve turizm bu köyün kuruluşunda etkili değildir. İki doğru seçilir.",
+   "cevap": "Su kaynağı ve düz tarım arazisi (çoklu seçim)",
+   "parametre": {
+    "board": {
+     "multi": true,
+     "kartlar": [
+      "Su kaynağının yakınlığı",
+      "Tarıma elverişli düz arazi",
+      "Maden yataklarının varlığı",
+      "Turistik tesisler"
+     ]
+    },
+    "answer": {
+     "correct": [
+      "a",
+      "b"
+     ]
+    },
+    "yanlisNedeni": {
+     "Maden yataklarının varlığı": "Çevrede maden yok.",
+     "Turistik tesisler": "Çevrede turistik tesis yok."
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "goc",
+   "zorluk": 1,
+   "id": "goc-01-mevsimlik-kart",
+   "baslik": "Fındık Mevsimi",
+   "kazanim": "Süresine göre göç türleri: mevsimlik göç",
+   "tur": "cards",
+   "durum": "yazildi",
+   "gozlem": "Fındık toplamak için başka şehirlerden gelen işçiler iş bitince evlerine dönüyor.",
+   "cozum": "Dönüşü olan, iş mevsimine bağlı göç mevsimlik göçtür.",
+   "cevap": "Mevsimlik göç",
+   "parametre": {
+    "answer": {
+     "correct": [
+      "a"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "goc",
+   "zorluk": 2,
+   "id": "goc-02-piramit-grafik",
+   "baslik": "Duvardaki Piramit",
+   "kazanim": "Nüfus piramidinden genç nüfus yorumu",
+   "tur": "graph",
+   "durum": "yazildi",
+   "gozlem": "Piramidin tabanı geniş, tepesi sivri.",
+   "cozum": "Geniş taban yüksek doğum oranını ve genç nüfusu gösterir.",
+   "cevap": "Genç nüfus oranı yüksektir",
+   "parametre": {
+    "board": {
+     "kind": "pyramid",
+     "pickMode": "choice"
+    },
+    "answer": {
+     "choice": "genc"
+    }
+   },
+   "hesap": null,
+   "dogrula": "Veri örnek (yaklaşık).",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "goc",
+   "zorluk": 3,
+   "id": "goc-03-koyden-goc-piramit",
+   "baslik": "Boşalan Orta Yaşlar",
+   "kazanim": "Göçün nüfus piramidindeki izi (yaş ve cinsiyet seçiciliği)",
+   "tur": "graph",
+   "durum": "planli",
+   "gozlem": "Köyün nüfus piramidinde genç ve orta yaş erkek çubukları belirgin biçimde dar.",
+   "cozum": "İş için göç eden genç yetişkinler köyden ayrıldığı için 15-29 ve 30-44 yaş grupları azalır. Bu iki grup işaretlenir.",
+   "cevap": "15-29 ve 30-44 yaş grupları",
+   "parametre": {
+    "board": {
+     "kind": "pyramid",
+     "pickMode": "bars",
+     "data": {
+      "groups": [
+       "0-14",
+       "15-29",
+       "30-44",
+       "45-59",
+       "60+"
+      ],
+      "male": [
+       9,
+       3,
+       3,
+       8,
+       6
+      ],
+      "female": [
+       8.5,
+       5,
+       5.5,
+       8,
+       8
+      ]
+     }
+    },
+    "answer": {
+     "bars": [
+      1,
+      2
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "Veri örnek (yaklaşık); kitaptaki piramitle değiştirilebilir.",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ekonomik-faaliyetler",
+   "zorluk": 1,
+   "id": "ekon-01-cay-pin",
+   "baslik": "Yeşil Sıralar",
+   "kazanim": "Tarım ürünleri ve yetiştiği yer: çay",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Yamaçlarda sıra sıra yeşil çalılar, yaprak toplayan işçiler; her gün yağış ve sis.",
+   "cozum": "Çay bol, düzenli yağış ve nemli yamaç ister; Türkiye’de Doğu Karadeniz’de yetişir.",
+   "cevap": "Rize çevresi",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 41.0,
+     "lon": 40.4,
+     "radiusKm": 110
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ekonomik-faaliyetler",
+   "zorluk": 2,
+   "id": "ekon-02-antep-fistigi-pin",
+   "baslik": "Kuru Tepelerde Fıstık",
+   "kazanim": "Tarım ürünleri ve iklim: antep fıstığı",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Kurak, kireçli ve taşlık tepelerde sıra sıra fıstık ağaçları; yazlar çok sıcak ve kurak.",
+   "cozum": "Antep fıstığı sıcak ve kurak yazlara, kireçli taşlık topraklara dayanır. Türkiye’de Güneydoğu Anadolu’da, başta Gaziantep, Şanlıurfa ve Siirt çevresinde yetişir.",
+   "cevap": "Gaziantep–Şanlıurfa çevresi (Güneydoğu Anadolu)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 37.2,
+     "lon": 38.2,
+     "radiusKm": 120
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Doğrulandı: Güneydoğu Anadolu; Şanlıurfa en geniş alana, Gaziantep ve Siirt de önemli paya sahip. Siirt bu vakanın kabul alanı dışında kalır."
+  },
+  {
+   "konu": "ekonomik-faaliyetler",
+   "zorluk": 3,
+   "id": "ekon-03-bor-pin",
+   "baslik": "Beyaz Maden",
+   "kazanim": "Madencilik: bor yatakları",
+   "tur": "pin",
+   "durum": "planli",
+   "gozlem": "Açık ocaklardan beyaz, ince bir toz çıkarılıyor; dünyanın en büyük rezervi bu ülkede; Batı Anadolu’dayım.",
+   "cozum": "Türkiye’nin bor yatakları Eskişehir (Kırka), Kütahya (Emet), Balıkesir (Bigadiç) ve Bursa (Kestelek) çevresinde yoğundur; dünya rezervinin yaklaşık dörtte üçü Türkiye’dedir.",
+   "cevap": "Eskişehir–Kütahya–Balıkesir çevresi (Batı Anadolu)",
+   "parametre": {
+    "answer": {
+     "mode": "point",
+     "lat": 39.4,
+     "lon": 29.3,
+     "radiusKm": 130
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Doğrulandı: Kırka, Emet, Bigadiç, Kestelek. Rezerv payı kaynaklara göre %72-73; vakada sayı verilmiyor."
+  },
+  {
+   "konu": "ulasim",
+   "zorluk": 1,
+   "id": "ulasim-02-tasima-turu-karar",
+   "baslik": "Hangi Taşıma?",
+   "kazanim": "Taşıma türlerini seçme: hız, kapasite, maliyet",
+   "tur": "decision",
+   "durum": "planli",
+   "gozlem": "20 kg tıbbi malzeme Deniz’e 2 saat içinde ulaşmalı.",
+   "cozum": "Adım 1: acil ve hafif yük için hava yolu en uygun. Adım 2: helikopterde hafif ve öncelikli malzeme yüklenir, ağır erzak sonraya bırakılır.",
+   "cevap": "Hava yolu, hafif ve acil malzeme önceliği",
+   "parametre": {
+    "board": {
+     "adimlar": [
+      {
+       "metin": "20 kg tıbbi malzeme 2 saatte ulaşmalı. Hangi taşıma türü?",
+       "secenekler": [
+        [
+         "Hava yolu (helikopter)",
+         "next"
+        ],
+        [
+         "Kara yolu (tır)",
+         "bad"
+        ],
+        [
+         "Demir yolu",
+         "bad"
+        ],
+        [
+         "Deniz yolu",
+         "bad"
+        ]
+       ]
+      },
+      {
+       "metin": "Helikopter hazır. Yük nasıl planlanır?",
+       "secenekler": [
+        [
+         "Hafif ve acil tıbbi malzemeyi yükle",
+         "best"
+        ],
+        [
+         "Tonlarca erzakı tek seferde yükle",
+         "bad"
+        ],
+        [
+         "Yakıtı azaltıp fazla yük al",
+         "bad"
+        ]
+       ]
+      }
+     ]
+    },
+    "answer": {
+     "okEndings": [
+      "best"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "ulasim",
+   "zorluk": 2,
+   "id": "ulasim-03-gulek-gecidi-rota",
+   "baslik": "Toros Geçidi",
+   "kazanim": "Doğal geçitler ve ulaşım hatları (Çukurova–İç Anadolu bağlantısı)",
+   "tur": "route",
+   "durum": "planli",
+   "gozlem": "Yardım malzemesi Mersin limanından Ankara’ya kara yoluyla gidecek; Toroslar önde bir engel.",
+   "cozum": "Çukurova’dan İç Anadolu’ya Toroslar Gülek Boğazı’ndan aşılır. Rota Mersin → Gülek Boğazı → Ankara sırasıyla çizilir.",
+   "cevap": "Mersin → Gülek Boğazı → Ankara",
+   "parametre": {
+    "board": {
+     "mode": "map",
+     "ordered": true,
+     "start": {
+      "lat": 36.8,
+      "lon": 34.64,
+      "radiusKm": 70,
+      "name": "Mersin"
+     },
+     "end": {
+      "lat": 39.93,
+      "lon": 32.86,
+      "radiusKm": 70,
+      "name": "Ankara"
+     },
+     "waypoints": [
+      {
+       "lat": 37.27,
+       "lon": 34.77,
+       "radiusKm": 55,
+       "name": "Gülek Boğazı"
+      }
+     ],
+     "maxLengthKm": 650,
+     "maxPoints": 8
+    },
+    "answer": {}
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Gülek Boğazı konumu ve Mersin–Ankara hattı doğrulandı (≈37°17′K 34°47′D)."
+  },
+  {
+   "konu": "ulasim",
+   "zorluk": 3,
+   "id": "ulasim-01-dogu-koridoru-rota",
+   "baslik": "Doğu Hattı",
+   "kazanim": "Doğu-batı ana ulaşım koridoru (Doğu Ekspresi hattı)",
+   "tur": "route",
+   "durum": "yazildi",
+   "gozlem": "Yardım Ankara’dan trenle Kars’a gidecek; hat Kayseri, Sivas ve Erzurum’dan geçmeli.",
+   "cozum": "Rota Ankara → Kayseri → Sivas → Erzurum → Kars sırasıyla çizilir.",
+   "cevap": "Ankara–Kayseri–Sivas–Erzurum–Kars",
+   "parametre": {
+    "board": {
+     "mode": "map",
+     "ordered": true,
+     "maxLengthKm": 1300
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dogal-afetler",
+   "zorluk": 1,
+   "id": "afet-01-deprem-karar",
+   "baslik": "Sarsıntı Anı",
+   "kazanim": "Deprem anında ve sonrasında doğru davranış",
+   "tur": "decision",
+   "durum": "yazildi",
+   "gozlem": "Binanın ikinci katında sarsıntı başlıyor.",
+   "cozum": "Adım 1: çök-kapan-tutun. Adım 2: sarsıntı bitince merdivenle çıkıp açık toplanma alanına gidilir.",
+   "cevap": "Çök-Kapan-Tutun, sonra açık alan",
+   "parametre": {
+    "answer": {
+     "okEndings": [
+      "best"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dogal-afetler",
+   "zorluk": 2,
+   "id": "afet-02-sel-karar",
+   "baslik": "Yükselen Dere",
+   "kazanim": "Sel anında doğru davranış",
+   "tur": "decision",
+   "durum": "yazildi",
+   "gozlem": "Dere kenarında sağanak, su bulanıklaşıp yükseliyor.",
+   "cozum": "Adım 1: dere yatağından uzaklaşıp yükseğe çık. Adım 2: güvenli yerde telsizle konum bildir.",
+   "cevap": "Yükseğe çık, konum bildir",
+   "parametre": {
+    "answer": {
+     "okEndings": [
+      "best"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": ""
+  },
+  {
+   "konu": "dogal-afetler",
+   "zorluk": 3,
+   "id": "afet-03-heyelan-karar",
+   "baslik": "Kayan Yamaç",
+   "kazanim": "Heyelan belirtilerini tanıma ve davranış (üç adımlı)",
+   "tur": "decision",
+   "durum": "planli",
+   "gozlem": "Yağmurlu yamaçta zeminde yeni çatlaklar, eğilmiş ağaçlar ve yeni su sızıntıları görülüyor.",
+   "cozum": "Adım 1: belirtileri heyelan riski olarak oku, hemen uzaklaş. Adım 2: hareket yönüne dik, yüksek ve sağlam zemine git. Adım 3: telsizle bildir, bölgeye geri dönme.",
+   "cevap": "Uzaklaş, dik yönde yükseğe, bildir",
+   "parametre": {
+    "board": {
+     "adimlar": 3
+    },
+    "answer": {
+     "okEndings": [
+      "best"
+     ]
+    }
+   },
+   "hesap": null,
+   "dogrula": "",
+   "kaynakNotu": "Doğrulandı: AFAD heyelan belirtileri (çatlak, eğilen ağaç ve direk, yeni su çıkışları) ve kayma hattından yana, yükseğe uzaklaşma."
+  }
+ ]
+}

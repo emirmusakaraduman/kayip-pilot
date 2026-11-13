@@ -2,71 +2,79 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "harita-03-olcek-kucultme",
+   "id": "harita-03-egim-yuzde",
    "topic": "harita-bilgisi",
    "difficulty": 2,
    "type": "number",
-   "title": "Küçülen Harita",
+   "title": "Dik Yamaç",
    "radio": [
-    "Deniz: Elimde 1/25.000 ölçekli bir harita var. İki köy arası haritada 8 cm.",
-    "Deniz: Ekibin elindeki harita 1/100.000 ölçekli. Aynı iki köy o haritada kaç cm tutar?"
+    "Deniz: Haritada A noktası 300 m, B noktası 500 m yükseklikte. İkisi arasında haritada 4 cm var.",
+    "Deniz: Haritanın ölçeği 1/50.000. İki nokta arasındaki yamacın eğimi yüzde kaçtır?"
    ],
-   "question": "1/100.000 ölçekli haritada uzaklık kaç cm olur?",
+   "question": "A ile B arasındaki yamacın eğimi yüzde kaçtır?",
    "board": {
-    "unit": "cm",
-    "placeholder": "Örn. 3",
+    "unit": "%",
+    "placeholder": "Örn. 8",
     "given": [
-     "1. harita: ölçek 1/25.000, uzaklık 8 cm",
-     "2. harita: ölçek 1/100.000"
+     "A: 300 m, B: 500 m",
+     "Haritada uzaklık: 4 cm",
+     "Ölçek: 1/50.000"
     ]
    },
    "answer": {
-    "value": 2,
+    "value": 10,
     "tolerance": 0.1
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Önce 1/25.000 ölçekte 8 cm’nin gerçekte kaç cm olduğunu bul."
+     "text": "Eğim yüzde, yükselti farkının yatay uzaklığa oranının 100 ile çarpımıdır."
     },
     {
      "from": "ayse",
-     "text": "Gerçek uzaklığı 100.000’e bölersen yeni haritadaki uzaklığı bulursun."
+     "text": "Önce haritadaki 4 cm’yi gerçek uzaklığa çevir ve metreye dönüştür."
+    },
+    {
+     "from": "nuri",
+     "text": "Yükselti farkı 200 m; yatay uzaklık metre cinsinden. Böl ve 100 ile çarp."
     }
    ],
    "feedback": {
-    "correct": "Deniz: 2 cm, ölçek küçülünce uzaklık da küçülüyor.",
-    "wrong": "Deniz: Rakam uymuyor, önce gerçek uzaklığı bulmayı dene.",
-    "explain": "8 × 25.000 = 200.000 cm (2 km). Bu uzaklık 1/100.000 ölçekte 200.000 ÷ 100.000 = 2 cm olur."
+    "correct": "Deniz: %10, tırmanması zor bir yamaç.",
+    "wrong": "Deniz: Eğim bu çıkmıyor, birimleri aynı yapıp tekrar dene.",
+    "explain": "Yatay uzaklık 4 × 50.000 = 200.000 cm = 2000 m. Eğim = 200 ÷ 2000 × 100 = %10."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
     "status": "dogrulandi",
-    "note": "Ölçek hesabı."
+    "note": "Eğim (%) = yükselti farkı ÷ yatay uzaklık × 100. Bazı kaynaklar binde (‰) kullanır; vakada formül ve birim açıkça yazıldı."
    },
    "selfTest": {
     "correct": [
      {
-      "raw": "2"
+      "raw": "10"
      },
      {
-      "raw": "2 cm"
-     },
-     {
-      "raw": "2,0"
+      "raw": "10.0"
      }
     ],
     "wrong": [
      {
-      "raw": "32"
+      "raw": "20"
      },
      {
-      "raw": "8"
+      "raw": "1"
      },
      {
-      "raw": "0,5"
+      "raw": "5"
+     },
+     {
+      "raw": "100"
+     },
+     {
+      "raw": ""
      }
     ]
    }

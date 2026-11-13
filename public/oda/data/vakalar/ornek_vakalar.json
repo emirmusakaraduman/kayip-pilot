@@ -10,12 +10,11 @@
    "title": "Bozulan GPS",
    "radio": [
     "Deniz: GPS ekranı bozuldu, sayılar silindi. Yerel saatim 14.20, telsizden aldığım Greenwich saati 12.00.",
-    "Deniz: Bugün 21 Mart. Öğle Güneş ışınlarının yere geliş açısını 53° ölçtüm. Haritada beni bulabilir misin?"
+    "Deniz: Bugün 21 Mart. Öğle Güneş ışınlarının yere geliş açısını 53° ölçtüm. Konumumu bulabilir misin?"
    ],
-   "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.",
+   "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu yaz.",
    "board": {
-    "mapMode": "neutral",
-    "cities": false
+    "mapMode": "hidden"
    },
    "answer": {
     "mode": "point",
@@ -178,7 +177,7 @@
   {
    "id": "dis-01-peribacalari-pin",
    "topic": "dis-kuvvetler",
-   "difficulty": 2,
+   "difficulty": 1,
    "type": "pin",
    "title": "Taştan Kuleler",
    "radio": [
@@ -214,8 +213,8 @@
     "jeton": 2
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Dış kuvvetler: aşınma şekilleri, Kapadokya."
+    "status": "dogrulanacak",
+    "note": "Kapadokya tüf aşınması genel bilgidir; ders kitabından hızlı kontrol önerilir (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
@@ -280,8 +279,8 @@
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Dönence değeri ders kitabında 23°27′ ya da 23°26′ yazılabilir."
+    "status": "dogrulandi",
+    "note": "Dönence 23°27′; 21 Haziran’da Yengeç Dönencesi’ne dik (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
@@ -494,8 +493,8 @@
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Ders kitabında 200 m’de 1°C kuralı mı, 100 m’de 0,6°C mi geçtiğini kontrol et."
+    "status": "dogrulandi",
+    "note": "Her 200 m’de yaklaşık 1°C azalma (MEB/TYT kaynakları, doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
@@ -585,8 +584,8 @@
     "jeton": 2
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "İç kuvvetler."
+    "status": "dogrulanacak",
+    "note": "Temel kavramlar; ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
@@ -667,16 +666,16 @@
     }
    ],
    "feedback": {
-    "correct": "Deniz: Tektonik göl, Eğirdir gibi.",
+    "correct": "Deniz: Tektonik göl, İznik ve Burdur gibi.",
     "wrong": "Deniz: Gölün oluşumu başka, çukurluğun nedenini düşün.",
-    "explain": "Fay hareketleriyle çöken çukurluklarda oluşan göllere tektonik göl denir; Eğirdir Gölü tektonik kökenlidir."
+    "explain": "Fay hareketleriyle çöken çukurluklarda oluşan göllere tektonik göl denir; İznik, Burdur ve Hazar bu türdendir."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Eğirdir Gölü tektonik kökenli mi ders kitabında kontrol et."
+    "status": "dogrulandi",
+    "note": "Eğirdir ve Beyşehir birçok kaynakta karma (tektonik-karstik) sayıldığından örnek olarak İznik, Burdur, Hazar kullanıldı (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
@@ -851,8 +850,8 @@
     "jeton": 2
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Göçün süreye göre türleri."
+    "status": "dogrulanacak",
+    "note": "Temel kavram; ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
@@ -1037,18 +1036,18 @@
    "type": "route",
    "title": "Doğu Hattı",
    "radio": [
-    "Deniz: Yardım malzemesi İstanbul’dan trenle gelecek. Ana hattı Ankara, Sivas ve Erzurum üzerinden Kars’a kadar izlemeli.",
+    "Deniz: Yardım malzemesi Ankara’dan trenle Kars’a gidecek. Hat Kayseri, Sivas ve Erzurum’dan geçmeli.",
     "Deniz: Haritada bu doğu hattının rotasını çizer misin?"
    ],
-   "question": "İstanbul’dan Kars’a, Ankara, Sivas ve Erzurum’dan geçen rotayı çiz.",
+   "question": "Ankara’dan Kars’a, Kayseri, Sivas ve Erzurum’dan geçen rotayı çiz.",
    "board": {
     "mode": "map",
     "mapMode": "neutral",
     "start": {
-     "lat": 41.01,
-     "lon": 28.98,
+     "lat": 39.93,
+     "lon": 32.86,
      "radiusKm": 70,
-     "name": "İstanbul"
+     "name": "Ankara"
     },
     "end": {
      "lat": 40.6,
@@ -1059,10 +1058,10 @@
     "ordered": true,
     "waypoints": [
      {
-      "lat": 39.93,
-      "lon": 32.86,
+      "lat": 38.73,
+      "lon": 35.49,
       "radiusKm": 70,
-      "name": "Ankara"
+      "name": "Kayseri"
      },
      {
       "lat": 39.75,
@@ -1078,43 +1077,43 @@
      }
     ],
     "forbidden": [],
-    "maxLengthKm": 1700,
+    "maxLengthKm": 1400,
     "maxPoints": 10
    },
    "answer": {},
    "hints": [
     {
      "from": "nuri",
-     "text": "Bu ana hat ülkeyi doğu-batı yönünde, iç kesimlerden geçerek katediyor. Ankara’dan sonra Sivas’a git."
+     "text": "Bu ana hat ülkeyi doğu-batı yönünde, iç kesimlerden geçerek katediyor. Ankara’dan sonra güneydoğuya, Kayseri’ye git."
     },
     {
      "from": "ayse",
-     "text": "Sivas’tan sonra Erzurum, oradan Kars. Kıyıdan gitme, iç Anadolu ve Doğu Anadolu’dan geç."
+     "text": "Kayseri’den sonra Sivas, Erzurum ve Kars. Kıyıdan gitme, İç Anadolu ve Doğu Anadolu’dan geç."
     }
    ],
    "feedback": {
     "correct": "Deniz: Rotayı aldım, malzeme zamanında ulaşır.",
     "wrong": "Deniz: Bu rota ana hattan sapıyor, şehirleri sırayla say.",
-    "explain": "İstanbul–Ankara–Sivas–Erzurum–Kars hattı, ülkeyi doğu-batı doğrultusunda kat eden ana ulaşım koridorlarından biridir."
+    "explain": "Ankara–Kayseri–Sivas–Erzurum–Kars hattı (Doğu Ekspresi), ülkeyi doğu-batı doğrultusunda kat eden ana ulaşım koridorlarından biridir."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Ara istasyonları demiryolu atlasından kontrol et."
+    "status": "dogrulandi",
+    "note": "Doğu Ekspresi: Ankara–Kırıkkale–Kayseri–Sivas–Erzincan–Erzurum–Kars. Hat bugün Ankara’dan başlıyor ve Kayseri’den geçiyor (doğrulama günlüğü)."
    },
    "selfTest": {
     "correct": [
      {
       "points": [
        {
-        "lat": 41.01,
-        "lon": 28.98
-       },
-       {
         "lat": 39.93,
         "lon": 32.86
+       },
+       {
+        "lat": 38.73,
+        "lon": 35.49
        },
        {
         "lat": 39.75,
@@ -1135,8 +1134,8 @@
      {
       "points": [
        {
-        "lat": 41.01,
-        "lon": 28.98
+        "lat": 39.93,
+        "lon": 32.86
        },
        {
         "lat": 40.6,
@@ -1147,16 +1146,16 @@
      {
       "points": [
        {
-        "lat": 41.01,
-        "lon": 28.98
+        "lat": 39.93,
+        "lon": 32.86
        },
        {
         "lat": 39.75,
         "lon": 37.02
        },
        {
-        "lat": 39.93,
-        "lon": 32.86
+        "lat": 38.73,
+        "lon": 35.49
        },
        {
         "lat": 39.9,

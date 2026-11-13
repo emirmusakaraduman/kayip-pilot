@@ -11,3 +11,15 @@ Object.keys(KP.TOPIC_NAMES).forEach(function (k) {
   console.log(KP.TOPIC_NAMES[k].padEnd(34) + ' ' + row.map(function (n) { return (n ? String(n) : '·').padEnd(5); }).join('') + ' ' + (Object.keys(used).join(',') || '-') + '  /  ' + allowed.join(','));
 });
 console.log('\nToplam vaka: ' + cases.length + '   dolu hücre: ' + total + '/45   eksik hücre: ' + missing);
+
+// plan karşılaştırması (data/vaka_plani.json)
+try {
+  var plan = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'vaka_plani.json'), 'utf8')), list = plan.vakalar || plan.plan || [], ids = {}, off = [];
+  cases.forEach(function (x) { ids[x.id] = x; });
+  list.forEach(function (p) { var x = ids[p.id]; if (!x) off.push('YOK    ' + p.id); else if (x.topic !== p.konu || x.type !== p.tur || x.difficulty !== p.zorluk) off.push('FARKLI ' + p.id); });
+  var inPlan = {}; list.forEach(function (p) { inPlan[p.id] = 1; });
+  var extra = cases.filter(function (x) { return !inPlan[x.id]; }).map(function (x) { return x.id; });
+  console.log('Plan: ' + list.length + ' vaka, plana uymayan: ' + off.length);
+  off.forEach(function (o) { console.log('  ' + o); });
+  console.log('Plan dışı ek vaka: ' + (extra.join(', ') || '-'));
+} catch (e) { console.log('Plan dosyası okunamadı: ' + e.message); }

@@ -72,73 +72,78 @@
    }
   },
   {
-   "id": "elemanlar-03-basinc-yukselti-sicaklik",
+   "id": "elemanlar-03-indirgenmis-sicaklik",
    "topic": "iklim-elemanlari",
    "difficulty": 3,
    "type": "number",
-   "title": "Barometre ve Termometre",
+   "title": "Haritadaki Sıcaklık",
    "radio": [
-    "Deniz: Barometremde 913 mb yazıyor. Kıyıdaki ekip aynı anda deniz seviyesinde 1013 mb ve 25°C ölçmüş.",
-    "Deniz: Termometrem bozuldu. Bulunduğum yerdeki sıcaklığı hesaplayabilir misin?"
+    "Deniz: 1600 m yüksekteyim ve termometre 11°C gösteriyor. Kıyıdaki istasyon aynı saatte 24°C ölçmüş.",
+    "Deniz: Yükseltinin etkisini çıkarırsam iki yer arasında kaç derece fark kalır?"
    ],
-   "question": "Deniz’in bulunduğu yerde sıcaklık kaç °C’dir?",
+   "question": "Yükselti etkisi giderilince iki yer arasındaki sıcaklık farkı kaç °C’dir?",
    "board": {
     "unit": "°C",
-    "placeholder": "Örn. 15",
+    "placeholder": "Örn. 6",
     "given": [
-     "Deniz seviyesi: 1013 mb, 25°C",
-     "Deniz’in barometresi: 913 mb",
-     "Her 10 m yükselişte basınç yaklaşık 1 mb düşer",
-     "Her 200 m yükselişte sıcaklık yaklaşık 1°C düşer"
+     "Deniz: 1600 m, 11°C",
+     "Kıyı istasyonu: 24°C (deniz seviyesi)"
     ]
    },
    "answer": {
-    "value": 20,
-    "tolerance": 0.5
+    "value": 5,
+    "tolerance": 0.1
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "Önce basınç farkından yüksekliği bul, sonra sıcaklığa geç."
+     "text": "Sıcaklık yükseldikçe her 200 m’de yaklaşık 1°C azalır."
     },
     {
      "from": "ayse",
-     "text": "Basınç farkı 100 mb ise yükselti kaç metredir? Bu yüksekliği 200’e bölerek sıcaklık düşüşünü bul."
+     "text": "Önce Deniz’in sıcaklığını deniz seviyesine indirge: yükseltiden kaybedilen kadarını ekle."
+    },
+    {
+     "from": "nuri",
+     "text": "İndirgenmiş sıcaklığı bulunca kıyıdaki 24°C ile farkını al."
     }
    ],
    "feedback": {
-    "correct": "Deniz: 20°C, hissettiğime uyuyor.",
-    "wrong": "Deniz: Hesap tutmuyor, önce kaç metre yükseldiğimi bul.",
-    "explain": "Basınç farkı 100 mb × 10 m = 1000 m yükseltidir. 1000 ÷ 200 = 5°C düşer; 25 − 5 = 20°C."
+    "correct": "Deniz: Aradaki fark 5°C kalıyor, anladım.",
+    "wrong": "Deniz: Yükselti etkisini çıkarmamış gibisin, tekrar dene.",
+    "explain": "1600 ÷ 200 = 8°C eklenir; 11 + 8 = 19°C (deniz seviyesi). Kıyıyla fark: 24 − 19 = 5°C."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "10 m’de 1 mb ve 200 m’de 1°C kuralları ders kitabıyla kontrol edilmeli (sıcaklık için 100 m’de 0,6°C de geçebilir)."
+    "status": "dogrulandi",
+    "note": "Her 200 m’de 1°C azalma; indirgenmiş sıcaklık = gerçek sıcaklık + yükseltiden kaybedilen (MEB/TYT kaynakları)."
    },
    "selfTest": {
     "correct": [
      {
-      "raw": "20"
+      "raw": "5"
      },
      {
-      "raw": "20°C"
-     },
-     {
-      "raw": "20,0"
+      "raw": "5°C"
      }
     ],
     "wrong": [
      {
-      "raw": "5"
+      "raw": "13"
      },
      {
-      "raw": "30"
+      "raw": "8"
      },
      {
-      "raw": "1000"
+      "raw": "19"
+     },
+     {
+      "raw": "3"
+     },
+     {
+      "raw": ""
      }
     ]
    }

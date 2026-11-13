@@ -2,41 +2,41 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "ic-02-kivrim-dag-kart",
+   "id": "ic-02-kivrim-kart",
    "topic": "ic-kuvvetler",
    "difficulty": 2,
    "type": "cards",
-   "title": "Dalga Gibi Katmanlar",
+   "title": "Bükülen Tabakalar",
    "radio": [
-    "Deniz: Kayaların katmanları dalga gibi bükülmüş; yer yer kemerler, yer yer çukurlar var. Kırık ya da çatlak göremiyorum.",
-    "Deniz: Sıralar çok uzun ve yüksek. Kayalarda deniz kabuklarının izleri var."
+    "Deniz: Önümde kat kat dizilmiş kaya tabakaları var. Kırılmamışlar, yukarı doğru kemer gibi bükülmüşler.",
+    "Deniz: Bükülmenin tepesi gökyüzüne bakıyor."
    ],
-   "question": "Bu dağların oluşumunda hangi iç kuvvet olayı etkili olmuştur?",
+   "question": "Deniz’in gördüğü, yukarı doğru kemerlenmiş tabakalar hangi şekildir?",
    "board": {
     "multi": false,
     "cards": [
      {
       "id": "a",
-      "title": "Kıvrılma",
-      "text": "Sıkışmayla katmanların bükülmesi"
+      "title": "Antiklinal",
+      "text": "Tabakaların yukarı doğru kemerlenmesi"
      },
      {
       "id": "b",
-      "title": "Faylanma",
-      "text": "Kırılma ve kayma",
-      "why": "Faylanmada katmanlar kırılıp kayar; burada kırık değil, bükülmüş katmanlar anlatılıyor."
+      "title": "Senklinal",
+      "text": "Tabakaların aşağı doğru çukurlaşması",
+      "why": "Senklinal çukur biçimidir; burada tabakalar yukarı kemerlenmiş."
      },
      {
       "id": "c",
-      "title": "Volkanizma",
-      "text": "Magmanın yüzeye çıkışı",
-      "why": "Volkanizmada lav ve kül çıkar; burada yalnızca bükülmüş çökel katmanlar var."
+      "title": "Horst",
+      "text": "Kırıklar arasında yüksekte kalan blok",
+      "why": "Horst kırılma ürünüdür; burada tabakalar kırılmamış, bükülmüş."
      },
      {
       "id": "d",
-      "title": "Epirojenez",
-      "text": "Geniş alanda yavaş yükselme",
-      "why": "Epirojenezde katmanlar bükülmez, geniş alan yatay biçimde yükselir ya da alçalır."
+      "title": "Graben",
+      "text": "Kırıklar arasında çöken blok",
+      "why": "Graben de kırılma ürünüdür; burada kırık anlatılmıyor."
      }
     ]
    },
@@ -48,28 +48,28 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Katmanların dalga gibi bükülmesi hangi kuvvetle olur: sıkışma mı, çekme mi?"
+     "text": "Tabakalar kırılmadan bükülüyorsa kıvrımdan söz edilir. Kemerin yukarı mı aşağı mı olduğuna bak."
     },
     {
      "from": "ayse",
-     "text": "Kırık anlatılmıyor ve lav ya da kül yok.",
+     "text": "Horst ve graben kırılma şekilleridir; burada kırık yok.",
      "eliminate": [
-      "b",
-      "c"
+      "c",
+      "d"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: Kıvrılma, sıralar bu yüzden uzun ve yüksek.",
-    "wrong": "Deniz: Bu olay katmanları kırmıyor, bükmüş; tekrar düşün.",
-    "explain": "Yanlardan gelen sıkışma kuvvetleri eski deniz tabanındaki çökel katmanları bükerek kıvrım dağlarını oluşturur. Deniz kabuklu kayalar bunu doğrular."
+    "correct": "Deniz: Antiklinal, kemerin tepesi yukarıda.",
+    "wrong": "Deniz: Tabakalar kırılmamış, bükülmüş; bükülmenin yönünü bir daha düşün.",
+    "explain": "Yanlardan gelen sıkışmayla tabakaların yukarı kemerlenmesi antiklinal, aşağı çukurlaşması senklinaldir. Horst ve graben ise kırılma şekilleridir."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Kıvrım dağları: Alp-Himalaya kuşağı, Toroslar."
+    "status": "dogrulanacak",
+    "note": "Antiklinal/senklinal ve horst/graben tanımları ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
@@ -91,80 +91,80 @@
    }
   },
   {
-   "id": "ic-03-ic-kuvvet-coklu-kart",
+   "id": "ic-03-kirik-sekilleri-kart",
    "topic": "ic-kuvvetler",
    "difficulty": 3,
    "type": "cards",
-   "title": "Dört Gözlem",
+   "title": "Fayların İzi",
    "radio": [
-    "Deniz: Dört şey gördüm. Bir pınardan buharlı sıcak su fışkırıyor; kıyıda dalgalar kayalığı oyuyor.",
-    "Deniz: Yolu bir çizgi boyunca yana kaymış görüyorum. Vadide ise akarsu kıyısını kemiriyor."
+    "Deniz: Çevrede yükselmiş sert bir blok ve hemen yanında çökmüş, uzun bir ova var.",
+    "Deniz: Biraz ötede bükülmüş tabakalar görünüyor; uzakta ise tepesi çukur bir volkan konisi duruyor."
    ],
-   "question": "Hangileri iç kuvvetlerin ürünüdür? Hepsini seç.",
+   "question": "Kırık (fay) hareketleriyle oluşan şekilleri seç. İki doğru var.",
    "board": {
     "multi": true,
     "cards": [
      {
       "id": "a",
-      "title": "Sıcak su fışkırması",
-      "text": "Gayzer, volkanik faaliyetin izi"
+      "title": "Horst",
+      "text": "Kırıklar arasında yüksekte kalan blok"
      },
      {
       "id": "b",
-      "title": "Dalgaların oyduğu kayalık",
-      "text": "Falez oluşumu",
-      "why": "Falez, dalgaların kıyıyı aşındırmasıyla oluşur; bu dış kuvvet ürünüdür."
+      "title": "Graben",
+      "text": "Kırıklar arasında çöken çukur"
      },
      {
       "id": "c",
-      "title": "Çizgi boyunca kayan yol",
-      "text": "Fay hattında yer kayması"
+      "title": "Antiklinal",
+      "text": "Bükülmüş tabakaların kemeri",
+      "why": "Antiklinal tabakaların kırılmadan bükülmesidir; kırık hareketi değildir."
      },
      {
       "id": "d",
-      "title": "Kıyısı kemirilen vadi",
-      "text": "Akarsuyun yan aşındırması",
-      "why": "Akarsu aşındırması dış kuvvettir; iç kuvvetlerle ilgisi yoktur."
+      "title": "Volkan konisi",
+      "text": "Magmanın yüzeye çıkmasıyla oluşan koni",
+      "why": "Volkan konisi magma çıkışı ürünüdür; kırılma değil."
      }
     ]
    },
    "answer": {
     "correct": [
      "a",
-     "c"
+     "b"
     ]
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "İç kuvvetler yerin içinden gelir: deprem, volkanizma, faylanma."
+     "text": "Fay denen kırıklar yükselen ve çöken bloklar oluşturur. Bükülme ve magma çıkışı farklı olaylardır."
     },
     {
      "from": "ayse",
-     "text": "Dalga ve akarsu yeryüzünü dışarıdan aşındırır.",
+     "text": "Bükülmüş tabakalar ile volkan konisi kırık hareketi değildir.",
      "eliminate": [
-      "b",
+      "c",
       "d"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: İkisi de yerin içinden gelen olaylarmış, anladım.",
-    "wrong": "Deniz: Birini eksik ya da fazla seçtin, aşındıran kuvvetlere bir daha bak.",
-    "explain": "İç kuvvetler (volkanizma, faylanma) yerin içinden kaynaklanır; dalga ve akarsu aşındırması dış kuvvettir. Gayzer volkanik faaliyetin, yolun kayması fayın ürünüdür."
+    "correct": "Deniz: Horst yüksek blok, graben çökmüş ova; ikisi de faydan.",
+    "wrong": "Deniz: Birini eksik ya da fazla seçtin, kırılmayla oluşanları ayır.",
+    "explain": "Kırık hareketleriyle yükselen blok horst, çöken blok grabendir. Bükülmüş tabakalar kıvrım, volkan konisi magma çıkışının ürünüdür."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Gayzer volkanik faaliyetin sonucudur (iç kuvvet)."
+    "status": "dogrulanacak",
+    "note": "Horst/graben ve kıvrım/volkan tanımları ders kitabıyla karşılaştırılmalı (günlükte “kontrol edilmedi”)."
    },
    "selfTest": {
     "correct": [
      [
       "a",
-      "c"
+      "b"
      ]
     ],
     "wrong": [
@@ -173,16 +173,16 @@
      ],
      [
       "a",
-      "b"
+      "c"
      ],
      [
-      "b",
+      "c",
       "d"
      ],
      [
       "a",
-      "c",
-      "d"
+      "b",
+      "c"
      ]
     ]
    }

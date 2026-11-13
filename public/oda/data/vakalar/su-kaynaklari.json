@@ -2,41 +2,41 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "su-02-akarsu-rejimi-kart",
+   "id": "su-02-kaynak-kart",
    "topic": "su-kaynaklari",
    "difficulty": 1,
    "type": "cards",
-   "title": "İlkbaharda Kabaran Dere",
+   "title": "Soğuk Su",
    "radio": [
-    "Deniz: Yanımdaki akarsu ilkbaharda kabarıyor, yatağını dolduruyor. Yaz sonunda ise neredeyse kuruyacak.",
-    "Deniz: Yukarıdaki yamaçlarda kar erimeye başlamış."
+    "Deniz: Yamaçta kayanın dibinden soğuk bir su kendiliğinden süzülüyor.",
+    "Deniz: Çevrede ne bir delik ne de bir kuyu var."
    ],
-   "question": "Bu akarsu en çok hangi kaynaktan beslenir?",
+   "question": "Deniz’in gördüğü yeraltı suyu çıkışı hangisidir?",
    "board": {
     "multi": false,
     "cards": [
      {
       "id": "a",
-      "title": "Kar erimesi",
-      "text": "İlkbaharda eriyen kar suyu"
+      "title": "Kaynak (pınar)",
+      "text": "Yeraltı suyunun kendiliğinden yüzeye çıkması"
      },
      {
       "id": "b",
-      "title": "Yağmur",
-      "text": "Yağışlı mevsimde yağan yağmur",
-      "why": "Yağmurla beslenen akarsu en yağışlı mevsimde kabarır; burada kabarma kar erime zamanına denk geliyor."
+      "title": "Artezyen",
+      "text": "Kuyu delinince basınçla fışkıran su",
+      "why": "Artezyende kuyu açılması gerekir; burada kuyu yok."
      },
      {
       "id": "c",
-      "title": "Buzul",
-      "text": "Yaz sıcağında eriyen buzul",
-      "why": "Buzulla beslenen akarsuyun suyu yazın en yüksektir; bu akarsu yazın azalıyor."
+      "title": "Gayzer",
+      "text": "Sıcak su ve buharın fışkırması",
+      "why": "Gayzer sıcak su ve buhar verir; burada su soğuk ve kendiliğinden akıyor."
      },
      {
       "id": "d",
-      "title": "Yer altı suyu",
-      "text": "Kaynak suları",
-      "why": "Yer altı suyuyla beslenen akarsuyun debisi çok az değişir; burada büyük dalgalanma var."
+      "title": "Göl",
+      "text": "Çukurlukta biriken su",
+      "why": "Göl çukurlukta birikir; burada su yamaçtan süzülüyor."
      }
     ]
    },
@@ -48,27 +48,28 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Akarsuyun ne zaman kabardığına bak; o dönemde hangi su kaynağı artar?"
+     "text": "Yeraltı suyunun doğal olarak yüzeye çıktığı yere ne denir?"
     },
     {
      "from": "ayse",
-     "text": "Su yıl içinde çok değişiyorsa yer altı suyu düşük ihtimaldir.",
+     "text": "Burada kuyu yok ve su sıcak değil.",
      "eliminate": [
-      "d"
+      "b",
+      "c"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: Kar suyuyla besleniyor, ilkbaharda en yüksek.",
-    "wrong": "Deniz: Kabarma zamanı bu kaynakla uyuşmuyor, tekrar bak.",
-    "explain": "İlkbaharda kabaran, yazın azalan akarsu kar erimesiyle beslenir. Buzul beslenmesinde en yüksek debi yazın, yağmur beslenmesinde yağışlı mevsimde görülür."
+    "correct": "Deniz: Su soğuk ve tertemiz, tam bir kaynak.",
+    "wrong": "Deniz: Burada ne kuyu var ne de sıcak su, tekrar düşün.",
+    "explain": "Yeraltı suyu doğal olarak yüzeye çıkarsa kaynak olur. Artezyen kuyu ister, gayzer ise sıcak su ve buhar fışkırtır."
    },
    "reward": {
-    "jeton": 2
+    "jeton": 1
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "Akarsu rejimi: kar, buzul, yağmur, yer altı suyu beslenmesi."
+    "status": "dogrulanacak",
+    "note": "Kaynak, artezyen ve gayzer tanımları ders kitabıyla karşılaştırılmalı (günlükte yok)."
    },
    "selfTest": {
     "correct": [
@@ -90,41 +91,41 @@
    }
   },
   {
-   "id": "su-03-artezyen-kart",
+   "id": "su-03-akarsu-rejimi-kart",
    "topic": "su-kaynaklari",
    "difficulty": 3,
    "type": "cards",
-   "title": "Fışkıran Kuyu",
+   "title": "Kabaran ve Çekilen",
    "radio": [
-    "Deniz: Kuyuyu kazarken su pompa olmadan kendiliğinden yüzeye fışkırdı. Çevre, iki yamaç arasında çanak biçiminde bir ova.",
-    "Deniz: Yamaçlarda geçirimli kumtaşı, ovanın altında ise kil tabakası var. Yakında kayalıktan akan küçük bir pınar da görüyorum."
+    "Deniz: Akarsu kışın ve ilkbaharda coşkun akıyor, yazın neredeyse kuruyor.",
+    "Deniz: Yüksek dağlarda kalıcı kar yok; akış yağışa bağlı gibi."
    ],
-   "question": "Deniz’in açtığı kuyu hangi türdendir?",
+   "question": "Bu akarsu hangi rejime sahiptir?",
    "board": {
     "multi": false,
     "cards": [
      {
       "id": "a",
-      "title": "Artezyen kuyusu",
-      "text": "Basınçlı yer altı suyu"
+      "title": "Düzensiz yağmur rejimi",
+      "text": "Yağışlı mevsimde coşkun, yazın kuru"
      },
      {
       "id": "b",
-      "title": "Pınar",
-      "text": "Yamaçtan doğal çıkış",
-      "why": "Pınar suyu yamaçta doğal olarak çıkar; Deniz’in anlattığı şey kazılmış bir kuyu."
+      "title": "Kar rejimi",
+      "text": "Su en çok ilkbahar sonu ve yazın yükselir",
+      "why": "Kar rejiminde su kar erimesiyle yazın artar; burada yazın kuruyor."
      },
      {
       "id": "c",
-      "title": "Adi kuyu",
-      "text": "Pompa ya da kovayla çekilir",
-      "why": "Adi kuyuda su kendiliğinden fışkırmaz; burada su basınçla yüzeye çıkıyor."
+      "title": "Karma rejim",
+      "text": "Hem kar hem yağmurla beslenir",
+      "why": "Karma rejimde kar erimesi yaz akışını sürdürür; burada kalıcı kar yok."
      },
      {
       "id": "d",
-      "title": "Karstik kaynak",
-      "text": "Kalkerli arazide çıkış",
-      "why": "Karstik kaynak kalkerli arazide görülür; burada kumtaşı ve kil var."
+      "title": "Düzenli rejim",
+      "text": "Yıl boyu dengeli ve bol akış",
+      "why": "Düzenli rejimde akış yıl boyu sürer; burada yazın kuruma var."
      }
     ]
    },
@@ -136,28 +137,28 @@
    "hints": [
     {
      "from": "nuri",
-     "text": "Kendiliğinden fışkıran su basınç altındadır. Bu basınç nasıl oluşur?"
+     "text": "Akışın mevsimlere göre nasıl değiştiğine bak: kışın bol, yazın yok."
     },
     {
      "from": "ayse",
-     "text": "Geçirimli tabaka iki geçirimsiz tabaka arasında çanak gibi kalırsa su sıkışır.",
+     "text": "Kalıcı kar olmadığı için kar beslenmesi yok.",
      "eliminate": [
       "b",
-      "d"
+      "c"
      ]
     }
    ],
    "feedback": {
-    "correct": "Deniz: Basınçlı su, kuyudan fışkırıyor.",
-    "wrong": "Deniz: Suyun kendiliğinden fışkırmasının nedenini bir daha düşün.",
-    "explain": "Geçirimli bir tabaka, çanak biçiminde geçirimsiz tabakalar arasında kalırsa su basınç altında sıkışır. Kuyu açılınca su kendiliğinden fışkırır; buna artezyen kuyusu denir."
+    "correct": "Deniz: Yağmura bağlı, yazın kuruyan bir akarsu.",
+    "wrong": "Deniz: Akışın mevsime göre değişimini ve kar olmadığını bir daha düşün.",
+    "explain": "Yağışa bağlı, yazın kuruyan düzensiz rejim Akdeniz ve Ege akarsularına özgüdür. Kar rejiminde su ilkbahar sonu ve yazın yükselir."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
     "status": "dogrulandi",
-    "note": "Artezyen: geçirimli tabakanın geçirimsiz tabakalar arasında çanak biçimi."
+    "note": "Akdeniz ve Ege akarsuları yağmur rejimli ve düzensiz, Doğu Anadolu akarsuları kar rejimli (Ankara Üniv. ders notu). Karadeniz için “düzenli” ifadesi tartışmalı olduğundan kullanılmadı."
    },
    "selfTest": {
     "correct": [

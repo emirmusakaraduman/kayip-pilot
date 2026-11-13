@@ -2,63 +2,67 @@
  "surum": 1,
  "vakalar": [
   {
-   "id": "konum-03-saat-ve-aci-pin",
+   "id": "konum-03-en-kuzey-nokta-pin",
    "topic": "cografi-konum",
    "difficulty": 3,
    "type": "pin",
-   "title": "Saat ve Gölge",
+   "title": "Kuzeyin Ucu",
    "radio": [
-    "Deniz: Yerel saatim 14.28, telsizden aldığım Greenwich saati 12.00.",
-    "Deniz: Bugün 21 Aralık. Öğle Güneş ışınlarının yere geliş açısı 27°33′. Haritada beni bulabilir misin?"
+    "Deniz: Pusulam kuzeyi gösteriyor ve önümde yalnızca deniz var; daha ileri gidemem.",
+    "Deniz: GPS ekranı yaklaşık 42° kuzey, 35° doğu gösteriyor."
    ],
-   "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.",
+   "question": "GPS değerlerini haritada bulup Deniz’in konumunu işaretle.",
    "board": {
     "mapMode": "neutral",
     "cities": false
    },
    "answer": {
     "mode": "point",
-    "lat": 39,
-    "lon": 37,
+    "lat": 42.1,
+    "lon": 35,
     "radiusKm": 90
    },
    "hints": [
     {
      "from": "nuri",
-     "text": "1° boylam 4 dakikadır. Saat farkını dakikaya çevir, 4’e böl."
+     "text": "Enlem ve boylamı birlikte oku: 42° K, Türkiye’nin en kuzey enlemidir."
     },
     {
      "from": "ayse",
-     "text": "21 Aralık’ta ışınlar Oğlak Dönencesi’ne (23°27′ G) dik gelir. Açıyı 90°’den çıkar, bulduğun farktan dönence payını at."
+     "text": "Bu enlem ve boylamın kesiştiği yer Karadeniz kıyısında çıkıntı yapan bir burundur; harita kıyıyı biraz sadeleştirir."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Beni buldun, iç kesimin doğusundayım.",
-    "wrong": "Deniz: Burası değil, hem saat farkını hem açıyı bir daha hesapla.",
-    "explain": "Saat farkı 148 dk ÷ 4 = 37° D. 90° − 27°33′ = 62°27′; 62°27′ − 23°27′ = 39° K. Kesişim Sivas çevresidir."
+    "correct": "Deniz: Ülkenin kuzey ucundayım, bunu pusulam da söylüyor.",
+    "wrong": "Deniz: Burası değil, enlemle boylamı beraber okumalısın.",
+    "explain": "Türkiye’nin en kuzey noktası yaklaşık 42°K enleminde Sinop çevresindeki İnceburun’dur. 42°K ve 35°D değerleri bu burunda kesişir."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulanacak",
-    "note": "Dönence değeri (23°27′ mi 23°26′ mı) ders kitabıyla kontrol edilmeli; 1° = 4 dakika standarttır."
+    "status": "dogrulandi",
+    "note": "Türkiye 36°-42° K arasında; en kuzey nokta Sinop–İnceburun (42°05′43″K). Bazı kaynaklar Kırklareli sınırını (42°06′21″K) gösterir, kitap esas alındı."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 39.5,
-      "lon": 37.2
+      "lat": 42,
+      "lon": 35
+     },
+     {
+      "lat": 41.9,
+      "lon": 35.2
      }
     ],
     "wrong": [
      {
-      "lat": 37,
+      "lat": 39,
       "lon": 35
      },
      {
-      "lat": 41,
-      "lon": 29
+      "lat": 42,
+      "lon": 28
      }
     ]
    }

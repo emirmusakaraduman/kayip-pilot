@@ -38,11 +38,11 @@ console.log('Doğrulayıcı ayrıntıları');
 t('pin noktası: yakın ama dışarıda "near" verir', function () { var c = cases[0], r = KP.types.pin.validate(c, { lat: 37.0, lon: 36.8 }); assert.ok(!r.ok && r.detail.near, JSON.stringify(r)); });
 t('sayı: yön yanlışsa dirOk=false', function () { var c = cases.filter(function (x) { return x.id === 'dunya-01-gunes-acisi-enlem'; })[0], r = KP.types.number.validate(c, { raw: '42', dir: 'G' }); assert.ok(!r.ok && r.detail.dirOk === false); });
 t('sayı: derece-dakika girişi kabul edilir', function () { var c = cases.filter(function (x) { return x.id === 'dunya-01-gunes-acisi-enlem'; })[0]; assert.ok(KP.types.number.validate(c, { raw: '42°', dir: 'K' }).ok); assert.ok(KP.types.number.validate(c, { raw: '41°50′', dir: 'K' }).ok); assert.ok(!KP.types.number.validate(c, { raw: '41°20′', dir: 'K' }).ok); });
-t('rota (harita): sırayla uğranmazsa kaçırılan ara nokta bildirilir', function () { var c = cases.filter(function (x) { return x.id === 'ulasim-01-dogu-koridoru-rota'; })[0]; var r = KP.types.route.validate(c, { points: [{ lat: 41.01, lon: 28.98 }, { lat: 40.6, lon: 43.09 }] }); assert.ok(!r.ok && r.detail.missed.length > 0); });
+t('rota (harita): sırayla uğranmazsa kaçırılan ara nokta bildirilir', function () { var c = cases.filter(function (x) { return x.id === 'ulasim-01-dogu-koridoru-rota'; })[0]; var r = KP.types.route.validate(c, { points: [{ lat: 39.93, lon: 32.86 }, { lat: 40.6, lon: 43.09 }] }); assert.ok(!r.ok && r.detail.missed.length > 0); });
 t('rota (harita): yasak daire kesilirse ihlal bildirilir', function () {
   var c = JSON.parse(JSON.stringify(cases.filter(function (x) { return x.id === 'ulasim-01-dogu-koridoru-rota'; })[0]));
   c.board.waypoints = []; c.board.forbidden = [{ lat: 40.4, lon: 36, radiusKm: 60, name: 'Fırtına hücresi' }];
-  var r = KP.types.route.validate(c, { points: [{ lat: 41.01, lon: 28.98 }, { lat: 40.6, lon: 43.09 }] });
+  var r = KP.types.route.validate(c, { points: [{ lat: 39.93, lon: 32.86 }, { lat: 40.6, lon: 43.09 }] });
   assert.ok(r.detail.hit.indexOf('Fırtına hücresi') >= 0, JSON.stringify(r.detail));
 });
 t('karar: geçersiz yol reddedilir', function () { var c = cases.filter(function (x) { return x.id === 'afet-01-deprem-karar'; })[0]; assert.ok(!KP.types.decision.validate(c, ['s2b']).ok); assert.ok(KP.types.decision.validate(c, ['s1b']).detail.incomplete); });
@@ -87,7 +87,7 @@ t('pin: haritaya dokunma cevabı doldurur', function () {
 });
 t('rota (harita): noktalar eklenir ve çizilir', function () {
   start('ulasim-01-dogu-koridoru-rota');
-  [[41.01, 28.98], [39.93, 32.86], [39.75, 37.02], [39.9, 41.27], [40.6, 43.09]].forEach(function (p) { A.pick({ lat: p[0], lon: p[1], zone: 'karasal' }); });
+  [[39.93, 32.86], [38.73, 35.49], [39.75, 37.02], [39.9, 41.27], [40.6, 43.09]].forEach(function (p) { A.pick({ lat: p[0], lon: p[1], zone: 'karasal' }); });
   assert.strictEqual(A.route.length, 5); KP.engine.submit(); assert.strictEqual(KP.engine.finished, true);
 });
 t('rota (kontur): panoya tıklayarak rota çizilir', function () {
@@ -118,6 +118,19 @@ t('cevap anahtarı bozulursa selfTest yakalar', function () {
     else if (c.board.mode === 'map') c.board.maxLengthKm = 100; else c.board.maxAscentM = 5;
     assert.ok(KP.runSelfTest(c).length > 0, id + ' bozulduğu hâlde testler geçti');
   });
+});
+
+console.log('Plan uyumu');
+t('pin: alternatif hedeflerden biri doğru sayılır (karst)', function () {
+  var c = cases.filter(function (x) { return x.id === 'dis-02-karst-pin'; })[0];
+  assert.ok(c.answer.alts.length >= 2);
+  assert.ok(KP.types.pin.validate(c, { lat: 37.8, lon: 30.7 }).ok); assert.ok(KP.types.pin.validate(c, { lat: 36.7, lon: 33 }).ok); assert.ok(!KP.types.pin.validate(c, { lat: 41, lon: 40.5 }).ok);
+});
+t('plan: 45 plan vakasının hepsi yazılmış, id, konu, tür ve zorluk planla aynı', function () {
+  var plan = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'data', 'vaka_plani.json'), 'utf8')), list = plan.vakalar || plan.plan || [], bad = [];
+  assert.strictEqual(list.length, 45);
+  list.forEach(function (p) { var c = cases.filter(function (x) { return x.id === p.id; })[0]; if (!c) bad.push(p.id + ' yok'); else if (c.topic !== p.konu || c.type !== p.tur || c.difficulty !== p.zorluk) bad.push(p.id + ' konu/tür/zorluk farklı'); });
+  assert.deepStrictEqual(bad, []);
 });
 setTimeout(function () {
   console.log('\n' + pass + ' geçti, ' + fail + ' kaldı');

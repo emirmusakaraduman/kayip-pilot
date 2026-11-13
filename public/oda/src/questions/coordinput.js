@@ -15,7 +15,7 @@
   // Her iklim bölgesinin içinde kalan bir nokta (vakaların selfTest verisiyle aynı bölgeler)
   KP.ZONE_POINTS = { akdeniz: [37.2, 30.5, 'Akdeniz'], karadeniz: [40.9, 40, 'Karadeniz'], karasal: [39.9, 32.8, 'Ilıman karasal'], sert: [40, 42, 'Sert karasal'] };
 
-  // opts: {button: 'Haritada işaretle', onSubmit: function(lat, lon), cities: false} -> kutu elemanı
+  // opts: {button: 'Haritada işaretle', info: 'üst metin', onSubmit: function(lat, lon), cities: false} -> kutu elemanı
   // cities:false: şehir listesi gösterilmez (koordinat okunarak bulunan vakalarda şehir adı cevabı verir)
   KP.coordForm = function (opts) {
     var city = U.el('select', { class: 'kp-input kp-sm', 'aria-label': 'Şehir seç (isteğe bağlı)' }), msg = U.el('div', { class: 'kp-sel', role: 'status', 'aria-live': 'polite' });
@@ -36,7 +36,7 @@
     });
     [lat, lon].forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); }); });
     return U.el('div', { class: 'kp-coord', role: 'group', 'aria-label': 'Koordinatla gir' }, [
-      U.el('div', { class: 'kp-info', text: useCities ? 'Haritaya dokunamıyorsan: şehir seç ya da enlem ve boylam yaz.' : 'Haritaya dokunamıyorsan: enlem ve boylamı yazarak işaretle.' }),
+      U.el('div', { class: 'kp-info', text: opts.info || (useCities ? 'Haritaya dokunamıyorsan: şehir seç ya da enlem ve boylam yaz.' : 'Haritaya dokunamıyorsan: enlem ve boylamı yazarak işaretle.') }),
       U.el('div', { class: 'kp-row' }, (useCities ? [city] : []).concat([lat, lon, U.el('button', { type: 'button', class: 'kp-btn kp-sm', text: opts.button || 'İşaretle', onclick: go })])), msg
     ]);
   };
