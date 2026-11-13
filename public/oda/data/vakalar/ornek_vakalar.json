@@ -7,54 +7,55 @@
    "topic": "cografi-konum",
    "difficulty": 1,
    "type": "pin",
-   "title": "GPS’teki Rakamlar",
+   "title": "Bozulan GPS",
    "radio": [
-    "Deniz: Merkez, telsizim zayıf ama GPS ekranında 37° kuzey, 35° doğu yazıyor. Etrafım geniş bir ova, uzakta dağlar görünüyor.",
-    "Deniz: Haritada beni bul, çok vaktim yok."
+    "Deniz: GPS ekranı bozuldu, sayılar silindi. Yerel saatim 14.20, telsizden aldığım Greenwich saati 12.00.",
+    "Deniz: Bugün 21 Mart. Öğle Güneş ışınlarının yere geliş açısını 53° ölçtüm. Haritada beni bulabilir misin?"
    ],
-   "question": "Deniz’in konumunu haritada işaretle.",
+   "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.",
    "board": {
-    "mapMode": "neutral"
+    "mapMode": "neutral",
+    "cities": false
    },
    "answer": {
     "mode": "point",
-    "lat": 37.0,
-    "lon": 35.0,
+    "lat": 37,
+    "lon": 35,
     "radiusKm": 90
    },
    "hints": [
     {
-     "from": "ayse",
-     "text": "Enlem kuzey-güney, boylam doğu-batı yönünü verir. Önce 37° kuzey çizgisini bul."
+     "from": "nuri",
+     "text": "1° boylam 4 dakikadır. Saat farkını dakikaya çevirip 4’e böl."
     },
     {
-     "from": "nuri",
-     "text": "35° doğu Türkiye’nin ortalarına denk gelir; 37° kuzey ise Akdeniz kıyısına yakındır."
+     "from": "ayse",
+     "text": "21 Mart’ta ışınlar ekvatora dik gelir; enlem = 90° − ışın açısı. İkisini haritada kesiştir."
     }
    ],
    "feedback": {
-    "correct": "Deniz: Beni buldun, Çukurova ovasındayım.",
-    "wrong": "Deniz: Burası değil, koordinatları bir daha oku.",
-    "explain": "Enlem ekvatora göre kuzey-güney, boylam başlangıç meridyenine göre doğu-batı konumunu verir; 37°K 35°D Adana çevresine denk gelir."
+    "correct": "Deniz: Beni buldun, güneydeki geniş ovadayım.",
+    "wrong": "Deniz: Burası değil, hem saat farkını hem açıyı bir daha hesapla.",
+    "explain": "Saat farkı 140 dk; 140 ÷ 4 = 35° D. 21 Mart’ta enlem = 90° − 53° = 37° K. Bu iki değer Adana çevresinde kesişir."
    },
    "reward": {
     "jeton": 2
    },
    "source": {
     "status": "dogrulanacak",
-    "note": "Koordinatları atlas ile kontrol et."
+    "note": "Koordinat (37°K 35°D) ve Adana çevresi atlasla kontrol edilmeli; 1° = 4 dakika ve ekinoks kuralı standarttır."
    },
    "selfTest": {
     "correct": [
      {
-      "lat": 37.0,
+      "lat": 37,
       "lon": 35.1
      }
     ],
     "wrong": [
      {
-      "lat": 41.0,
-      "lon": 29.0
+      "lat": 41,
+      "lon": 29
      }
     ]
    }
@@ -161,14 +162,14 @@
     "correct": [
      {
       "lat": 40.9,
-      "lon": 40.0,
+      "lon": 40,
       "zone": "karadeniz"
      }
     ],
     "wrong": [
      {
-      "lat": 37.0,
-      "lon": 30.0,
+      "lat": 37,
+      "lon": 30,
       "zone": "akdeniz"
      }
     ]
@@ -225,8 +226,8 @@
     ],
     "wrong": [
      {
-      "lat": 41.0,
-      "lon": 29.0
+      "lat": 41,
+      "lon": 29
      }
     ]
    }

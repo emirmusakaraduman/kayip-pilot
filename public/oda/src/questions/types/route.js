@@ -78,7 +78,7 @@
         if (A.setMapMode) A.setMapMode(b.mapMode || 'neutral', b);
         if (A.showEndpoints) A.showEndpoints(b);
         if (A.enableMapPick) A.enableMapPick(function (p) { pts.push({ lat: p.lat, lon: p.lon }); redraw(); });
-        if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Nokta ekle', onSubmit: function (a, o) { pts.push({ lat: a, lon: o }); redraw(); } }));
+        if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Nokta ekle', cities: b.cities !== false, onSubmit: function (a, o) { pts.push({ lat: a, lon: o }); redraw(); } }));
       } else {
         if (A.setMapMode) A.setMapMode('hidden', b);
         var S = 360, svg = U.el('svg', { viewBox: '0 0 ' + S + ' ' + S, class: 'kp-chart kp-contour', role: 'application', tabindex: '0', 'aria-label': 'Eş yükselti haritası. Ok tuşlarıyla imleci taşı (Shift ile büyük adım), Enter ile nokta ekle, Backspace ile son noktayı sil.' });

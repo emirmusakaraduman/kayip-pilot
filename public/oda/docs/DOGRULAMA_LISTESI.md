@@ -4,25 +4,29 @@ Bu dosya `node tools/build_vakalar.js` sonrası `source.status: "dogrulanacak"` 
 
 | # | Vaka | Zorluk | Ne kontrol edilecek |
 |---|---|---|---|
-| 1 | `dis-02-obruk-pin` — Çöken Zemin | Kolay | Obruk alanı (Karapınar–Çumra, Konya Kapalı Havzası) yaklaşık 37,65°K 33,2°D; yarıçap 110 km. Atlasta obruk alanını kontrol et. |
-| 2 | `dunya-03-aralik-gunes-acisi-enlem` — Kuzeye Uzanan Gölge | Zor | Aynı dönence değeri kontrolü. Hesap 23°27′ ile tam 37° çıkar; kitap 23°26′ kullanıyorsa 37°01′ olur, tolerans (±0,3°) karşılar. |
-| 3 | `ekonomi-03-findik-pin` — Bodur Kümeler | Zor | Fındık yoğun üretim merkezi Ordu–Giresun (40,9°K 38,2°D), yarıçap 110 km. Kitapta Sakarya–Düzce çevresi de anılıyorsa vaka yine doğrudur (ipucu "çay yok" Doğu Karadeniz dışını söyler) ama yarıçap/merkez gözden geçirilebilir. |
-| 4 | `goc-03-goc-alan-sehir-grafik` — Sanayi Kentinin Piramidi | Zor | Örnek (yaklaşık) veri. Piramit kitaptaki göç alan kent piramidine benzemeli (erkek ağırlıklı, çalışma çağı kabarık). |
-| 5 | `elemanlar-03-basinc-yukselti-sicaklik` — Barometre ve Termometre | Zor | İki kural: basınç "her 10 m’de 1 mb" ve sıcaklık "her 200 m’de 1°C". Kitap farklıysa given satırlarını ve cevabı (20°C) yeniden hesapla. |
-| 6 | `kayac-03-kara-toprak-pin` — Simsiyah Toprak | Zor | Çernozyom (kara toprak) kitapta hangi iklim ve bölgeyle anılıyor? Cevap "sert karasal" kabul edildi. Kitap "ılıman karasal (İç Anadolu, step)" diyorsa answer.zone değerini değiştir. |
-| 7 | `konum-01-gps-adana` — GPS’teki Rakamlar | Kolay | Adana yaklaşık 37°K, 35,3°D; vaka 37°K 35°D noktasını 90 km yarıçapla kabul eder. Atlasla doğrula. |
-| 8 | `dunya-01-gunes-acisi-enlem` — Öğle Güneşi | Orta | Ders kitabında Yengeç Dönencesi 23°27′ yazıyorsa vaka olduğu gibi doğrudur (hesap bu değerle 42° çıkar). 23°26′ yazıyorsa cevabın toleransı (±0,3°) yine karşılar. |
-| 9 | `elemanlar-01-sicaklik-yukselti` — Soğuyan Termometre | Orta | Kitapta "her 200 m’de 1°C" mi, "her 100 m’de 0,6°C" mi? İkincisiyse vakadaki "given" satırını ve cevabı (2400 m) kitabın kuralına göre güncelle. |
-| 10 | `su-01-gol-turu-kart` — Dar ve Uzun Göl | Orta | Eğirdir Gölü kitapta tektonik göl olarak mı geçiyor (bazı kaynaklarda tektonik-karstik)? Gerekirse örnek göl adını değiştir ya da kartı sadeleştir. |
-| 11 | `ulasim-01-dogu-koridoru-rota` — Doğu Hattı | Zor | İstanbul–Ankara–Sivas–Erzurum–Kars hattının kitaptaki ana ulaşım koridoruyla uyumunu demiryolu atlasından kontrol et. |
-| 12 | `iklim-03-kurak-aylar-grafik` — Kurak Aylar | Orta | Örnek (yaklaşık) Akdeniz istasyon verisi; gerçek istasyon grafiğiyle değiştirmek istenirse selfTest ve answer.months güncellenmeli. |
-| 13 | `iklim-04-grafik-iklim-sec` — Hangi İklim? | Zor | Örnek (yaklaşık) Karadeniz istasyon verisi; gerçek grafikle değiştirilirse answer.choice kontrol edilmeli. |
-| 14 | `goc-02-piramit-grafik` — Duvardaki Piramit | Orta | Örnek (yaklaşık) veri. İstersen ders kitabındaki gerçek piramitle değiştir; yoksa başlıktaki "örnek" ifadesi kalsın. |
-| 15 | `tr-03-ege-kiyisi-pin` — Girintili Kıyı | Zor | Ege kıyısı örnek merkezi İzmir çevresi (38,4°K 27°D), yarıçap 120 km. Kitaptaki "Ege tipi kıyı" tanımıyla uyumlu mu bak. |
-| 16 | `ulasim-03-izmir-ankara-rota` — Karlı Yol | Orta | Kurgu senaryo: kapalı bölge Eskişehir çevresi (70 km), ara nokta Afyonkarahisar. Gerçek yol durumu değildir; yalnızca şehir konumlarını atlasla doğrula. |
+| 1 | `konum-03-saat-ve-aci-pin` — Saat ve Gölge | Zor | Dönence değeri (23°27′ mi 23°26′ mı) kitapla kontrol. Cevap 39°K 37°D (Sivas çevresi, 90 km). |
+| 2 | `dis-02-obruk-pin` — Çöken Zemin | Kolay | Obruk alanı (Karapınar–Çumra, Konya Kapalı Havzası) yaklaşık 37,65°K 33,2°D; yarıçap 110 km. Atlasta obruk alanını kontrol et. |
+| 3 | `dunya-03-aralik-gunes-acisi-enlem` — Kuzeye Uzanan Gölge | Zor | Aynı dönence değeri kontrolü. Hesap 23°27′ ile tam 37° çıkar; kitap 23°26′ kullanıyorsa 37°01′ olur, tolerans (±0,3°) karşılar. |
+| 4 | `ekonomi-03-findik-pin` — Bodur Kümeler | Zor | Fındık yoğun üretim merkezi Ordu–Giresun (40,9°K 38,2°D), yarıçap 110 km. Kitapta Sakarya–Düzce çevresi de anılıyorsa vaka yine doğrudur (ipucu "çay yok" Doğu Karadeniz dışını söyler) ama yarıçap/merkez gözden geçirilebilir. |
+| 5 | `goc-03-goc-alan-sehir-grafik` — Sanayi Kentinin Piramidi | Zor | Örnek (yaklaşık) veri. Piramit kitaptaki göç alan kent piramidine benzemeli (erkek ağırlıklı, çalışma çağı kabarık). |
+| 6 | `elemanlar-03-basinc-yukselti-sicaklik` — Barometre ve Termometre | Zor | İki kural: basınç "her 10 m’de 1 mb" ve sıcaklık "her 200 m’de 1°C". Kitap farklıysa given satırlarını ve cevabı (20°C) yeniden hesapla. |
+| 7 | `kayac-03-kara-toprak-pin` — Simsiyah Toprak | Zor | Çernozyom (kara toprak) kitapta hangi iklim ve bölgeyle anılıyor? Cevap "sert karasal" kabul edildi. Kitap "ılıman karasal (İç Anadolu, step)" diyorsa answer.zone değerini değiştir. |
+| 8 | `konum-01-gps-adana` — Bozulan GPS | Kolay | Cevap 37°K 35°D (Adana çevresi, 90 km yarıçap): saat farkı 140 dk → 35°D, ekinoks açısı 53° → 37°K. Noktayı atlasla doğrula. |
+| 9 | `dunya-01-gunes-acisi-enlem` — Öğle Güneşi | Orta | Ders kitabında Yengeç Dönencesi 23°27′ yazıyorsa vaka olduğu gibi doğrudur (hesap bu değerle 42° çıkar). 23°26′ yazıyorsa cevabın toleransı (±0,3°) yine karşılar. |
+| 10 | `elemanlar-01-sicaklik-yukselti` — Soğuyan Termometre | Orta | Kitapta "her 200 m’de 1°C" mi, "her 100 m’de 0,6°C" mi? İkincisiyse vakadaki "given" satırını ve cevabı (2400 m) kitabın kuralına göre güncelle. |
+| 11 | `su-01-gol-turu-kart` — Dar ve Uzun Göl | Orta | Eğirdir Gölü kitapta tektonik göl olarak mı geçiyor (bazı kaynaklarda tektonik-karstik)? Gerekirse örnek göl adını değiştir ya da kartı sadeleştir. |
+| 12 | `ulasim-01-dogu-koridoru-rota` — Doğu Hattı | Zor | İstanbul–Ankara–Sivas–Erzurum–Kars hattının kitaptaki ana ulaşım koridoruyla uyumunu demiryolu atlasından kontrol et. |
+| 13 | `iklim-03-kurak-aylar-grafik` — Kurak Aylar | Orta | Örnek (yaklaşık) Akdeniz istasyon verisi; gerçek istasyon grafiğiyle değiştirmek istenirse selfTest ve answer.months güncellenmeli. |
+| 14 | `iklim-04-grafik-iklim-sec` — Hangi İklim? | Zor | Örnek (yaklaşık) Karadeniz istasyon verisi; gerçek grafikle değiştirilirse answer.choice kontrol edilmeli. |
+| 15 | `goc-02-piramit-grafik` — Duvardaki Piramit | Orta | Örnek (yaklaşık) veri. İstersen ders kitabındaki gerçek piramitle değiştir; yoksa başlıktaki "örnek" ifadesi kalsın. |
+| 16 | `tr-03-ege-kiyisi-pin` — Girintili Kıyı | Zor | Ege kıyısı örnek merkezi İzmir çevresi (38,4°K 27°D), yarıçap 120 km. Kitaptaki "Ege tipi kıyı" tanımıyla uyumlu mu bak. |
+| 17 | `ulasim-03-izmir-ankara-rota` — Karlı Yol | Orta | Kurgu senaryo: kapalı bölge Eskişehir çevresi (70 km), ara nokta Afyonkarahisar. Gerçek yol durumu değildir; yalnızca şehir konumlarını atlasla doğrula. |
 
 ## Cevap anahtarı (kontrol için)
 
+- **konum-03-saat-ve-aci-pin**: Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.
+  - cevap: `{"mode":"point","lat":39,"lon":37,"radiusKm":90}`
+  - açıklama: Saat farkı 148 dk ÷ 4 = 37° D. 90° − 27°33′ = 62°27′; 62°27′ − 23°27′ = 39° K. Kesişim Sivas çevresidir.
 - **dis-02-obruk-pin**: Bu şekiller hangi bölgede görülür? Deniz’in konumunu işaretle.
   - cevap: `{"mode":"point","lat":37.65,"lon":33.2,"radiusKm":110}`
   - açıklama: Kalkerli arazide suyun çözmesiyle karstik şekiller oluşur; kurak Konya Kapalı Havzası’ndaki obruklar buna örnektir.
@@ -41,9 +45,9 @@ Bu dosya `node tools/build_vakalar.js` sonrası `source.status: "dogrulanacak"` 
 - **kayac-03-kara-toprak-pin**: Bu toprağın oluştuğu iklim bölgesini haritadan seç.
   - cevap: `{"mode":"zone","zone":"sert"}`
   - açıklama: Çernozyom gibi siyah, humuslu topraklar soğuk ve yarı kurak step koşullarında oluşur. Kışı uzun ve sert olan sert karasal iklim bölgesine uyar.
-- **konum-01-gps-adana**: Deniz’in konumunu haritada işaretle.
+- **konum-01-gps-adana**: Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.
   - cevap: `{"mode":"point","lat":37,"lon":35,"radiusKm":90}`
-  - açıklama: Enlem ekvatora göre kuzey-güney, boylam başlangıç meridyenine göre doğu-batı konumunu verir; 37°K 35°D Adana çevresine denk gelir.
+  - açıklama: Saat farkı 140 dk; 140 ÷ 4 = 35° D. 21 Mart’ta enlem = 90° − 53° = 37° K. Bu iki değer Adana çevresinde kesişir.
 - **dunya-01-gunes-acisi-enlem**: Deniz hangi enlemde? (derece ve yön)
   - cevap: `{"value":42,"tolerance":0.3,"dir":"K","angle":true}`
   - açıklama: 90° − 71°27′ = 18°33′ fark; kuzey yarım kürede dönencenin kuzeyinde: 23°27′ + 18°33′ = 42° K.

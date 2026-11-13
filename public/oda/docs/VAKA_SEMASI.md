@@ -48,6 +48,7 @@ ya da
 - `mapMode: "climate"` yalnızca iklim bölgesi seçtirilen sorularda (renkler bölgeleri gösterir). Diğer pin sorularında `neutral`: harita renksiz, bölge etiketi yok, bölge vurgusu yok.
 - Haritanın ölçeği ve kıyı çizgisi sadeleştirilmiştir. Nokta cevaplarında `radiusKm` en az 70 olsun (kıyı şehirleri haritada hafif içeri kayar).
 - `selfTest` cevabı: `{lat, lon, zone?}`.
+- `board.cities: false`: klavye/koordinat formunda şehir listesi gösterilmez. Koordinat okunarak bulunan vakalarda (ör. GPS, saat farkı) şehir adı cevabı vereceği için kullan.
 
 ### number
 ```json
@@ -94,7 +95,7 @@ Harita rotası:
   "forbidden": [{"lat":40.4,"lon":36,"radiusKm":60,"name":"Fırtına hücresi"}],
   "maxLengthKm": 1700, "maxPoints": 10 }
 ```
-E� yükselti rotası (sentetik arazi, gerçek coğrafya değil):
+E� yükselti rotası (sentetik arazi, gerçek coğrafya değil):
 ```json
 "board": { "mode":"contour", "terrain": {"base":100,"hills":[{"x":0.5,"y":0.5,"h":700,"r":0.17}]},
   "start":{"x":0.1,"y":0.85,"r":0.06}, "end":{"x":0.9,"y":0.15,"r":0.06},

@@ -9,11 +9,12 @@
    "title": "Saat ve Gölge",
    "radio": [
     "Deniz: Yerel saatim 14.28, telsizden aldığım Greenwich saati 12.00.",
-    "Deniz: Bugün 21 Mart. Öğle Güneş ışınlarının yere geliş açısı 51°. Haritada beni bulabilir misin?"
+    "Deniz: Bugün 21 Aralık. Öğle Güneş ışınlarının yere geliş açısı 27°33′. Haritada beni bulabilir misin?"
    ],
    "question": "Boylam ve enlemi hesaplayıp Deniz’in konumunu işaretle.",
    "board": {
-    "mapMode": "neutral"
+    "mapMode": "neutral",
+    "cities": false
    },
    "answer": {
     "mode": "point",
@@ -28,20 +29,20 @@
     },
     {
      "from": "ayse",
-     "text": "21 Mart’ta ışınlar ekvatora dik gelir; enlem = 90° − ışın açısı. İkisini haritada kesiştir."
+     "text": "21 Aralık’ta ışınlar Oğlak Dönencesi’ne (23°27′ G) dik gelir. Açıyı 90°’den çıkar, bulduğun farktan dönence payını at."
     }
    ],
    "feedback": {
     "correct": "Deniz: Beni buldun, iç kesimin doğusundayım.",
     "wrong": "Deniz: Burası değil, hem saat farkını hem açıyı bir daha hesapla.",
-    "explain": "Saat farkı 148 dk; 148 ÷ 4 = 37° D. 21 Mart’ta enlem = 90° − 51° = 39° K. Bu iki değerin kesiştiği yer Sivas çevresidir."
+    "explain": "Saat farkı 148 dk ÷ 4 = 37° D. 90° − 27°33′ = 62°27′; 62°27′ − 23°27′ = 39° K. Kesişim Sivas çevresidir."
    },
    "reward": {
     "jeton": 3
    },
    "source": {
-    "status": "dogrulandi",
-    "note": "1° = 4 dakika; ekinokta enlem = 90° − ışın açısı. Konum haritada yaklaşık."
+    "status": "dogrulanacak",
+    "note": "Dönence değeri (23°27′ mi 23°26′ mı) ders kitabıyla kontrol edilmeli; 1° = 4 dakika standarttır."
    },
    "selfTest": {
     "correct": [

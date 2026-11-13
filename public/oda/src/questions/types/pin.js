@@ -37,7 +37,7 @@
       }
       if (A.enableMapPick) A.enableMapPick(function (p) { choose({ lat: p.lat, lon: p.lon, zone: p.zone }); });
       // klavye / dokunamayanlar için: koordinat girişi ve (bölge sorularında) bölge düğmeleri
-      if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Haritada işaretle', onSubmit: function (a, o) { choose({ lat: a, lon: o }); } }));
+      if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Haritada işaretle', cities: !(c.board && c.board.cities === false), onSubmit: function (a, o) { choose({ lat: a, lon: o }); } }));
       if (c.answer && c.answer.mode === 'zone' && KP.ZONE_POINTS) {
         var zr = U.el('div', { class: 'kp-row', role: 'group', 'aria-label': 'İklim bölgesi seç' });
         Object.keys(KP.ZONE_POINTS).forEach(function (k) {
