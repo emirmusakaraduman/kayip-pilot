@@ -7,6 +7,7 @@ import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
 import { KONULAR } from '../data/topics'
 import { VAKALAR } from '../data/cases'
 import { DEFTER } from '../data/defter'
+import { ARAMA_ASAMALARI, ARAMA_HIKAYE, ARAMA_VAKALARI } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
 import type { KonuId, Vaka, Verilen, Zorluk } from '../game/types'
 import type { Tiklama } from './ReliefMap'
@@ -61,8 +62,10 @@ export function OdaSahnesi() {
   const [sira, setSira] = useState<string[]>([])
   const [ipuclari, setIpuclari] = useState<string[]>([])
   const [mesaj, setMesaj] = useState<{ dogru: boolean; metin: string } | null>(null)
-  const [panel, setPanel] = useState<'defter' | null>(null)
+  const [panel, setPanel] = useState<'defter' | 'arama' | null>(null)
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(null) // bölüm başı kısa sinematik
+  const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
+  const [defterOku, setDefterOku] = useState(false)
 
   const vakaBaslat = (v: Vaka) => {
     setVaka(v)
@@ -74,7 +77,23 @@ export function OdaSahnesi() {
     setSira([])
     setIpuclari([])
     setMesaj(null)
+    setDefterOku(false)
     setKamera('telsiz')
+  }
+
+  /** Büyük Arama: i. aşamayı başlatır; ilk aşamada kısa sinematik oynar. */
+  const aramaBaslat = (i: number) => {
+    setArama(i)
+    setPanel(null)
+    const v = ARAMA_ASAMALARI[i].vaka
+    if (i === 0) setKisaSinema(v)
+    else vakaBaslat(v)
+  }
+  const aramaCik = () => {
+    setArama(null)
+    setAsama('sec')
+    setVaka(null)
+    setKamera('genel')
   }
 
   const haritaTikla = (t: Tiklama) => {
@@ -88,9 +107,16 @@ export function OdaSahnesi() {
     const { dogru } = degerlendir(vaka.cevap, verilen)
     if (dogru) {
       const j = bitirmeJetonu(ipuclari.length > 0)
-      oyun.vakaBitir(vaka.id, vaka.konu, j)
+      if (arama !== null) {
+        const son = arama === ARAMA_ASAMALARI.length - 1
+        const toplam = j + (son ? ARAMA_HIKAYE.odul : 0)
+        oyun.aramaAsamaBitir(toplam, son)
+        setMesaj({ dogru: true, metin: `Doğru! +${toplam} jeton. Bulgu: ${ARAMA_ASAMALARI[arama].bulgu}` })
+      } else {
+        oyun.vakaBitir(vaka.id, vaka.konu, j)
+        setMesaj({ dogru: true, metin: `Doğru! +${j} jeton. Deniz'in defterine bir sayfa eklendi.` })
+      }
       dogruSes()
-      setMesaj({ dogru: true, metin: `Doğru! +${j} jeton. Deniz'in defterine bir sayfa eklendi.` })
       setAsama('sonuc')
     } else {
       oyun.yanlisYap(vaka.id)
@@ -109,6 +135,9 @@ export function OdaSahnesi() {
   const kartlar = c && (c.tur === 'secenek' || c.tur === 'karar' || c.tur === 'grafik') ? c.secenekler : null
   const rotaSecenekleri = c?.tur === 'rota' ? [...c.dogruSira].reverse() : []
   const sustu = oyun.pil <= 0
+  const asamaBilgi = arama !== null ? ARAMA_ASAMALARI[arama] : null
+  const sayfaAcik = asamaBilgi ? oyun.defter.includes(asamaBilgi.defterSayfa) : false
+  const aramaVurgu: Bolge[] = arama !== null && oyun.aramaIlerleme >= 4 ? ['karadeniz'] : []
 
   if (kisaSinema)
     return (
@@ -131,7 +160,7 @@ export function OdaSahnesi() {
           satir={metin}
           pil={oyun.pil}
           jeton={oyun.jeton}
-          vurgu={secBolgeler}
+          vurgu={[...secBolgeler, ...aramaVurgu]}
           onHarita={haritaTikla}
           onDefter={() => setPanel('defter')}
         />
@@ -153,10 +182,23 @@ export function OdaSahnesi() {
         ))}
       </div>
 
-      {asama === 'sec' && panel !== 'defter' && <VakaSecici onSec={setKisaSinema} />}
+      {asama === 'sec' && panel !== 'defter' && panel !== 'arama' && (
+        <VakaSecici onSec={(v) => { setArama(null); setKisaSinema(v) }} onArama={() => setPanel('arama')} />
+      )}
+      {panel === 'arama' && <AramaGiris baslat={(i) => aramaBaslat(i)} kapat={() => setPanel(null)} />}
+
+      {arama !== null && asama !== 'sec' && oyun.aramaIlerleme > 0 && (
+        <div className="hud pano">
+          <b>Arama panosu</b>
+          {ARAMA_ASAMALARI.slice(0, oyun.aramaIlerleme).map((a, i) => (
+            <div key={i}>✔ {a.bulgu}</div>
+          ))}
+        </div>
+      )}
 
       {vaka && asama !== 'sec' && (
         <div className="hud alt">
+          {asamaBilgi && <div className="anlati">{asamaBilgi.merkez}</div>}
           <div className="altyazi">
             <b>DENİZ:</b> {metin || '…'}
           </div>
@@ -202,6 +244,22 @@ export function OdaSahnesi() {
                   <button onClick={() => setSira([])}>Sıfırla</button>
                 </div>
               )}
+              {asamaBilgi && (
+                <div className="satir">
+                  {sayfaAcik ? (
+                    <button className="kucuk" onClick={() => setDefterOku((x) => !x)}>
+                      {defterOku ? 'Defter sayfasını gizle' : 'Defter sayfasını oku (ücretsiz)'}
+                    </button>
+                  ) : (
+                    <small>Bu konunun defter sayfası sende yok. Konu Modu'nda kazanırsan buradan ücretsiz okuyabilirsin.</small>
+                  )}
+                </div>
+              )}
+              {defterOku && asamaBilgi && (
+                <div className="defter-sayfa">
+                  {DEFTER.find((d) => d.konu === asamaBilgi.defterSayfa)?.metin.split('\n').map((satir, i) => <p key={i}>{satir}</p>)}
+                </div>
+              )}
               <div className="satir">
                 {vaka.ipucuNuri && <button className="kucuk" onClick={() => ipucuIste('Nuri')}>Nuri'ye sor ({JETON.ipucu} jeton)</button>}
                 {vaka.ipucuAyse && <button className="kucuk" onClick={() => ipucuIste('Ayşe')}>Ayşe'ye sor ({JETON.ipucu} jeton)</button>}
@@ -215,7 +273,22 @@ export function OdaSahnesi() {
               <button className="kucuk" disabled={oyun.jeton < JETON.pilDoldur} onClick={() => oyun.pilDoldur()}>Pili doldur ({JETON.pilDoldur} jeton)</button>
             </div>
           )}
-          {asama === 'sonuc' && <button onClick={() => { setAsama('sec'); setVaka(null); setKamera('genel') }}>Vakalara dön</button>}
+          {asama === 'sonuc' && arama !== null && arama === ARAMA_ASAMALARI.length - 1 && (
+            <div className="mesaj dogru">
+              {ARAMA_HIKAYE.final.map((p, i) => <p key={i}>{p}</p>)}
+            </div>
+          )}
+          {asama === 'sonuc' && arama !== null && arama < ARAMA_ASAMALARI.length - 1 && (
+            <button onClick={() => aramaBaslat(arama + 1)}>Sonraki sayfa ▶</button>
+          )}
+          {asama === 'sonuc' && (
+            <button
+              className={arama !== null && arama < ARAMA_ASAMALARI.length - 1 ? 'kucuk' : ''}
+              onClick={arama !== null ? aramaCik : () => { setAsama('sec'); setVaka(null); setKamera('genel') }}
+            >
+              {arama !== null ? 'Aramadan çık' : 'Vakalara dön'}
+            </button>
+          )}
         </div>
       )}
 
@@ -224,8 +297,9 @@ export function OdaSahnesi() {
   )
 }
 
-function VakaSecici({ onSec }: { onSec: (v: Vaka) => void }) {
+function VakaSecici({ onSec, onArama }: { onSec: (v: Vaka) => void; onArama: () => void }) {
   const biten = useOyun((s) => s.bitenVakalar)
+  const ilerleme = useOyun((s) => s.aramaIlerleme)
   const zorluklar: Zorluk[] = ['kolay', 'orta', 'zor']
   return (
     <div className="hud panel sol">
@@ -247,7 +321,7 @@ function VakaSecici({ onSec }: { onSec: (v: Vaka) => void }) {
           </div>
         ))}
       </div>
-      <button className="kucuk" disabled>Büyük Arama (yakında)</button>
+      <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>
     </div>
   )
 }
@@ -286,9 +360,29 @@ function Defter({ kapat }: { kapat: () => void }) {
       <h3>Yanlış defteri</h3>
       {yanlisDefteri.length === 0 && <p>Henüz yanlış yok.</p>}
       {yanlisDefteri.map((id) => {
-        const v = VAKALAR.find((x) => x.id === id)
+        const v = [...VAKALAR, ...ARAMA_VAKALARI].find((x) => x.id === id)
         return v ? <p key={id}><b>{v.baslik}:</b> {v.aciklama}</p> : null
       })}
+    </div>
+  )
+}
+
+function AramaGiris({ baslat, kapat }: { baslat: (i: number) => void; kapat: () => void }) {
+  const { aramaIlerleme, aramaBitti, aramaYenidenBasla } = useOyun()
+  const bitti = aramaBitti || aramaIlerleme >= ARAMA_ASAMALARI.length
+  return (
+    <div className="hud panel orta">
+      <button className="kucuk kapat" onClick={kapat}>Kapat</button>
+      <h3>{ARAMA_HIKAYE.baslik}</h3>
+      {ARAMA_HIKAYE.giris.map((p, i) => <p key={i}>{p}</p>)}
+      <p>İlerleme: {Math.min(aramaIlerleme, ARAMA_ASAMALARI.length)}/{ARAMA_ASAMALARI.length} sayfa. Defter sayfalarını Konu Modu'nda kazandıysan Büyük Arama'da ücretsiz ipucu olarak okuyabilirsin.</p>
+      <div className="satir">
+        {!bitti && <button onClick={() => baslat(aramaIlerleme)}>{aramaIlerleme === 0 ? 'Aramaya başla' : 'Aramaya devam et'}</button>}
+        {(aramaIlerleme > 0 || bitti) && (
+          <button className="kucuk" onClick={() => { aramaYenidenBasla(); baslat(0) }}>Baştan başla</button>
+        )}
+      </div>
+      {bitti && <p>Deniz bulundu! Dilersen aramayı baştan oynayabilirsin.</p>}
     </div>
   )
 }
