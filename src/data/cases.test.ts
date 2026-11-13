@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { VAKALAR } from './cases'
 import { KONULAR } from './topics'
+import { DEFTER } from './defter'
 import { degerlendir } from '../game/engine'
 import { BOLGELER, bolgeOf, icerde } from '../map/turkey'
 import type { Vaka, Verilen, Zorluk } from '../game/types'
@@ -113,4 +114,35 @@ describe('coğrafya hesapları (ders kitabı kuralları)', () => {
   it('nüfus yoğunluğu 30.000/600 = 50', () => expect(30000 / 600).toBe(sayi('nufus-yerlesme-kolay')))
   it('nüfus artış hızı 28 − 8 − 5 = 15', () => expect(28 - 8 - 5).toBe(sayi('nufus-yerlesme-zor')))
   it('net göç hızı (8000−12000)/400000×1000 = −10', () => expect(((8000 - 12000) / 400000) * 1000).toBe(sayi('goc-zor')))
+})
+
+describe('defter sayfaları', () => {
+  it('15 konunun her biri için tam bir sayfa var, sırayla ve yeterince uzun', () => {
+    expect(DEFTER).toHaveLength(15)
+    expect(DEFTER.map((d) => d.konu)).toEqual(KONULAR.map((k) => k.id))
+    for (const d of DEFTER) {
+      expect(d.metin.length, d.konu).toBeGreaterThan(250)
+      expect(d.metin.length, d.konu).toBeLessThan(900)
+      expect(d.metin.split('\n').length, d.konu).toBeGreaterThanOrEqual(4)
+    }
+  })
+
+  it('ders kitabı kuralları sayfalarda doğru yazılı (vakalarla tutarlı)', () => {
+    const m = (k: string) => DEFTER.find((d) => d.konu === k)!.metin
+    expect(m('iklim-elemanlari')).toContain('200 m')
+    expect(m('iklim-elemanlari')).toContain('1°C')
+    expect(m('cografi-konum')).toContain('1° boylam = 4 dakika')
+    expect(m('cografi-konum')).toContain('111 km')
+    expect(m('ic-kuvvetler')).toContain('Van Gölü')
+    expect(m('ic-kuvvetler')).toContain('volkanik set')
+    expect(m('kayac-toprak')).toMatch(/Çernozyom[^]*Kuzeydoğu Anadolu/)
+    expect(m('turkiye-yer-iklim')).toContain('5137')
+    expect(m('harita')).toContain('1/100.000 ölçekte 1 cm = 1 km')
+    expect(m('nufus-yerlesme')).toContain('Nüfus yoğunluğu')
+    expect(m('goc')).toContain('Net göç hızı')
+  })
+
+  it('Türkiye saat farkı: doğu-batı 19° boylam = 76 dakika', () => {
+    expect((45 - 26) * 4).toBe(76)
+  })
 })
