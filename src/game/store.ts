@@ -22,6 +22,8 @@ interface Durum {
   pilDoldur: () => boolean
   sesDegistir: () => void
   muzikDegistir: () => void
+  /** Tüm ilerlemeyi siler (pil, jeton, defter, çözülen vakalar, karne, Büyük Arama). Ses ayarları ve giriş filmi izlendi bilgisi kalır. */
+  ilerlemeyiSifirla: () => void
   girisBitti: () => void
   aramaAsamaBitir: (jeton: number, son: boolean) => void
   aramaYenidenBasla: () => void
@@ -72,6 +74,10 @@ export const useOyun = create<Durum>()(
       },
       sesDegistir: () => set((s) => ({ sesAcik: !s.sesAcik })),
       muzikDegistir: () => set((s) => ({ muzikAcik: !s.muzikAcik })),
+      ilerlemeyiSifirla: () => {
+        try { localStorage.removeItem('kp_save_v1') } catch { /* kayıt kapalıysa geç */ }
+        set({ pil: 100, jeton: 3, defter: [], bitenVakalar: [], yanlisDefteri: [], istatistik: {}, aramaIlerleme: 0, aramaBitti: false })
+      },
       girisBitti: () => set({ girisIzlendi: true }),
       // Büyük Arama defter sayfası kazandırmaz (sayfalar yalnızca Konu Modu ile açılır).
       aramaAsamaBitir: (jeton, son) =>

@@ -49,7 +49,7 @@ const Cizim = ({ z }: { z: Zorluk }) => (
 
 export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: () => void }) {
   const olcek = useOlcek()
-  const { jeton, defter, bitenVakalar, sesAcik, muzikAcik, sesDegistir, muzikDegistir } = useOyun()
+  const { jeton, defter, bitenVakalar, sesAcik, muzikAcik, sesDegistir, muzikDegistir, ilerlemeyiSifirla } = useOyun()
 
   // konu durumu: tamam (vakaların hepsi bitti) · aktif (ilk bitmemiş, önerilen) · acik (diğerleri). Kilit yok: öğrenci istediği konuya girer.
   const durumlar = useMemo(() => {
@@ -111,6 +111,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         <button className="ae-izle" style={{ left: 18, top: 90 }} onClick={izle}>▶ Girişi izle</button>
         <button className="ae-izle" style={{ left: 18, top: 128 }} onClick={sesDegistir} aria-label="Ses">{sesAcik ? '🔊 Ses açık' : '🔇 Ses kapalı'}</button>
         <button className="ae-izle" style={{ left: 18, top: 166, opacity: muzikAcik ? 1 : 0.55 }} onClick={muzikDegistir} aria-label="Müzik">{muzikAcik ? '🎵 Müzik açık' : '🎵 Müzik kapalı'}</button>
+        <button className="ae-izle" style={{ left: 18, top: 204 }} onClick={() => { if (window.confirm('Tüm ilerleme silinecek: çözülen vakalar, defter sayfaları, jeton, karne ve Büyük Arama. Emin misin?')) ilerlemeyiSifirla() }} aria-label="İlerlemeyi sıfırla">↺ İlerlemeyi sıfırla</button>
 
         {/* sol sayfa: konu listesi */}
         <ol className="ae-liste" ref={liste} style={{ left: 304, top: 238, width: 184, height: 192 }}>
