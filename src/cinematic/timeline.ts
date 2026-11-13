@@ -1,19 +1,27 @@
 // Açılış sinematiğinin saf (React'siz) zaman çizelgesi: helikopter yolu, kameralar, altyazılar.
 // Helikopterin ileri yönü yerel +z, sol yanı yerel +x'tir. Dünya: +x uçuş yönü, y yukarı.
+//
+// Sahne planı (38 sn):
+//   0–8    huzurlu ama gergin: gün batımı, sağ-arka çaprazdan eşlik
+//   8–15   arıza ve yangın: kamera öne geçer, kabin ve Deniz; "Mayday" telsizi
+//   15–23  kontrol kaybı: kuyruk savrulur, drone bakışıyla spiral
+//   23–28  ağaç tepelerine çarpma, yere iniş, yan yatma
+//   28–33  patlama, enkazdan uzaklaşan kamera, telsizin son sinyali
+//   33–38  duman ekranı kaplar, kararır → telsiz odasına geçiş
 
 export type V3 = [number, number, number]
 
 export const TOPLAM = 38
 /** Kısa sürüm: bölüm başlarında bu aralık hızlandırılarak oynatılır. */
-export const KISA = { bas: 6.2, son: 32, hiz: 1.6 }
+export const KISA = { bas: 7, son: 33, hiz: 1.6 }
 
 export const OLAY = {
-  yanginBasla: 7,
-  kuyrukKaybi: 11,
-  agacCarpma: 17.5,
-  yereInis: 22,
-  yanYatma: 24.3,
-  patlama: 27,
+  yanginBasla: 8,
+  kuyrukKaybi: 15,
+  agacCarpma: 23,
+  yereInis: 25,
+  yanYatma: 26.8,
+  patlama: 28,
 } as const
 
 /** Enkazın son durağı (temizlik alanının merkezi). */
@@ -38,18 +46,24 @@ export interface HeliDurum {
 }
 
 const salinim = (t: number) => 0.3 * Math.sin(1.9 * t) * yumusat((t - OLAY.kuyrukKaybi) / 3)
+/** Motor sarsıntısı: yangınla başlar, yere inerken söner (yüksek frekanslı sinüsle uygulanır). */
+const sarsinti = (t: number) =>
+  yumusat((t - OLAY.yanginBasla) / 2) * (1 - yumusat((t - OLAY.agacCarpma) / (OLAY.yereInis - OLAY.agacCarpma)))
+
+const KRUVAZIYER_X = -50 + 4.7 * OLAY.kuyrukKaybi // kontrol kaybı anındaki x
 
 export function heliDurum(t: number): HeliDurum {
   let x: number, y: number, z: number
   if (t <= OLAY.kuyrukKaybi) {
-    x = -70 + 8.3 * t
+    x = -50 + 4.7 * t
     y = lerp(32, 29, t / OLAY.kuyrukKaybi)
     z = 0
   } else if (t <= OLAY.agacCarpma) {
     const u = (t - OLAY.kuyrukKaybi) / (OLAY.agacCarpma - OLAY.kuyrukKaybi)
-    x = lerp(21.3, CARPMA_YERI[0], u)
+    // spiral: yanal salınım uçlarda sıfırlanır, çarpma noktasına tam oturur
+    x = lerp(KRUVAZIYER_X, CARPMA_YERI[0], u)
     y = lerp(29, CARPMA_YERI[1], Math.pow(u, 1.5))
-    z = lerp(0, CARPMA_YERI[2], u)
+    z = lerp(0, CARPMA_YERI[2], u) + 5 * Math.sin(Math.PI * u) * Math.sin(2.2 * Math.PI * u)
   } else if (t <= OLAY.yereInis) {
     const u = (t - OLAY.agacCarpma) / (OLAY.yereInis - OLAY.agacCarpma)
     x = lerp(CARPMA_YERI[0], 55, u)
@@ -62,18 +76,18 @@ export function heliDurum(t: number): HeliDurum {
     z = 6 + 0.3 * u
   }
 
-  const yaw = Math.PI / 2 + (t <= OLAY.kuyrukKaybi ? 0 : 0.15 * Math.pow(Math.min(t, OLAY.yereInis) - OLAY.kuyrukKaybi, 2))
+  const yaw = Math.PI / 2 + (t <= OLAY.kuyrukKaybi ? 0 : 0.13 * Math.pow(Math.min(t, OLAY.yereInis) - OLAY.kuyrukKaybi, 2))
   const pitch =
     t <= OLAY.kuyrukKaybi
-      ? 0
+      ? 0.03 * Math.sin(17 * t + 1) * sarsinti(t)
       : t <= OLAY.agacCarpma
-        ? 0.5 * yumusat((t - OLAY.kuyrukKaybi) / 6.5)
+        ? 0.5 * yumusat((t - OLAY.kuyrukKaybi) / 6.5) + 0.03 * Math.sin(17 * t + 1) * sarsinti(t)
         : t <= OLAY.yereInis
           ? lerp(0.5, 0.15, yumusat((t - OLAY.agacCarpma) / 4.5))
           : lerp(0.15, 0, yumusat(t - OLAY.yereInis))
   const roll =
     t <= OLAY.yereInis
-      ? salinim(t)
+      ? salinim(t) + 0.035 * Math.sin(21 * t) * sarsinti(t)
       : lerp(salinim(OLAY.yereInis), -Math.PI / 2, yumusat((t - OLAY.yereInis) / (OLAY.yanYatma - OLAY.yereInis)))
   const rotorHiz =
     t <= OLAY.kuyrukKaybi ? 22 : t <= OLAY.agacCarpma ? 22 * (1 - 0.5 * yumusat((t - OLAY.kuyrukKaybi) / 6.5)) : 0
@@ -112,30 +126,45 @@ export interface Kamera {
 
 export function kamera(t: number): Kamera {
   const h = heliDurum(t).poz
-  if (t < 6) return { poz: [-14, 3, 40], bak: h, fov: lerp(24, 36, t / 6) }
-  if (t < OLAY.kuyrukKaybi) {
-    const u = (t - 6) / 5
-    return { poz: ekle(h, [lerp(3, 2, u), 1.2, lerp(-7.5, -5.5, u)]), bak: ekle(h, [0, 0.6, 0]), fov: 42 }
+  const { yanginBasla: YB, kuyrukKaybi: KK, agacCarpma: AC, yereInis: YI, patlama: PT } = OLAY
+  // 0–8 sn: sağ-arka çaprazdan eşlik; gün batımı kadrajda, sona doğru öne doğru ilerler
+  if (t < YB) {
+    const u = t / YB
+    return { poz: ekle(h, [lerp(-12, -5, u), lerp(1.6, 0.7, u), lerp(12, 10, u)]), bak: ekle(h, [0.8, 0.3, 0]), fov: lerp(32, 38, u) }
   }
-  if (t < OLAY.agacCarpma) {
-    const a = Math.PI + 0.35 * (t - OLAY.kuyrukKaybi)
-    return { poz: ekle(h, [14 * Math.cos(a), 3.5, 14 * Math.sin(a)]), bak: h, fov: 46 }
-  }
-  if (t < OLAY.yereInis) return { poz: [30, 14, 21], bak: ekle(h, [0, 0.5, 0]), fov: 40 }
-  if (t < OLAY.patlama) {
-    const u = (t - OLAY.yereInis) / (OLAY.patlama - OLAY.yereInis)
-    return { poz: lerp3([72, 9, 24], [68, 7, 19], u), bak: [58, 1.5, 6.3], fov: 40 }
-  }
-  if (t < 32) {
-    const s = 0.5 * Math.exp(-1.5 * (t - OLAY.patlama))
-    const w = t * 1
+  // 8–15 sn: helikopterin önüne geçer, kabin ve Deniz; sonra sol motorun yangınına kayar
+  if (t < KK) {
+    const u = yumusat((t - YB) / 3)
+    const w = yumusat((t - (YB + 3)) / (KK - YB - 3))
+    const sal = 0.05 * Math.sin(9 * t)
     return {
-      poz: ekle([36, 12, -16], [s * Math.sin(60 * w), s * Math.sin(47 * w + 1), s * Math.sin(53 * w + 2)]),
-      bak: [59, 3, 6.3],
-      fov: 45,
+      poz: ekle(h, [lerp(lerp(-4, 9, u), 7.5, w), lerp(lerp(0.6, 0.5, u), 1.8, w) + sal, lerp(lerp(8.5, 2.2, u), -6.5, w)]),
+      bak: ekle(h, [lerp(0.8, 1.2, u), 0.5, lerp(0, -0.5, w)]),
+      fov: lerp(38, 34, u),
     }
   }
-  return { poz: lerp3([46, 5, -6], [38, 16, -26], yumusat((t - 32) / 6)), bak: [59, 2.5, 6.3], fov: 42 }
+  // 15–23 sn: üstten drone bakışı, irtifa kaybeden helikopterin etrafında spiral
+  if (t < AC) {
+    const u = (t - KK) / (AC - KK)
+    const a = 2.4 + 3.7 * u
+    const r = lerp(24, 15, u)
+    return { poz: ekle(h, [r * Math.cos(a), lerp(15, 12.5, u), r * Math.sin(a)]), bak: h, fov: lerp(44, 40, u) }
+  }
+  // 23–25.5 sn: orman zeminine yakın sabit kamera; ağaç tepelerine çarpış ve çöküş
+  if (t < YI + 0.5) return { poz: [69, 2.2, 20], bak: ekle(h, [0, 1.5, 0]), fov: 36 }
+  // 25.5–28 sn: yerdeki enkaz yan yatar
+  if (t < PT) {
+    const u = (t - (YI + 0.5)) / (PT - YI - 0.5)
+    return { poz: lerp3([72, 9, 24], [68, 7, 19], u), bak: [58, 1.5, 6.3], fov: 40 }
+  }
+  // 28–38 sn: patlama sarsıntısı, ardından enkazdan yavaşça uzaklaşan kamera
+  const s = 0.5 * Math.exp(-1.5 * (t - PT))
+  const u = yumusat((t - PT) / (TOPLAM - PT))
+  return {
+    poz: ekle(lerp3([36, 12, -16], [26, 18, -34], u), [s * Math.sin(60 * t), s * Math.sin(47 * t + 1), s * Math.sin(53 * t + 2)]),
+    bak: [59, lerp(3, 2.5, u), 6.3],
+    fov: lerp(45, 40, u),
+  }
 }
 
 export interface Altyazi {
@@ -146,13 +175,13 @@ export interface Altyazi {
 }
 
 export const ALTYAZILAR: Altyazi[] = [
-  { t0: 1.5, t1: 6, kim: 'MERKEZ', metin: 'TC-KRT, burası Merkez. Tıbbi malzeme uçuşunuz radarda, rota normal.' },
-  { t0: 6.8, t1: 11, kim: 'DENİZ', metin: 'Merkez, burası Deniz! Sol motor yangın uyarısı veriyor!' },
-  { t0: 11.3, t1: 16, kim: 'DENİZ', metin: 'Yangın büyüyor! Kuyruk kontrolünü kaybettim, dönüyorum!' },
-  { t0: 16, t1: 17.4, kim: 'MERKEZ', metin: 'Deniz! [cızırtı] Deniz, duyuyor musun?' },
-  { t0: 17.6, t1: 21.2, kim: 'DENİZ', metin: 'Ağaçlara çarpacağım, tutun— [cızırtı]' },
-  { t0: 28.5, t1: 32.5, kim: 'MERKEZ', metin: 'TC-KRT, cevap ver... [cızırtı] TC-KRT...' },
-  { t0: 33.2, t1: 37.4, kim: 'MERKEZ', metin: 'Tüm birimler: helikopter düşmüş olabilir. Deniz\'i bulmamız lazım.' },
+  { t0: 1.5, t1: 7.2, kim: 'MERKEZ', metin: 'TC-KRT, burası Merkez. Tıbbi malzeme uçuşunuz radarda, rota normal.' },
+  { t0: 8.4, t1: 12.4, kim: 'DENİZ', metin: 'Mayday, mayday! [cızırtı] Sol motor yangını!' },
+  { t0: 12.7, t1: 15.6, kim: 'DENİZ', metin: 'Yangın büyüyor, kuyruk kontrolünü kaybediyorum!' },
+  { t0: 15.8, t1: 19.2, kim: 'MERKEZ', metin: 'Deniz! [cızırtı] Deniz, duyuyor musun?' },
+  { t0: 19.5, t1: 23, kim: 'DENİZ', metin: 'Ağaçlara çarpacağım, tutun— [cızırtı]' },
+  { t0: 28.8, t1: 32.8, kim: 'DENİZ', metin: '...Merkez... beni duyan var mı? [cızırtı]' },
+  { t0: 33.4, t1: 37.4, kim: 'MERKEZ', metin: 'Tüm birimler: helikopter düşmüş olabilir. Deniz\'i bulmamız lazım.' },
 ]
 
 /** Kelime kelime yazılan altyazı: süresinin ilk %75'inde tamamlanır. */

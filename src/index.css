@@ -78,3 +78,7 @@ button.sayfa.secili { outline: 2px solid #f0a020; }
 @keyframes cevirGeri { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
 .yanlis-liste { background: #e8dfbf; color: #3b2f22; border-radius: 8px; padding: 18px 24px; max-height: 62vh; overflow: auto; font-family: 'Caveat', cursive; font-size: 1.4rem; }
 .kitap-alt span { font-size: 1.5rem; }
+
+/* Sinematikten telsiz odasına geçiş: siyahtan yavaşça açılır */
+.oda-gecis { position: fixed; inset: 0; z-index: 50; background: #000; pointer-events: none; animation: oda-gecis 3.2s ease-out forwards; }
+@keyframes oda-gecis { 0% { opacity: 1; } 35% { opacity: 1; } 100% { opacity: 0; } }

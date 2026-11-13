@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { OrtamAyar } from './ortam'
 import { ENKAZ, CARPMA_YERI } from './timeline'
 
@@ -205,10 +206,58 @@ interface Agac {
 
 const YAKIN = 70
 
+/** Tepeden dibe doğru koyulaşan köşe rengi: ağaçlara hacim ve iç gölge hissi verir (örnek rengiyle çarpılır). */
+function golgele(g: THREE.BufferGeometry, y0: number, y1: number, alt: number, ust: number) {
+  const p = g.attributes.position
+  const c = new Float32Array(p.count * 3)
+  for (let i = 0; i < p.count; i++) {
+    const k = alt + (ust - alt) * Math.min(1, Math.max(0, (p.getY(i) - y0) / (y1 - y0)))
+    c[i * 3] = c[i * 3 + 1] = c[i * 3 + 2] = k
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(c, 3))
+  return g
+}
+
+/**
+ * Taç geometrileri (yükseklik ≈ 3,2 birim, merkez y=0; gövde ayrı). Çam: üst üste üç koni; geniş yapraklı: birleşik küreler.
+ * Uzak sürüm çok daha az üçgenlidir (LOD).
+ */
+function agacGeometrileri(tur: 'ibre' | 'genis') {
+  const govde = new THREE.CylinderGeometry(0.12, 0.2, 1.2, 6)
+  if (tur === 'ibre') {
+    const kat = (r: number, h: number, taban: number, kenar: number) => {
+      const g = new THREE.ConeGeometry(r, h, kenar, 1, false)
+      g.translate(0, taban + h / 2 - 1.6, 0)
+      return g
+    }
+    const yap = (kenar: number, katlar: [number, number, number][]) =>
+      golgele(mergeGeometries(katlar.map(([r, h, t]) => kat(r, h, t, kenar)))!, -1.6, 1.6, 0.55, 1.05)
+    return {
+      yakinTac: yap(9, [[1.3, 1.5, 0], [1.0, 1.4, 0.9], [0.66, 1.3, 1.9]]),
+      uzakTac: yap(5, [[1.25, 1.9, 0], [0.8, 1.7, 1.5]]),
+      govde,
+    }
+  }
+  const kure = (r: number, x: number, y: number, z: number, detay: number) => {
+    const g = new THREE.IcosahedronGeometry(r, detay)
+    g.scale(1, 0.88, 1)
+    g.translate(x, y, z)
+    return g
+  }
+  return {
+    yakinTac: golgele(
+      mergeGeometries([kure(1.15, 0, -0.35, 0, 1), kure(0.85, 0.55, 0.35, 0.25, 1), kure(0.9, -0.5, 0.5, -0.3, 1), kure(0.7, 0.05, 1.0, 0.15, 1)])!,
+      -1.5, 1.7, 0.5, 1.05,
+    ),
+    uzakTac: golgele(mergeGeometries([kure(1.2, 0, -0.2, 0, 0), kure(0.9, 0.1, 0.8, 0, 0)])!, -1.5, 1.7, 0.55, 1.05),
+    govde,
+  }
+}
+
 /**
  * Orman: örnekli çizim + yakınlığa göre ayrıntı seviyesi.
- * Yakın ağaçlar gövdeli, 9 kenarlı taçlı ve rüzgârda sallanır; uzaktakiler tek, 4 kenarlı koni.
- * (Şimdilik yer tutucu koni geometrisi; GLB gelince buradaki geometri onunla değiştirilecek.)
+ * Yakın ağaçlar gövdeli, ayrıntılı taçlı ve rüzgârda sallanır; uzaktakiler tek parça, düşük üçgenli taçtır.
+ * Ortama göre katmanlı çam (karadeniz, sert-karasal) ya da yuvarlak tepeli yapraklı ağaç (akdeniz, karasal) çizilir.
  */
 export function Agaclar({ ayar }: { ayar: OrtamAyar }) {
   const kamera = useThree((s) => s.camera)
@@ -240,15 +289,8 @@ export function Agaclar({ ayar }: { ayar: OrtamAyar }) {
     return liste
   }, [ayar])
 
-  const geo = useMemo(
-    () => ({
-      yakinTac: new THREE.ConeGeometry(1.1, 3.2, 9),
-      uzakTac: new THREE.ConeGeometry(1.1, 3.2, 4),
-      govde: new THREE.CylinderGeometry(0.12, 0.18, 1.2, 6),
-    }),
-    [],
-  )
-  const tacMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9 }), [])
+  const geo = useMemo(() => agacGeometrileri(ayar.agacTuru), [ayar.agacTuru])
+  const tacMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9, vertexColors: true, flatShading: true }), [])
   const govdeMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#4a3520', roughness: 1 }), [])
   const temel = useMemo(() => new THREE.Color(ayar.agacRenk), [ayar])
   const d = useMemo(() => new THREE.Object3D(), [])
@@ -303,9 +345,9 @@ export function Agaclar({ ayar }: { ayar: OrtamAyar }) {
   const n = agaclar.length
   return (
     <>
-      <instancedMesh ref={yakinTac} args={[geo.yakinTac, tacMat, n]} frustumCulled={false} castShadow receiveShadow />
+      <instancedMesh key={ayar.agacTuru + 'y'} ref={yakinTac} args={[geo.yakinTac, tacMat, n]} frustumCulled={false} castShadow receiveShadow />
       <instancedMesh ref={yakinGovde} args={[geo.govde, govdeMat, n]} frustumCulled={false} castShadow />
-      <instancedMesh ref={uzakTac} args={[geo.uzakTac, tacMat, n]} frustumCulled={false} castShadow />
+      <instancedMesh key={ayar.agacTuru + 'u'} ref={uzakTac} args={[geo.uzakTac, tacMat, n]} frustumCulled={false} castShadow />
     </>
   )
 }

@@ -53,3 +53,29 @@ export const yanlisSes = () => {
   bip(200, 0.3, 0.06)
   cizirti(0.3, 0.08)
 }
+
+/** Sinematikten telsiz odasına geçiş: kısık yağmur ve iç mekân uğultusu yavaşça gelir, sonra söner. */
+export function odaGecisSesi(sure = 9) {
+  if (!acik() || !ctx) return
+  const c = ctx
+  const n = c.sampleRate * 2
+  const buf = c.createBuffer(1, n, c.sampleRate)
+  const d = buf.getChannelData(0)
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1
+  const src = c.createBufferSource()
+  src.buffer = buf
+  src.loop = true
+  const f = c.createBiquadFilter()
+  f.type = 'bandpass'
+  f.frequency.value = 3200
+  f.Q.value = 0.4
+  const g = c.createGain()
+  const t0 = c.currentTime
+  g.gain.setValueAtTime(0.0001, t0)
+  g.gain.exponentialRampToValueAtTime(0.05, t0 + 3)
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + sure)
+  src.connect(f).connect(g).connect(c.destination)
+  src.start()
+  src.stop(t0 + sure)
+  setTimeout(() => cizirti(0.4, 0.03), 1800)
+}

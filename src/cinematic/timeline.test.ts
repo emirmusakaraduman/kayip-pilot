@@ -17,7 +17,7 @@ describe('sinematik zaman çizelgesi', () => {
   })
 
   it('kamera kesintileri dışında kamera da sıçramaz', () => {
-    const kesit = [6, OLAY.kuyrukKaybi, OLAY.agacCarpma, OLAY.yereInis, OLAY.patlama, 32]
+    const kesit = [OLAY.kuyrukKaybi, OLAY.agacCarpma, OLAY.yereInis + 0.5, OLAY.patlama]
     for (let i = 1; i < adimlar.length; i++) {
       if (kesit.some((k) => adimlar[i - 1] < k && adimlar[i] >= k - 1e-9)) continue
       const a = kamera(adimlar[i - 1]).poz

@@ -37,6 +37,7 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
   const rotorRef = useRef<THREE.Group>(null)
   const kopukRotor = useRef<THREE.Group>(null)
   const kopukBlade = useRef<THREE.Group>(null)
+  const deniz = useRef<THREE.Group>(null)
   // GLB helikopterin adlandırılmış rotor düğümleri (yükleme asenkron; hazır olana dek yer tutucu rotor kullanılır)
   const glb = useRef<{
     ana: THREE.Object3D; kuy: THREE.Object3D | null
@@ -77,7 +78,7 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
 
   useFrame((_, dtHam) => {
     const dt = Math.min(dtHam, 0.05)
-    const hiz = kisa ? KISA.hiz : 1
+    const hiz = import.meta.env.DEV && new URLSearchParams(location.search).has('dondur') ? 0 : kisa ? KISA.hiz : 1 // ?dondur: geliştirmede kareyi dondurur
     const t = (tRef.current += dt * hiz)
     const son = kisa ? KISA.son : TOPLAM
     const o = once.current
@@ -117,7 +118,21 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
           eksKuy: kuy ? eksen(new THREE.Vector3(1, 0, 0), kuy) : new THREE.Vector3(1, 0, 0), // kuyruk rotoru: yanal eksen
           aciAna: 0, aciKuy: 0, kopuk: false, kok: null,
         }
-        g.traverse((m) => { if ((m as THREE.Mesh).isMesh) m.castShadow = true })
+        g.traverse((m) => {
+          const me = m as THREE.Mesh
+          if (!me.isMesh) return
+          me.castShadow = true
+          // Camlar yarı saydam: kabindeki Deniz dışarıdan görünsün
+          const mat = me.material as THREE.MeshStandardMaterial
+          if (mat?.name === 'glass') {
+            const k = mat.clone()
+            k.transparent = true
+            k.opacity = 0.22
+            k.depthWrite = false
+            me.material = k
+            me.castShadow = false
+          }
+        })
         if (kopukBlade.current) kopukBlade.current.visible = false
       }
     }
@@ -151,6 +166,14 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
         kopukRotor.current.position.set(...kp.poz)
         kopukRotor.current.rotation.set(kp.yerde ? 0.2 : 0.8, kp.donus, kp.yerde ? 0.15 : 0.3)
       }
+    }
+
+    // — Deniz (kabinde panik): yangınla birlikte titrer, başını sağa sola çevirir
+    if (deniz.current) {
+      const pn = yum((t - OLAY.yanginBasla) / 2)
+      deniz.current.rotation.z = 0.12 * Math.sin(13 * t) * pn
+      deniz.current.rotation.y = 0.5 * Math.sin(2.6 * t) * pn
+      deniz.current.position.y = 0.1 + 0.02 * Math.sin(30 * t) * pn
     }
 
     // — kamera
@@ -198,6 +221,14 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
         c0: [0.12, 0.11, 0.11, 0.55], c1: [0.2, 0.19, 0.19, 0],
       })
     }
+    // Kıvılcımlar: arıza anında sol motordan fırlayan ışıltılar
+    if (t > OLAY.yanginBasla - 0.6 && t < OLAY.agacCarpma && Math.random() < 0.5 + yangin * 0.3)
+      havuzlar.alev.emit({
+        p: [ex, ey, ez],
+        v: [hx * 0.5 + rnd(-5, 5), rnd(0, 4) + hy * 0.3, hz * 0.5 + rnd(-5, 5)],
+        omur: rnd(0.25, 0.6), s0: 0.18, s1: 0.05,
+        c0: [1, 0.9, 0.5, 1], c1: [1, 0.4, 0.1, 0],
+      })
     // Ağaç tepeleri: yaprak ve dal parçaları
     if (t >= OLAY.agacCarpma && !o.agacPatladi) {
       o.agacPatladi = true
@@ -272,8 +303,13 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
     if (kap) {
       const acilis = 1 - yum((t - (kisa ? KISA.bas : 0)) / 1.0)
       const flas = dp >= 0 ? Math.exp(-5 * dp) * 0.9 : 0
+      // Son 4,5 sn: kalın duman ekranı kaplar, sonra tam karartma (kısa sürümde yalnız karartma)
+      const duman = kisa ? 0 : yum((t - (son - 4.5)) / 3.5)
       const kapanis = yum((t - (son - 1.4)) / 1.2)
-      kap.style.background = flas > 0.02 ? `rgba(255,235,200,${flas})` : `rgba(0,0,0,${Math.max(acilis, kapanis)})`
+      kap.style.background =
+        flas > 0.02
+          ? `rgba(255,235,200,${flas})`
+          : `radial-gradient(ellipse at 50% 60%, rgba(40,34,32,${duman * 0.95}) 0%, rgba(8,7,7,${duman}) 75%), rgba(0,0,0,${Math.max(acilis, kapanis)})`
     }
 
     if (t >= son && !bitti.current) {
@@ -318,6 +354,20 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
 
       <group ref={heliRef}>
         <AssetModel varlik="helikopter" />
+        <group ref={deniz} position={[-0.4, 0.1, 3.15]} scale={0.8}>
+          <mesh position={[0, 0.1, 0]} castShadow>
+            <capsuleGeometry args={[0.2, 0.32, 4, 10]} />
+            <meshStandardMaterial color="#e8641e" roughness={0.8} />
+          </mesh>
+          <mesh position={[0, 0.58, 0]} castShadow>
+            <sphereGeometry args={[0.15, 14, 10]} />
+            <meshStandardMaterial color="#d9a27a" roughness={0.7} />
+          </mesh>
+          <mesh position={[0, 0.63, 0]} castShadow>
+            <sphereGeometry args={[0.17, 14, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#eeeeee" roughness={0.4} />
+          </mesh>
+        </group>
         <group ref={rotorRef} position={[0, 1, 0]}>
           <mesh castShadow>
             <boxGeometry args={[6, 0.04, 0.22]} />
