@@ -51,7 +51,7 @@ type Asama = 'sec' | 'dinle' | 'sonuc'
 
 export function OdaSahnesi() {
   const oyun = useOyun()
-  const [kamera, setKamera] = useState<Kamera>('genel')
+  const [kamera, setKamera] = useState<Kamera>('oda')
   const [vaka, setVaka] = useState<Vaka | null>(null)
   const [asama, setAsama] = useState<Asama>('sec')
   const [pilBas, setPilBas] = useState(100)
@@ -93,7 +93,7 @@ export function OdaSahnesi() {
     setArama(null)
     setAsama('sec')
     setVaka(null)
-    setKamera('genel')
+    setKamera('oda')
   }
 
   const haritaTikla = (t: Tiklama) => {
@@ -154,7 +154,7 @@ export function OdaSahnesi() {
 
   return (
     <div className="oda">
-      <Canvas camera={{ position: KAMERALAR.genel.poz, fov: 50 }} dpr={[1, 1.75]} gl={{ preserveDrawingBuffer: import.meta.env.DEV }}>
+      <Canvas camera={{ position: KAMERALAR.oda.poz, fov: 56 }} dpr={[1, 1.75]} gl={{ preserveDrawingBuffer: import.meta.env.DEV }}>
         <RadioRoom
           kamera={kamera}
           satir={metin}
@@ -284,7 +284,7 @@ export function OdaSahnesi() {
           {asama === 'sonuc' && (
             <button
               className={arama !== null && arama < ARAMA_ASAMALARI.length - 1 ? 'kucuk' : ''}
-              onClick={arama !== null ? aramaCik : () => { setAsama('sec'); setVaka(null); setKamera('genel') }}
+              onClick={arama !== null ? aramaCik : () => { setAsama('sec'); setVaka(null); setKamera('oda') }}
             >
               {arama !== null ? 'Aramadan çık' : 'Vakalara dön'}
             </button>

@@ -6,10 +6,23 @@ import { ASSETS, yuklenebilirMi, type AssetId, type AssetSlot } from '../assets/
 import { Placeholder } from './Placeholders'
 
 /** Modeli yükler, kopyalar (iskeletli modeller için güvenli), sınır kutusundan ortalar, ölçekler ve yere oturtur. */
-function GlbModel({ slot }: { slot: AssetSlot }) {
+function GlbModel({ slot, oturan }: { slot: AssetSlot; oturan: boolean }) {
   const { scene } = useGLTF(slot.url!)
   const nesne = useMemo(() => {
     const kopya = iskeletKlonla(scene)
+    // Kemik pozu: eksen model uzayında verilir; ebeveyn çerçevesine çevrilip dönüş öne eklenir.
+    for (const poz of slot.kemikPozu ?? []) {
+      kopya.updateMatrixWorld(true)
+      const re = new RegExp(poz.ad)
+      let kemik: THREE.Object3D | null = null
+      kopya.traverse((o) => { if (!kemik && (o as THREE.Bone).isBone && re.test(o.name)) kemik = o })
+      const k = kemik as THREE.Object3D | null
+      if (!k?.parent) continue
+      const kq = kopya.getWorldQuaternion(new THREE.Quaternion())
+      const pq = k.parent.getWorldQuaternion(new THREE.Quaternion())
+      const eksen = new THREE.Vector3(...poz.eksen).applyQuaternion(kq).applyQuaternion(pq.invert())
+      k.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(eksen, poz.aci))
+    }
     kopya.rotation.y = slot.donusY ?? 0
     kopya.updateMatrixWorld(true)
     const kutu = new THREE.Box3().setFromObject(kopya)
@@ -24,9 +37,9 @@ function GlbModel({ slot }: { slot: AssetSlot }) {
     duzen.name = 'duzen'
     duzen.add(kopya)
     duzen.scale.setScalar(olcek)
-    duzen.position.set(-orta.x * olcek, (slot.taban ?? 0) - kutu.min.y * olcek, -orta.z * olcek)
+    duzen.position.set(-orta.x * olcek, (slot.taban ?? 0) - (oturan ? (slot.oturma ?? 0) : 0) - kutu.min.y * olcek, -orta.z * olcek)
     return duzen
-  }, [scene, slot])
+  }, [scene, slot, oturan])
   return <primitive object={nesne} />
 }
 
@@ -45,7 +58,7 @@ class YukleHatasi extends Component<{ yedek: ReactNode; children: ReactNode }, {
 }
 
 /** Varlık kimliğiyle çağrılır: GLB varsa onu, yoksa yer tutucuyu gösterir. */
-export function AssetModel({ varlik, ...props }: { varlik: AssetId } & React.ComponentProps<'group'>) {
+export function AssetModel({ varlik, oturan = false, ...props }: { varlik: AssetId; oturan?: boolean } & React.ComponentProps<'group'>) {
   const slot: AssetSlot = ASSETS[varlik]
   const placeholder = <Placeholder kind={slot.placeholder} />
   return (
@@ -53,7 +66,7 @@ export function AssetModel({ varlik, ...props }: { varlik: AssetId } & React.Com
       {yuklenebilirMi(slot) ? (
         <YukleHatasi yedek={placeholder}>
           <Suspense fallback={placeholder}>
-            <GlbModel slot={slot} />
+            <GlbModel slot={slot} oturan={oturan} />
           </Suspense>
         </YukleHatasi>
       ) : (

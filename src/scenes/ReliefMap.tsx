@@ -50,7 +50,7 @@ export function ReliefMap({
   }, [genislik, yukseklik])
 
   const tikla = (e: ThreeEvent<MouseEvent>) => {
-    if (!onTikla || !e.uv) return
+    if (!onTikla || !e.uv || e.delta > 6) return // sürükleyerek bakmak seçim sayılmaz
     e.stopPropagation()
     const boylam = LON0 + e.uv.x * (LON1 - LON0)
     const enlem = LAT0 + e.uv.y * (LAT1 - LAT0)

@@ -25,6 +25,13 @@ export interface AssetSlot {
   donusY?: number
   /** Ölçekten sonra modelin tabanının y konumu (varsayılan 0). */
   taban?: number
+  /**
+   * İskeletli modellerde kemik pozu (ör. T-pozdan kolları indirmek). `ad` düzenli ifadedir; `eksen` MODEL uzayındadır
+   * (modelin kendi eksenleri, donusY uygulanmadan önce); `aci` radyan. Dönüş kemiğin ebeveyn çerçevesinde uygulanır.
+   */
+  kemikPozu?: { ad: string; eksen: [number, number, number]; aci: number }[]
+  /** `oturan` kullanıldığında modelin tabanı bu kadar aşağı indirilir (kalçanın sandalye yüksekliğine gelmesi için). */
+  oturma?: number
   /** Model içindeki adlandırılmış parçalar (sinematikte rotor döndürmek/koparmak için). */
   parcalar?: Record<string, string>
   /** Sinematikte yangının çıkacağı nokta (modelin yerel, ölçeklenmiş koordinatlarında). */
@@ -71,6 +78,7 @@ export const ASSETS = {
     url: '/models/nuri.glb',
     hedefBoy: 1.75,
     donusY: -Math.PI / 2, // model +x'e bakıyor; sahnede +z'ye çevrilir
+    oturma: 0.04, // masa 1,275 m yüksekte: yüksek sandalyede kalça neredeyse ayakta yükseklikte. Kolları indirilmiş üretilir (scripts/glb-optimize.mjs); iskeleti yok
     baslik: 'Realistic Male Character',
     yazar: 'adhamasalah',
     kaynak: 'https://sketchfab.com/3d-models/realistic-male-character-c67725338c4d40fcafa5918009ccbc37',
@@ -83,6 +91,15 @@ export const ASSETS = {
     placeholder: 'person',
     url: '/models/ayse.glb',
     hedefBoy: 1.7,
+    oturma: 0.04,
+    // T-pozdan A-poza: sol kol (+x) saat yönünde, sağ kol (−x) ters yönde z ekseni etrafında indirilir
+    kemikPozu: [
+      { ad: '^LeftArm_\\d+$', eksen: [0, 0, 1], aci: -1.15 },
+      { ad: '^RightArm_\\d+$', eksen: [0, 0, 1], aci: 1.15 },
+      // ön kollar klavyeye doğru öne (model +z) uzanır
+      { ad: '^LeftForeArm_\\d+$', eksen: [1, 0, 0], aci: -1.35 },
+      { ad: '^RightForeArm_\\d+$', eksen: [1, 0, 0], aci: -1.35 },
+    ],
     baslik: 'Female Character 2',
     yazar: "Empire's 3D",
     kaynak: 'https://sketchfab.com/3d-models/female-character-2-5d139e8d106c425b9ab904674daa4fe5',
