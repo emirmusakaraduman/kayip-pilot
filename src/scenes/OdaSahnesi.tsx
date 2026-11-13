@@ -66,6 +66,7 @@ export function OdaSahnesi() {
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
+  const [vakaPaneli, setVakaPaneli] = useState(false) // Konu Modu paneli varsayılan olarak kapalı
 
   const vakaBaslat = (v: Vaka) => {
     setVaka(v)
@@ -171,6 +172,9 @@ export function OdaSahnesi() {
         <span>📓 {oyun.defter.length}/15</span>
         <button className="kucuk" onClick={oyun.sesDegistir}>{oyun.sesAcik ? '🔊' : '🔇'}</button>
         <button className="kucuk" onClick={() => setPanel('defter')}>Defteri aç</button>
+        {asama === 'sec' && (
+          <button className={'kucuk' + (vakaPaneli ? ' secili' : '')} onClick={() => setVakaPaneli((x) => !x)}>Vakalar</button>
+        )}
       </div>
 
       <div className="hud kameralar">
@@ -181,8 +185,11 @@ export function OdaSahnesi() {
         ))}
       </div>
 
-      {asama === 'sec' && panel !== 'defter' && panel !== 'arama' && (
-        <VakaSecici onSec={(v) => { setArama(null); setKisaSinema(v) }} onArama={() => setPanel('arama')} />
+      {asama === 'sec' && vakaPaneli && panel !== 'defter' && panel !== 'arama' && (
+        <VakaSecici
+          onSec={(v) => { setVakaPaneli(false); setArama(null); setKisaSinema(v) }}
+          onArama={() => { setVakaPaneli(false); setPanel('arama') }}
+        />
       )}
       {panel === 'arama' && <AramaGiris baslat={(i) => aramaBaslat(i)} kapat={() => setPanel(null)} />}
 
