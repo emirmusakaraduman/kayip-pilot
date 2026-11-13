@@ -15,6 +15,12 @@ CC BY 4.0 gereği: eser adı, yazar, bağlantı, lisans ve **yapılan değişikl
 
 Lisans bilgisi, yazar ve kaynak, dosyaların kendi `asset.extras` alanlarından alınmıştır. Dönüştürme: `scripts/glb-optimize.mjs` (ham dosyalar `.kaynak-modeller/`, repoda yok).
 
+## Arayüz görseli
+
+| Görsel | Kaynak | Değişiklik |
+|---|---|---|
+| Ana ekran zemini (`public/arayuz/ana-ekran.webp`) | Proje sahibinin sağladığı referans görsel | 2000×1116 yüksek çözünürlüklü sürüm kullanıldı; canlı olacak alanlar (levha ve defter başlığı, konu listesi, sağ sayfa, vaka kartları, jeton/defter sayaçları) kâğıt/metal dokusuyla temizlendi, üzerine kodla canlı katmanlar eklendi. |
+
 ## Veri
 
 | Veri | Kaynak | Not |

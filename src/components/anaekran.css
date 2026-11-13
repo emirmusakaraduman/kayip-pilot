@@ -1,0 +1,88 @@
+/* Ana ekran: 884×489'luk görsel zemin + üstünde canlı katmanlar; sahne pencereye sığacak şekilde ölçeklenir */
+.ae { position: relative; height: 100%; overflow: hidden; background: #050505; font-family: 'Caveat', 'Segoe Print', cursive; color: #26201a; }
+.ae-sahne { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; background: #0a0807; box-shadow: 0 0 60px #000; }
+.ae-zemin { position: absolute; inset: 0; display: block; user-select: none; -webkit-user-drag: none; }
+.ae button { padding: 0; font-family: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
+.ae button:disabled { opacity: 1; }
+.ae button:focus-visible { outline: 2px solid #ffc47a; outline-offset: 1px; }
+
+/* canlı ışık: yağmur, şimşek, lamba titremesi */
+.ae-yagmur { position: absolute; left: 255px; top: 0; width: 495px; height: 170px; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .30;
+  -webkit-mask-image: radial-gradient(circle at 148px 72px, transparent 60px, #000 92px); mask-image: radial-gradient(circle at 148px 72px, transparent 60px, #000 92px); }
+.ae-yagmur::before { content: ''; position: absolute; inset: -40px -10px; background: repeating-linear-gradient(103deg, transparent 0 7px, rgba(185, 215, 235, .55) 7px 7.6px, transparent 7.6px 17px), repeating-linear-gradient(98deg, transparent 0 11px, rgba(185, 215, 235, .35) 11px 11.5px, transparent 11.5px 29px); animation: ae-yag .5s linear infinite; }
+@keyframes ae-yag { to { transform: translate(-5px, 40px); } }
+.ae-simsek { position: absolute; left: 255px; top: 0; width: 495px; height: 170px; pointer-events: none; background: linear-gradient(180deg, rgba(190, 215, 255, .9), rgba(120, 150, 210, .4)); mix-blend-mode: screen; opacity: 0; animation: ae-sims 13s infinite;
+  -webkit-mask-image: radial-gradient(circle at 148px 72px, transparent 58px, #000 92px); mask-image: radial-gradient(circle at 148px 72px, transparent 58px, #000 92px); }
+@keyframes ae-sims { 0%, 91%, 100% { opacity: 0; } 92% { opacity: .5; } 93% { opacity: .08; } 94% { opacity: .4; } 97% { opacity: 0; } }
+.ae-lamba { position: absolute; left: 297px; top: 0; width: 230px; height: 200px; pointer-events: none; mix-blend-mode: screen; background: radial-gradient(circle at 115px 88px, rgba(255, 190, 110, .28), transparent 68%); animation: ae-titre 5.3s infinite; }
+@keyframes ae-titre { 0%, 100% { opacity: .9; } 18% { opacity: 1; } 19% { opacity: .62; } 21% { opacity: .98; } 62% { opacity: .85; } 63% { opacity: .55; } 65% { opacity: 1; } }
+
+/* keskin vektör yazılar */
+.ae-levha { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; font-family: 'Barlow Condensed', system-ui, sans-serif; color: #36322e; text-shadow: 0 1px 0 rgba(255, 255, 255, .30), 0 -1px 0 rgba(0, 0, 0, .22); transform: rotate(-.3deg); }
+.ae-levha b { font-size: 33px; line-height: 1; font-weight: 700; letter-spacing: .012em; }
+.ae-levha span { margin-top: 0; font-size: 19px; line-height: 1; font-weight: 600; letter-spacing: .02em; }
+.ae-defter-baslik { position: absolute; margin: 0; text-align: center; font-family: 'Caveat', cursive; font-size: 23.5px; line-height: .93; font-weight: 700; letter-spacing: 0; white-space: nowrap; color: #231c15; mix-blend-mode: multiply; pointer-events: none; }
+
+/* sağ üst sayaçlar: görseldeki etiketlerle aynı koyu cam görünüm */
+.ae-cip { position: absolute; height: 24px; line-height: 24px; padding: 0; text-align: center; box-sizing: border-box; background: rgba(38, 34, 30, .94); border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 1px 3px rgba(0, 0, 0, .5); font-family: 'Barlow Condensed', system-ui, sans-serif; font-size: 17px; font-weight: 500; color: #d9d6cf; white-space: nowrap; }
+.ae-cip b { color: #f0b84e; font-weight: 600; }
+
+.ae-izle { position: absolute; padding: 3px 10px !important; background: rgba(10, 8, 6, .65) !important; border: 1px solid rgba(255, 255, 255, .15) !important; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif !important; font-size: 13px; color: #d7cfc0 !important; z-index: 3; }
+.ae-izle:hover { color: #ffc47a !important; border-color: #ffc47a !important; }
+
+/* defter yazıları: mürekkep gibi kâğıda işlenir */
+.ae-liste, .ae-sag, .ae-kart { mix-blend-mode: multiply; }
+.ae-liste { position: absolute; margin: 0; padding: 0; list-style: none; overflow-y: auto; scrollbar-width: none; }
+.ae-liste::-webkit-scrollbar { display: none; }
+.ae-liste li { height: 31px; }
+.ae-konu { display: flex; align-items: center; justify-content: space-between; gap: 5px; width: 100%; height: 31px; padding: 0 3px 0 4px; text-align: left; color: #28211a !important; font-size: 16.5px; line-height: .95; font-weight: 600; letter-spacing: .005em; border-radius: 2px; transition: background .15s; }
+.ae-ad { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ae-konu:hover:not(:disabled) { background: rgba(190, 150, 70, .22) !important; }
+.ae-konu.sec:not(.aktif) { background: rgba(190, 150, 70, .20) !important; }
+.ae-konu.aktif { box-shadow: inset 0 0 0 1.3px rgba(40, 30, 20, .75), 0 1.5px 0 rgba(40, 30, 20, .65); }
+.ae-konu:disabled { cursor: not-allowed; }
+.ae-konu.kilitli .ae-ad { color: #3b3228; }
+.ae-tik { width: 17px; height: 16px; flex: none; margin-right: 3px; }
+.ae-kilit { flex: none; margin-right: 4px; }
+.ae-damga { flex: none; font-style: normal; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .03em; color: #3a2e22; border: 1.5px solid #3a2e22; padding: 0 6px; line-height: 16px; transform: rotate(-5deg); background: rgba(255, 255, 255, .25); }
+
+.ae-sag { position: absolute; overflow: hidden; }
+.ae-sag h2 { margin: 0 0 4px; font-size: 21.5px; line-height: .95; font-weight: 700; letter-spacing: .005em; color: #231c15; }
+.ae-sag p { margin: 0; font-size: 13.5px; line-height: 1.04; font-weight: 500; color: #3b3126; }
+
+/* vaka kartları: raptiyeli/ataçlı kâğıt notlar */
+.ae-kart { position: absolute; display: flex; flex-direction: column; align-items: center; padding: 16px 4px 7px; box-sizing: border-box; background: linear-gradient(170deg, #f7f2e4, #ebe4cf); box-shadow: 1px 2px 4px rgba(0, 0, 0, .5), inset 0 0 6px rgba(120, 95, 50, .18); color: #2a2013 !important; transition: transform .15s; }
+.ae-kart:hover:not(:disabled) { transform: translateY(-3px) rotate(0deg) !important; }
+.ae-kart.kilitli { background: linear-gradient(170deg, #ece6d3, #dcd4bc); cursor: not-allowed; }
+.ae-kart b { font-family: 'Barlow Condensed', system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .02em; white-space: nowrap; color: #222; }
+.ae-kart b i { font-style: normal; color: #b3261e; }
+.ae-vbaslik { margin-top: 4px; font-size: 14.5px; line-height: .95; font-weight: 600; text-align: center; min-height: 28px; }
+.ae-cizim { width: 42px; height: 36px; margin: 4px 0; opacity: .85; }
+.ae-kilit.ae-kilit { margin: 8px 0 3px; }
+.ae-not { font-size: 14px; line-height: .95; font-weight: 500; text-align: center; }
+.ae-toka { position: absolute; top: -5px; left: 50%; }
+.ae-toka.t1, .ae-toka.t3 { width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff9a8c, #b3261e 55%, #5a0e0a); box-shadow: 1px 2px 2px rgba(0, 0, 0, .55); }
+.ae-toka.t2 { width: 10px; height: 27px; margin-left: -13px; top: -10px; border: 1.8px solid #8f959b; border-radius: 5px; transform: rotate(8deg); background: transparent; }
+.ae-basari { margin-top: auto; align-self: center; display: inline-flex; align-items: center; gap: 2px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: #2f8f3c; border: 1.5px solid #2f8f3c; padding: 0 5px; transform: rotate(-6deg); background: rgba(47, 143, 60, .08); }
+.ae-basari .ae-tik { width: 11px; height: 11px; margin: 0; }
+.ae-yeni { position: absolute; right: -5px; bottom: -4px; padding: 3px 7px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; line-height: .95; text-align: center; color: #06240c; background: linear-gradient(160deg, #5dff6a, #22d63a); box-shadow: 0 0 10px rgba(80, 255, 100, .8), 1px 2px 3px rgba(0, 0, 0, .5); transform: rotate(-5deg); animation: ae-nabiz 1.8s ease-in-out infinite; }
+@keyframes ae-nabiz { 50% { box-shadow: 0 0 16px rgba(80, 255, 100, 1), 1px 2px 3px rgba(0, 0, 0, .5); } }
+
+/* görseldeki nesnelerin üstündeki şeffaf düğmeler */
+.ae-canta { position: absolute; border-radius: 12px !important; transition: box-shadow .2s; }
+.ae-canta:hover { box-shadow: 0 0 0 2px rgba(255, 196, 122, .85), 0 0 18px rgba(255, 196, 122, .55); background: rgba(255, 196, 122, .08) !important; }
+.ae-radar { position: absolute; border-radius: 50% !important; transition: box-shadow .2s; }
+.ae-radar:hover { box-shadow: 0 0 0 2px rgba(120, 255, 160, .8), 0 0 26px rgba(80, 255, 130, .75); }
+.ae-tarama { position: absolute; left: 12px; top: 12px; width: 104px; height: 104px; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; background: conic-gradient(from 0deg, rgba(90, 255, 140, .55), rgba(90, 255, 140, 0) 30%, transparent 100%); animation: ae-don 3.4s linear infinite; }
+@keyframes ae-don { to { transform: rotate(360deg); } }
+
+/* kavanoz etiketi */
+.ae-etiket { position: absolute; width: 76px; height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; background: linear-gradient(160deg, #e8dec2, #d3c7a4); border: 1px solid #8a7a52; box-shadow: 1px 2px 3px rgba(0, 0, 0, .6); transform: rotate(-9deg); pointer-events: none; }
+.ae-etiket small { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .12em; color: #2b2214; }
+.ae-etiket b { font-size: 36px; line-height: .9; font-weight: 700; color: #8a5a10; }
+
+.ae-alt { position: absolute; left: 250px; bottom: 4px; width: 500px; display: flex; flex-direction: column; align-items: center; gap: 1px; text-align: center; pointer-events: none; }
+.ae-alt small { font-family: system-ui, sans-serif; font-size: 8px; line-height: 1.15; color: #bfb29a; opacity: .75; text-shadow: 0 1px 2px #000; }
+.ae-alt .ae-atif { font-size: 6px; opacity: .5; max-height: 20px; overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) { .ae-yagmur::before, .ae-simsek, .ae-lamba, .ae-tarama, .ae-yeni { animation: none; } }

@@ -12,6 +12,7 @@ import { ARAMA_ASAMALARI, ARAMA_HIKAYE } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
 import type { Vaka, Verilen, Zorluk } from '../game/types'
 import { Sinematik } from '../cinematic/Sinematik'
+import type { Acilis } from '../components/AnaEkran'
 
 /** Telsiz altyazısı: kelime kelime yazılır; pil azaldıkça kelimeler "[cızırtı]" olur. */
 function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
@@ -49,7 +50,7 @@ function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
 
 type Asama = 'sec' | 'dinle' | 'sonuc'
 
-export function OdaSahnesi() {
+export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: () => void }) {
   const oyun = useOyun()
   const [kamera, setKamera] = useState<Kamera>('oda')
   const [vaka, setVaka] = useState<Vaka | null>(null)
@@ -62,8 +63,8 @@ export function OdaSahnesi() {
   const [sira, setSira] = useState<string[]>([])
   const [ipuclari, setIpuclari] = useState<string[]>([])
   const [mesaj, setMesaj] = useState<{ dogru: boolean; metin: string } | null>(null)
-  const [panel, setPanel] = useState<'defter' | 'yanlis' | 'arama' | null>(null)
-  const [kisaSinema, setKisaSinema] = useState<Vaka | null>(null) // bölüm başı kısa sinematik
+  const [panel, setPanel] = useState<'defter' | 'yanlis' | 'arama' | null>(acilis?.arama ? 'arama' : null)
+  const [kisaSinema, setKisaSinema] = useState<Vaka | null>(acilis?.vaka ?? null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
   const [vakaPaneli, setVakaPaneli] = useState(false) // Konu Modu paneli varsayılan olarak kapalı
@@ -174,6 +175,7 @@ export function OdaSahnesi() {
       />
 
       <div className="hud defterler">
+        {anaEkran && <button className="kucuk" onClick={anaEkran}>← Ana Ekran</button>}
         <button className="kucuk" onClick={defterAc}>Pilotun Defteri</button>
         <button className="kucuk" onClick={() => { setVakaPaneli(false); setPanel('yanlis') }}>Hata Defteri</button>
         {asama === 'sec' && (
