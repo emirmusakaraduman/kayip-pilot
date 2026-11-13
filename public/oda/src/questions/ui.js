@@ -31,6 +31,13 @@
     setStatus: function (battery, jeton) { if (this.refs) this.refs.status.textContent = 'Telsiz pili %' + battery + ' · ' + jeton + ' jeton'; },
     setFeedback: function (kind, text) { if (!this.refs) return; this.refs.fb.setAttribute('class', 'kp-fb kp-' + kind); this.refs.fb.textContent = text; },
     addHint: function (from, text) { if (this.refs) this.refs.hints.appendChild(U.el('li', {}, [U.el('strong', { text: (from === 'nuri' ? 'Nuri: ' : 'Ayşe: ') }), text])); },
+    // sahne üstünde kısa bilgi/uyarı şeridi (harita yüklenmedi, kayıt kapalı, vaka kalmadı...). Tıklayınca ya da 9 sn sonra kapanır.
+    note: function (text) {
+      var doc = root.document, host = (doc.getElementById && doc.getElementById('stage')) || doc.body, n;
+      n = U.el('div', { class: 'kp-note', role: 'status', 'aria-live': 'polite', tabindex: '0', text: text, onclick: function () { if (n.parentNode) n.parentNode.removeChild(n); } });
+      host.appendChild(n); if (root.setTimeout) root.setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 9000);
+      return n;
+    },
     close: function () { if (this.P && this.P.parentNode) this.P.parentNode.removeChild(this.P); this.P = null; this.refs = null; }
   };
 })(typeof window !== 'undefined' ? window : globalThis);

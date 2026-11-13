@@ -408,6 +408,7 @@
     });
   }
   Object.keys(LABELS).forEach(function (k) {
+    if (!window.MAP_DATA || !zoneInfo[k]) return; // harita verisi yüklenmediyse etiket yok, sahne yine de açılır
     var L = LABELS[k];
     var texN = labelTex(L.text, '#d5ded8');
     var texS = labelTex(L.text, '#ffc47a');
@@ -1606,7 +1607,7 @@
     if (msg == null) return;
     var i = 0;
     (function step() {
-      i = Math.min(msg.length, i + 2);
+      i = reduce ? msg.length : Math.min(msg.length, i + 2);
       api.setText(msg.slice(0, i), i >= msg.length);
       if (i < msg.length) KPS.qTimer = setTimeout(step, 28);
       else if (KPS.q.length) KPS.qTimer = setTimeout(kpTypeNext, 4200);
@@ -1708,12 +1709,23 @@
   if (/[?&]kp=1/.test(location.search) && window.KP && window.KP.engine) {
     var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([\w-]+)/) || [])[1];
     document.body.classList.add('kp-on');
-    KP.geo.setMapData(window.MAP_DATA); KP.scene = window.KPScene; KPE.load(); KPE.addCases(window.KP_CASES || []);
+    var kpMapOk = false;
+    try { if (window.MAP_DATA && gridG) { KP.geo.setMapData(window.MAP_DATA); kpMapOk = true; } } catch (kpErr) { console.warn('KP harita verisi', kpErr); }
+    KP.scene = window.KPScene; KPE.load();
+    var kpCases = (window.KP_CASES || []).filter(function (c) { // harita yüklenmediyse haritayla çözülen vakalar sunulmaz
+      var T = KP.types[c.type], need = T && (typeof T.mapNeeded === 'function' ? T.mapNeeded(c) : !!T.mapNeeded);
+      return kpMapOk || !need;
+    });
+    KPE.addCases(kpCases);
+    var kpMsgs = [];
+    if (!kpMapOk) kpMsgs.push('Harita yüklenemedi: haritayla çözülen vakalar gizlendi.');
+    try { localStorage.setItem('kp_t', '1'); localStorage.removeItem('kp_t'); } catch (kpErr2) { kpMsgs.push('Kayıt kapalı: ilerlemen yalnızca bu oturumda kalır.'); }
+    if (kpMsgs.length) KP.ui.note(kpMsgs.join(' '));
     api.onDefter = function () { KP.defter.open(); };
     var kpOpened = KP.defter.unlocked(); // kayıttan: en son açılan sayfa defterde görünsün
     if (kpOpened.length) window.KPScene.openNotebookPage(kpOpened[kpOpened.length - 1]);
     window.KPScene.setBattery(KPE.state.battery); window.KPScene.setCoins(KPE.state.jeton);
-    if (!(kpVaka && KPE.startCase(kpVaka))) KPE.start();
+    if (!(kpVaka && KPE.startCase(kpVaka)) && !KPE.start()) KP.ui.note('Çözülmemiş vaka kalmadı. Telsiz sessiz...');
   }
 
   /* ---------- animasyon döngüsü ---------- */
