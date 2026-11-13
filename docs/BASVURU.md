@@ -73,7 +73,7 @@ Henüz öğrenci verisiyle test edilmedi. Hedef: oyuncunun bir konuyu bitirdiği
 - **Teknoloji:** React, Vite, TypeScript, React Three Fiber (Three.js), Zustand (yerel depolamada kalıcı oyun durumu), Web Audio, Vitest.
 - **Sinematik:** gökyüzü ve bulut gölgelendiricisi, ufukta sisli dağ katmanları, tarla parçalı zemin, güneş gölgeleri, rüzgârda sallanan ağaçlar, ortam yansıması, bloom. Ağaçlar çok sayıda olduğu için yakınlığa göre ayrıntı seviyesi (LOD) ve örnekli çizim kullanılır.
 - **Ses:** tüm sesler (motor, rotor vuruşu, rüzgâr, alarm, çarpma, patlama, yangın, telsiz paraziti) Web Audio ile kodla üretilir; ses dosyası yoktur.
-- **Harita:** Türkiye kabartma haritası, iklim bölgeleri maskesinden üretilir. Tıklanabilir; vakalar haritayı cevap aracı olarak kullanır.
+- **Harita:** Türkiye kabartma haritası; yükseklikler gerçek veridir (AWS Terrain Tiles; SRTM dâhil birleşik veri), iklim bölgeleri elle çizilmiş bir maskeden üretilir. Tıklanabilir; vakalar haritayı cevap aracı olarak kullanır.
 - **Takılıp çıkarılabilir varlık sistemi:** helikopter, ağaç türleri ve üç karakter için birer yuva vardır; hepsi şimdilik basit yer tutucu şekillerle çalışır. GLB dosyası verildiğinde tek satırla değişir. Her varlık için yazar, kaynak ve lisans alanı tutulur; ticari kullanıma uygun olmayan (NC) lisanslı bir varlık, bilerek onaylanmadıkça yüklenmez.
 - **Kalite:** 31 otomatik test (45 vakanın bütünlüğü, cevap motoru, coğrafya hesapları, defter metinleri, Büyük Arama tutarlılığı, sinematik zaman çizelgesi).
 - **Boyut:** üretim derlemesi yaklaşık 1,5 MB JS (gzip ≈ 414 KB); henüz kod bölme yapılmadı.
@@ -84,7 +84,7 @@ Henüz öğrenci verisiyle test edilmedi. Hedef: oyuncunun bir konuyu bitirdiği
 
 **Henüz yok (dürüstçe):**
 - Gerçek 3D varlıklar (helikopter, ağaçlar, Deniz/Nuri/Ayşe) — yer tutucu kullanılıyor; modeller sonradan eklenecek.
-- Gerçek yükseklik verisi (SRTM) — harita yükseklikleri ve iklim sınırları şimdilik elle tahmin edilmiş kaba bir yaklaşımdır.
+- Gerçek sınır ve iklim verisi — yükseklikler gerçek veridir, ancak Türkiye'nin kıyı/sınır çizgisi ve iklim bölgesi sınırları elle çizilmiş kaba bir yaklaşımdır. Ayrıca yükseklikler yaklaşık 5 km hücre ortalamasıdır; zirveler gerçekte olduğundan düşük görünür (örn. Ağrı ≈ 3,96 km, gerçek 5,137 km).
 - Günlük ve tekrar jetonu, kitap QR'ı, otomatik zorluk uyarlaması (motorda hazır, arayüze bağlı değil), grafik cevap arayüzü, ek hak mekaniği.
 - Öğrenci verisiyle bir pilot test.
 - Mobil için ayrıca uyarlanmış arayüz.
@@ -92,7 +92,7 @@ Henüz öğrenci verisiyle test edilmedi. Hedef: oyuncunun bir konuyu bitirdiği
 ### 4.10 Özgünlük ve lisans beyanı
 
 - Oyunun hikâyesi, 45 vakası, 15 defter sayfası ve Büyük Arama olay örgüsü bu proje için özgün olarak yazılmıştır.
-- Üçüncü taraf 3D model, doku, ses veya görsel kullanılmamıştır; modeller yer tutucu geometridir, sesler kodla üretilir.
+- Üçüncü taraf 3D model, doku, ses veya görsel kullanılmamıştır; modeller yer tutucu geometridir, sesler kodla üretilir. Tek harici veri, harita yükseklikleridir: AWS Open Data "Terrain Tiles" (SRTM dâhil birleşik veri; atıf: github.com/tilezen/joerd, docs/attribution.md). Üretim betiği `scripts/yukseklik-uret.mjs`, ham karolar repoya eklenmez.
 - Kullanılan açık kaynak kütüphanelerin lisansları (React, Three.js, React Three Fiber, drei, postprocessing, Zustand, Vite, Vitest) gönderimden önce son kez gözden geçirilmelidir.
 - Geliştirme sürecinde yapay zekâ kodlama asistanı (Claude Code) kullanılmıştır.
 
@@ -109,7 +109,7 @@ Henüz öğrenci verisiyle test edilmedi. Hedef: oyuncunun bir konuyu bitirdiği
 ## 6. Yol haritası (hackathon sonrası)
 
 1. Gerçek 3D varlıkların eklenmesi (lisans ve atıf alanlarıyla).
-2. SRTM yükseklik verisi ve gerçek sınır/iklim maskesi.
+2. Gerçek sınır ve iklim maskesi (yükseklik verisi eklendi); zirveler için daha ince çözünürlük.
 3. İşler Kitabevleri kitap QR'ı ile jeton kazanma; günlük ve tekrar jetonları.
 4. Zorluk uyarlamasının arayüze bağlanması; grafik cevapları.
 5. Pilot sınıf testi ve ölçüm göstergeleri (bkz. 4.6.1).

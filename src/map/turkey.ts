@@ -1,6 +1,11 @@
-// Türkiye haritası verisi: YAKLAŞIK. Sınır çizgisi, iklim maskesi ve yükseklikler elle tahmin edilmiştir.
-// Gerçek SRTM yükseklik verisi geldiğinde yalnızca `yukseklikKm` fonksiyonunun yerine
-// bir veri okuyucu konacak; geri kalan kod (doku, kabartma, tıklama) değişmez.
+// Türkiye haritası verisi.
+// • Yükseklik: GERÇEK veri (AWS Terrain Tiles / SRTM dâhil birleşik), yukseklikVeri.ts içinde. Ayrıntı: scripts/yukseklik-uret.mjs
+// • Sınır çizgisi ve iklim maskesi: elle çizilmiş KABA yaklaşımdır (yükseklik verisi değildir, sınır içermez).
+//   Gerçek sınır/iklim verisi ayrıca eklenmelidir.
+import { YUK_B64, YUK_BIRIM, YUK_H, YUK_W } from './yukseklikVeri'
+
+/** Başlık ekranında gösterilen veri atfı. */
+export const YUKSEKLIK_ATIF = 'Harita yüksekliği: AWS Terrain Tiles (SRTM dâhil birleşik veri; kaynaklar: github.com/tilezen/joerd, docs/attribution.md)'
 
 export type Bolge = 'akdeniz' | 'karadeniz' | 'karasal' | 'sert-karasal'
 
@@ -84,8 +89,21 @@ const TEPELER: [number, number, number, number, number][] = [
   [42.0, 38.3, 0.8, 0.4, 1.2], [44.0, 37.5, 0.8, 0.4, 1.5],
 ]
 
-/** YAKLAŞIK yükseklik (km). SRTM verisi gelince burası değişecek. */
+const GERCEK = Uint8Array.from(atob(YUK_B64), (c) => c.charCodeAt(0))
+
+/** Gerçek yükseklik (km): ızgaradan çift doğrusal (bilinear) örnekleme. Satır 0 = kuzey, sütun 0 = batı. */
 export function yukseklikKm(lon: number, lat: number): number {
+  const fx = Math.min(YUK_W - 1, Math.max(0, ((lon - LON0) / (LON1 - LON0)) * (YUK_W - 1)))
+  const fy = Math.min(YUK_H - 1, Math.max(0, ((LAT1 - lat) / (LAT1 - LAT0)) * (YUK_H - 1)))
+  const x = Math.min(YUK_W - 2, Math.floor(fx)), y = Math.min(YUK_H - 2, Math.floor(fy))
+  const u = fx - x, v = fy - y
+  const h = (i: number, j: number) => GERCEK[j * YUK_W + i]
+  const m = (h(x, y) * (1 - u) + h(x + 1, y) * u) * (1 - v) + (h(x, y + 1) * (1 - u) + h(x + 1, y + 1) * u) * v
+  return (m * YUK_BIRIM) / 1000
+}
+
+/** Eski elle yazılmış yaklaşık yükseklik (km). Yalnızca yedek/karşılaştırma için tutuluyor. */
+export function yukseklikKmTahmin(lon: number, lat: number): number {
   let h = lon < 29.5 ? 0.25 + Math.max(0, lon - 26) * 0.06 : 0.9 + Math.min(1, (lon - 29.5) / 10) * 0.9
   if (lon > 37 && lat < 37.4) h = 0.45
   for (const [cx, cy, sx, sy, a] of TEPELER) h += g(lon, lat, cx, cy, sx, sy, a)
