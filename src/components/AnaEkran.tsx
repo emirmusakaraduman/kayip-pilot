@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useOyun } from '../game/store'
 import { KONULAR } from '../data/topics'
 import { VAKALAR } from '../data/cases'
-import { ARAMA_ASAMALARI } from '../data/buyukArama'
 import { atifSatiri } from '../assets/registry'
 import { YUKSEKLIK_ATIF } from '../map/turkey'
 import type { Vaka, Zorluk } from '../game/types'
@@ -50,7 +49,7 @@ const Cizim = ({ z }: { z: Zorluk }) => (
 
 export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: () => void }) {
   const olcek = useOlcek()
-  const { jeton, defter, bitenVakalar, aramaIlerleme } = useOyun()
+  const { jeton, defter, bitenVakalar } = useOyun()
 
   // konu durumu: tamam (vakaların hepsi bitti) · aktif (ilk bitmemiş, önerilen) · acik (diğerleri). Kilit yok: öğrenci istediği konuya girer.
   const durumlar = useMemo(() => {
@@ -61,6 +60,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
   }, [bitenVakalar])
   const aktifIdx = Math.max(0, durumlar.indexOf('aktif'))
   const [secili, setSecili] = useState<number | null>(null)
+  const dosyaKilitli = defter.length < KONULAR.length // Büyük Arama dosyası tüm defter sayfaları toplanınca açılır
   const idx = secili ?? aktifIdx
   const konu = KONULAR[idx]
 
@@ -155,7 +155,16 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         })}
 
         {/* Büyük Arama çantası ve radar düğmesi: görseldeki nesnelerin üstünde şeffaf düğmeler */}
-        <button className="ae-canta" style={{ left: 800, top: 306, width: 172, height: 104 }} onClick={() => basla({ arama: true })} aria-label={`Büyük Arama Modu, ${Math.min(aramaIlerleme, ARAMA_ASAMALARI.length)}/${ARAMA_ASAMALARI.length}`} title="Büyük Arama Modu" />
+        <button
+          className={'ae-dosya' + (dosyaKilitli ? ' kilitli' : '')}
+          style={{ left: 740, top: 284, width: 255, height: 132 }}
+          disabled={dosyaKilitli}
+          onClick={() => basla({ arama: true })}
+          aria-label={`Büyük Arama Modu, gizlilik kilidi: toplanan veri ${defter.length}/${KONULAR.length}`}
+          title={dosyaKilitli ? `Kilitli: ${KONULAR.length} defter sayfasını tamamla` : 'Büyük Arama Modu'}
+        >
+          <span className="ae-dosya-not">GİZLİLİK KİLİDİ:<br />Toplanan Veri <b>{defter.length}/{KONULAR.length}</b></span>
+        </button>
         <button className="ae-radar" style={{ left: 855, top: 416, width: 128, height: 128 }} onClick={() => basla(siradaki?.vaka ? { vaka: siradaki.vaka } : {})} aria-label="Bağlantıyı kur, göreve başla">
           <span className="ae-tarama" />
         </button>

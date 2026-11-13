@@ -18,6 +18,9 @@ button.kucuk.secili { background: #f0a020; color: #111; }
 button:disabled { opacity: .4; cursor: default; }
 .hud.panel { background: rgba(8,12,18,.88); padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 75vh; overflow: auto; }
 .hud.panel.sol { top: 60px; left: 10px; width: min(380px, 92vw); }
+.hud.merkez { top: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; padding: 5px 14px; border-radius: 8px; background: rgba(8, 10, 12, .72); box-shadow: inset 0 0 0 1px rgba(255, 235, 200, .08); color: #d6d2ca; font-size: .9rem; white-space: nowrap; }
+.hud.merkez b { color: #f2b94d; font-weight: 600; }
+@media (max-width: 1180px) { .hud.merkez { top: 52px; left: 10px; transform: none; } }
 @media (max-width: 900px) { .hud.kameralar { top: 52px; } .hud.panel.sol { top: 100px; } }
 .hud.panel.orta { top: 8vh; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); }
 .konu { display: flex; justify-content: space-between; align-items: center; gap: 8px; }

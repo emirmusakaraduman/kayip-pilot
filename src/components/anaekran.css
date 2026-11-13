@@ -66,8 +66,12 @@
 @keyframes ae-nabiz { 50% { box-shadow: 0 0 16px rgba(80, 255, 100, 1), 1px 2px 3px rgba(0, 0, 0, .5); } }
 
 /* görseldeki nesnelerin üstündeki şeffaf düğmeler */
-.ae-canta { position: absolute; border-radius: 12px !important; transition: box-shadow .2s; }
-.ae-canta:hover { box-shadow: 0 0 0 2px rgba(255, 196, 122, .85), 0 0 18px rgba(255, 196, 122, .55); background: rgba(255, 196, 122, .08) !important; }
+/* Mühürlü operasyon dosyası: görseldeki dosyanın üstünde şeffaf düğme + canlı sayaç notu */
+.ae-dosya { position: absolute; border-radius: 6px !important; transition: box-shadow .2s, background .2s; }
+.ae-dosya:hover:not(:disabled) { box-shadow: 0 0 0 2px rgba(255, 196, 122, .85), 0 0 18px rgba(255, 196, 122, .55); background: rgba(255, 196, 122, .08) !important; }
+.ae-dosya:disabled { cursor: not-allowed; }
+.ae-dosya-not { position: absolute; left: 30px; bottom: 10px; padding: 3px 6px; text-align: left; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 9px; line-height: 1.25; font-weight: 600; color: #2a2013; background: #efe6cc; transform: rotate(-3deg); box-shadow: 1px 1px 3px rgba(0, 0, 0, .45); }
+.ae-dosya-not b { color: #a8201a; }
 .ae-radar { position: absolute; border-radius: 50% !important; transition: box-shadow .2s; }
 .ae-radar:hover { box-shadow: 0 0 0 2px rgba(120, 255, 160, .8), 0 0 26px rgba(80, 255, 130, .75); }
 .ae-tarama { position: absolute; left: 12px; top: 12px; width: 104px; height: 104px; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; background: conic-gradient(from 0deg, rgba(90, 255, 140, .55), rgba(90, 255, 140, 0) 30%, transparent 100%); animation: ae-don 3.4s linear infinite; }
