@@ -3,7 +3,7 @@
 //
 // Kullanım:  node scripts/yukseklik-uret.mjs [önbellekKlasörü]
 // Ham karolar önbellek klasörüne iner (repoya girmez: .gitignore). Yeniden çalıştırınca önbellek kullanılır.
-// Kaynak/atıf: bkz. src/map/yukseklikVeri.ts başlığı ve docs/BASVURU.md.
+// Kaynak/atıf: bkz. src/map/yukseklikVeri.ts başlığı.
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { PNG } from 'pngjs'
