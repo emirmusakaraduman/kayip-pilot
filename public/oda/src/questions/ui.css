@@ -59,3 +59,7 @@
 
 .kp-note{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);max-width:min(560px,calc(100vw - 32px));box-sizing:border-box;padding:10px 14px;background:rgba(7,11,10,.92);color:#e6eee8;border:1px solid #ffc47a;border-radius:10px;font:14px 'Barlow Condensed',system-ui,sans-serif;cursor:pointer;z-index:40}
 @media (prefers-reduced-motion:reduce){.kp-defter,.kp-note{transition:none!important;animation:none!important}}
+
+/* klavye alternatifleri */
+.kp-coord{margin:6px 0}.kp-coord .kp-row{flex-wrap:wrap;gap:6px}.kp-coord select.kp-sm,.kp-coord input.kp-sm{min-height:44px;min-width:0;flex:1 1 92px;font-size:14px}
+.kp-contour:focus-visible{outline:2px solid #ffc47a;outline-offset:2px}.kp-cur{stroke:#ffc47a;stroke-width:2;fill:none}

@@ -1639,6 +1639,7 @@
     },
     // doğru cevap bir defter sayfası açınca masadaki defterin sayfası güncellenir; tamamı deftere tıklayınca açılır
     openNotebookPage: function (n) {
+      if (KPS.bridge) return; // gömülü modda defter sayfasını React çizer (setDefter)
       var pg = window.KP.defter && window.KP.defter.page(n);
       defterTxt = pg ? pg.metin : ''; defterN = n;
       var c = pageTex.image; drawPage(c.getContext('2d'), c.width, c.height); pageTex.needsUpdate = true;
@@ -1705,13 +1706,17 @@
     }
   }
   function KPScene_clear() { window.KPScene.clearMarkers(); }
-  // ?kp=1: soru sistemini başlat (?vaka=<id> ile belirli vaka)
-  if (/[?&]kp=1/.test(location.search) && window.KP && window.KP.engine) {
-    var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([\w-]+)/) || [])[1];
+  // ?kp=1: soru sistemini tek başına başlat (?vaka=<id> ile belirli vaka)
+  // ?kp=bridge: React oyunu içinde gömülü; kayıt, menü ve defter React'te kalır, vakayı React ister (api.kpBaslat), olaylar api.onKp ile döner.
+  var kpBridge = /[?&]kp=bridge/.test(location.search);
+  if ((kpBridge || /[?&]kp=1/.test(location.search)) && window.KP && window.KP.engine) {
+    var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([w-]+)/) || [])[1];
+    KPS.bridge = kpBridge;
     document.body.classList.add('kp-on');
     var kpMapOk = false;
     try { if (window.MAP_DATA && gridG) { KP.geo.setMapData(window.MAP_DATA); kpMapOk = true; } } catch (kpErr) { console.warn('KP harita verisi', kpErr); }
-    KP.scene = window.KPScene; KPE.load();
+    KP.scene = window.KPScene;
+    if (!kpBridge) KPE.load();
     var kpCases = (window.KP_CASES || []).filter(function (c) { // harita yüklenmediyse haritayla çözülen vakalar sunulmaz
       var T = KP.types[c.type], need = T && (typeof T.mapNeeded === 'function' ? T.mapNeeded(c) : !!T.mapNeeded);
       return kpMapOk || !need;
@@ -1719,13 +1724,41 @@
     KPE.addCases(kpCases);
     var kpMsgs = [];
     if (!kpMapOk) kpMsgs.push('Harita yüklenemedi: haritayla çözülen vakalar gizlendi.');
-    try { localStorage.setItem('kp_t', '1'); localStorage.removeItem('kp_t'); } catch (kpErr2) { kpMsgs.push('Kayıt kapalı: ilerlemen yalnızca bu oturumda kalır.'); }
+    if (!kpBridge) { try { localStorage.setItem('kp_t', '1'); localStorage.removeItem('kp_t'); } catch (kpErr2) { kpMsgs.push('Kayıt kapalı: ilerlemen yalnızca bu oturumda kalır.'); } }
     if (kpMsgs.length) KP.ui.note(kpMsgs.join(' '));
-    api.onDefter = function () { KP.defter.open(); };
-    var kpOpened = KP.defter.unlocked(); // kayıttan: en son açılan sayfa defterde görünsün
-    if (kpOpened.length) window.KPScene.openNotebookPage(kpOpened[kpOpened.length - 1]);
-    window.KPScene.setBattery(KPE.state.battery); window.KPScene.setCoins(KPE.state.jeton);
-    if (!(kpVaka && KPE.startCase(kpVaka)) && !KPE.start()) KP.ui.note('Çözülmemiş vaka kalmadı. Telsiz sessiz...');
+    if (!kpBridge) {
+      api.onDefter = function () { KP.defter.open(); };
+      var kpOpened = KP.defter.unlocked(); // kayıttan: en son açılan sayfa defterde görünsün
+      if (kpOpened.length) window.KPScene.openNotebookPage(kpOpened[kpOpened.length - 1]);
+      window.KPScene.setBattery(KPE.state.battery); window.KPScene.setCoins(KPE.state.jeton);
+      if (!(kpVaka && KPE.startCase(kpVaka)) && !KPE.start()) KP.ui.note('Çözülmemiş vaka kalmadı. Telsiz sessiz...');
+    } else {
+      var kpSnap = function () { return { pil: KPE.state.battery, jeton: KPE.state.jeton }; };
+      var kpEmit = function (o) { if (api.onKp) try { api.onKp(o); } catch (e) { console.warn('onKp', e); } };
+      var kpCamNow = function () { return camName; };
+      KPE.save = function () { kpEmit(Object.assign({ tur: 'durum' }, kpSnap())); }; // her ipucu/cevap/pil dolumundan sonra React'e bildir
+      KP.on('correct', function (d) { kpEmit(Object.assign({ tur: 'dogru', kpId: d.case.id, kazanc: d.gain, ipucu: d.hints, deneme: d.attempts }, kpSnap())); });
+      KP.on('wrong', function (d) { kpEmit(Object.assign({ tur: 'yanlis', kpId: d.case.id, deneme: d.attempts }, kpSnap())); });
+      KPE.next = function () { api.kpDur(); kpEmit({ tur: 'bitti' }); }; // doğru cevaptan sonra "Vakalara dön"
+      // konu: KP konu kodu, zorluk: 1-3, durum: {pil, jeton}, tekrar: bu hücre daha önce çözüldü mü
+      api.kpBaslat = function (konu, zorluk, durum, tekrar) {
+        var id = null, ids = KPE.order.filter(function (i) { return KPE.cases[i].topic === konu && KPE.cases[i].difficulty === zorluk; });
+        if (!ids.length) { kpEmit({ tur: 'yok', konu: konu, zorluk: zorluk }); return null; }
+        id = ids[0];
+        if (durum) { KPE.state.battery = durum.pil; KPE.state.jeton = durum.jeton; }
+        KPE.state.solved = {}; if (tekrar) KPE.state.solved[id] = 1; // tekrar çözümde ödül düşer
+        KPE.state.wrong = [];
+        KPE.startCase(id);
+        if (KP.ui.refs) KP.ui.refs.bNext.textContent = 'Vakalara dön';
+        kpEmit({ tur: 'basla', kpId: id, kamera: kpCamNow() });
+        return id;
+      };
+      api.kpDur = function () {
+        clearTimeout(KPS.qTimer); KPS.q = []; api.setText('', false); // telsiz ekranı boşa dönsün
+        KPE.stop(); window.KPScene.setMapMode('climate'); window.KPScene.clearMarkers(); window.KPScene.clearRoute();
+      };
+      kpEmit({ tur: 'hazir', vakalar: KPE.order.length });
+    }
   }
 
   /* ---------- animasyon döngüsü ---------- */

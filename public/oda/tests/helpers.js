@@ -6,7 +6,7 @@ function loadKP() {
   globalThis.document = DOC;
   globalThis.window = undefined; // kaynaklar globalThis'e bağlanır
   delete globalThis.KP;
-  ['kp.js', 'geo.js', 'contour.js', 'types/pin.js', 'types/number.js', 'types/cards.js', 'types/decision.js', 'types/graph.js', 'types/route.js', 'ui.js', 'engine.js'].forEach(function (f) {
+  ['kp.js', 'geo.js', 'contour.js', 'coordinput.js', 'types/pin.js', 'types/number.js', 'types/cards.js', 'types/decision.js', 'types/graph.js', 'types/route.js', 'ui.js', 'engine.js'].forEach(function (f) {
     vm.runInThisContext(fs.readFileSync(path.join(ROOT, 'src/questions', f), 'utf8'), { filename: f });
   });
   var md = fs.readFileSync(path.join(ROOT, 'data/map_data.js'), 'utf8');

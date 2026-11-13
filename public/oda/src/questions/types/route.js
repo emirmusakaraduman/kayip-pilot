@@ -78,9 +78,11 @@
         if (A.setMapMode) A.setMapMode(b.mapMode || 'neutral', b);
         if (A.showEndpoints) A.showEndpoints(b);
         if (A.enableMapPick) A.enableMapPick(function (p) { pts.push({ lat: p.lat, lon: p.lon }); redraw(); });
+        if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Nokta ekle', onSubmit: function (a, o) { pts.push({ lat: a, lon: o }); redraw(); } }));
       } else {
         if (A.setMapMode) A.setMapMode('hidden', b);
-        var S = 360, svg = U.el('svg', { viewBox: '0 0 ' + S + ' ' + S, class: 'kp-chart kp-contour', role: 'img', 'aria-label': 'Eş yükselti haritası' });
+        var S = 360, svg = U.el('svg', { viewBox: '0 0 ' + S + ' ' + S, class: 'kp-chart kp-contour', role: 'application', tabindex: '0', 'aria-label': 'Eş yükselti haritası. Ok tuşlarıyla imleci taşı (Shift ile büyük adım), Enter ile nokta ekle, Backspace ile son noktayı sil.' });
+        var cur = { x: b.start.x, y: b.start.y }, kb = false;
         var segs = KP.contour.contourSegments(b.terrain, (function () { var L = [], h = b.contourInterval || 50, k; for (k = 1; k < 30; k++) L.push((b.terrain.base || 0) + h * k); return L; })(), 64);
         segs.forEach(function (s) { var idx = Math.round((s[4] - (b.terrain.base || 0)) / (b.contourInterval || 50)); svg.appendChild(U.el('line', { x1: s[0] * S, y1: s[1] * S, x2: s[2] * S, y2: s[3] * S, class: 'kp-cl' + (idx % 5 === 0 ? ' kp-clx' : '') })); });
         [['A', b.start], ['B', b.end]].forEach(function (p) {
@@ -92,7 +94,26 @@
           U.clear(layer);
           if (pts.length > 1) layer.appendChild(U.el('polyline', { points: pts.map(function (p) { return (p[0] * S).toFixed(1) + ',' + (p[1] * S).toFixed(1); }).join(' '), class: 'kp-route' }));
           pts.forEach(function (p) { layer.appendChild(U.el('circle', { cx: p[0] * S, cy: p[1] * S, r: 3.5, class: 'kp-rp' })); });
+          if (kb) {
+            layer.appendChild(U.el('circle', { cx: cur.x * S, cy: cur.y * S, r: 8, class: 'kp-cur' }));
+            layer.appendChild(U.el('line', { x1: cur.x * S - 12, y1: cur.y * S, x2: cur.x * S + 12, y2: cur.y * S, class: 'kp-cur' }));
+            layer.appendChild(U.el('line', { x1: cur.x * S, y1: cur.y * S - 12, x2: cur.x * S, y2: cur.y * S + 12, class: 'kp-cur' }));
+          }
         };
+        svg.addEventListener('focus', function () { kb = true; draw(); });
+        svg.addEventListener('blur', function () { kb = false; draw(); });
+        svg.addEventListener('keydown', function (e) {
+          var st = e.shiftKey ? 0.1 : 0.02, k = e.key;
+          if (k === 'ArrowLeft') cur.x = U.clamp(cur.x - st, 0, 1);
+          else if (k === 'ArrowRight') cur.x = U.clamp(cur.x + st, 0, 1);
+          else if (k === 'ArrowUp') cur.y = U.clamp(cur.y - st, 0, 1);
+          else if (k === 'ArrowDown') cur.y = U.clamp(cur.y + st, 0, 1);
+          else if (k === 'Enter' || k === ' ') { if (e.preventDefault) e.preventDefault(); pts.push([cur.x, cur.y]); redraw(); return; }
+          else if (k === 'Backspace' || k === 'Delete') { if (e.preventDefault) e.preventDefault(); pts.pop(); redraw(); return; }
+          else return;
+          if (e.preventDefault) e.preventDefault();
+          draw();
+        });
         svg.addEventListener('click', function (e) {
           var r = svg.getBoundingClientRect && svg.getBoundingClientRect(); if (!r || !r.width) return;
           // viewBox kare; kutu daha geniş/dar olunca çizim ortalanır (meet). Tıklamayı çizilen kareye göre hesapla.

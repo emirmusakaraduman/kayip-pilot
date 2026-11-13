@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { KAMERALAR, type Kamera, type Tiklama } from './kameralar'
 import { TelsizOdasi } from './TelsizOdasi'
 import { useOyun } from '../game/store'
@@ -13,6 +13,7 @@ import { BOLGE_AD, type Bolge } from '../map/turkey'
 import type { Vaka, Verilen, Zorluk } from '../game/types'
 import { Sinematik } from '../cinematic/Sinematik'
 import type { Acilis } from '../components/AnaEkran'
+import type { KpIstek, KpOlay } from '../game/kpKopru'
 
 /** Telsiz altyazısı: kelime kelime yazılır; pil azaldıkça kelimeler "[cızırtı]" olur. */
 function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
@@ -50,9 +51,11 @@ function useTelsizYazi(vaka: Vaka | null, pilBaslangic: number) {
 
 type Asama = 'sec' | 'dinle' | 'sonuc'
 
-export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: () => void }) {
+export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acilis; anaEkran?: () => void; giris?: boolean }) {
   const oyun = useOyun()
-  const [kamera, setKamera] = useState<Kamera>('oda')
+  // Sinematikten gelindiyse masadaki telsizin yakın planıyla başlar, karartma açılırken odaya doğru açılır.
+  const [kamera, setKamera] = useState<Kamera>(giris ? 'telsiz' : 'oda')
+  const girisRef = useRef(giris)
   const [vaka, setVaka] = useState<Vaka | null>(null)
   const [asama, setAsama] = useState<Asama>('sec')
   const [pilBas, setPilBas] = useState(100)
@@ -68,6 +71,10 @@ export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: (
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
   const [vakaPaneli, setVakaPaneli] = useState(false) // Konu Modu paneli varsayılan olarak kapalı
+  // Soru sistemi (iframe motoru): Konu Modu'nda seçilen vaka, istek ve sayaç
+  const [kpVaka, setKpVaka] = useState<Vaka | null>(null)
+  const [kpIstek, setKpIstek] = useState<KpIstek | null>(null)
+  const kpSayac = useRef(0)
 
   const vakaBaslat = (v: Vaka) => {
     setVaka(v)
@@ -81,6 +88,36 @@ export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: (
     setMesaj(null)
     setDefterOku(false)
     setKamera('telsiz')
+  }
+
+  /** Konu Modu: vakayı iframe'deki soru sistemi açar. Pil, jeton ve defter React deposunda kalır. */
+  const kpBasla = (v: Vaka) => {
+    const d = useOyun.getState()
+    setVaka(null)
+    setAsama('sec')
+    setVakaPaneli(false)
+    setKpVaka(v)
+    setKpIstek({ sayac: ++kpSayac.current, vakaId: v.id, konu: v.konu, zorluk: v.zorluk, pil: d.pil, jeton: d.jeton, tekrar: d.bitenVakalar.includes(v.id) })
+  }
+  const kpCik = () => {
+    setKpVaka(null)
+    setKpIstek(null)
+    setKamera('oda')
+  }
+  const kpOlay = (o: KpOlay) => {
+    const d = useOyun.getState()
+    if (o.tur === 'durum') d.kpSenkron(o.pil, o.jeton)
+    else if (o.tur === 'dogru') {
+      d.kpSenkron(o.pil, o.jeton)
+      if (kpVaka) d.kpDogru(kpVaka.id, kpVaka.konu)
+      dogruSes()
+    } else if (o.tur === 'yanlis') {
+      d.kpSenkron(o.pil, o.jeton)
+      if (kpVaka) d.kpYanlis(kpVaka.id)
+      yanlisSes()
+    } else if (o.tur === 'basla') {
+      if (o.kamera in KAMERALAR) setKamera(o.kamera as Kamera)
+    } else if (o.tur === 'bitti' || o.tur === 'yok') kpCik()
   }
 
   /** Büyük Arama: i. aşamayı başlatır; ilk aşamada kısa sinematik oynar. */
@@ -155,7 +192,8 @@ export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: (
         onDone={() => {
           const v = kisaSinema
           setKisaSinema(null)
-          vakaBaslat(v)
+          if (arama === null) kpBasla(v)
+          else vakaBaslat(v)
         }}
       />
     )
@@ -163,6 +201,8 @@ export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: (
   return (
     <div className="oda">
       <TelsizOdasi
+        baslangicKamera={giris ? 'telsiz' : undefined}
+        onHazir={() => { if (girisRef.current) { girisRef.current = false; setTimeout(() => setKamera('oda'), 1100) } }}
         kamera={kamera}
         satir={metin}
         bitti={bitti}
@@ -172,13 +212,15 @@ export function OdaSahnesi({ acilis, anaEkran }: { acilis?: Acilis; anaEkran?: (
         onHarita={haritaTikla}
         defter={oyun.defter.length}
         onDefter={defterAc}
+        kp={{ istek: kpIstek, onOlay: kpOlay }}
       />
 
       <div className="hud defterler">
         {anaEkran && <button className="kucuk" onClick={anaEkran}>← Ana Ekran</button>}
         <button className="kucuk" onClick={defterAc}>Pilotun Defteri</button>
         <button className="kucuk" onClick={() => { setVakaPaneli(false); setPanel('yanlis') }}>Hata Defteri</button>
-        {asama === 'sec' && (
+        {kpVaka && <button className="kucuk" onClick={kpCik}>Vakadan çık</button>}
+        {asama === 'sec' && !kpVaka && (
           <button className={'kucuk' + (vakaPaneli ? ' secili' : '')} onClick={() => setVakaPaneli((x) => !x)}>Konu Defteri</button>
         )}
       </div>

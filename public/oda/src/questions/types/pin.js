@@ -28,13 +28,24 @@
       ctx.host.appendChild(U.el('div', { class: 'kp-info', text: 'Masadaki haritaya dokunarak Deniz’in konumunu işaretle. Değiştirmek için başka bir yere dokun.' }));
       ctx.host.appendChild(sel);
       if (A.setMapMode) A.setMapMode((c.board && c.board.mapMode) || 'neutral', c.board || {});
-      if (A.enableMapPick) A.enableMapPick(function (p) {
-        last = { lat: p.lat, lon: p.lon, zone: p.zone };
-        sel.textContent = 'Seçtiğin yer: ' + p.lat.toFixed(2) + '°K, ' + p.lon.toFixed(2) + '°D';
+      function choose(pt) {
+        last = pt;
+        sel.textContent = 'Seçtiğin yer: ' + pt.lat.toFixed(2) + '°K, ' + pt.lon.toFixed(2) + '°D' + (pt.zoneName ? ' (' + pt.zoneName + ')' : '');
         if (A.clearMarkers) A.clearMarkers();
-        if (A.addMarker) A.addMarker(p.lat, p.lon);
+        if (A.addMarker) A.addMarker(pt.lat, pt.lon);
         ctx.changed();
-      });
+      }
+      if (A.enableMapPick) A.enableMapPick(function (p) { choose({ lat: p.lat, lon: p.lon, zone: p.zone }); });
+      // klavye / dokunamayanlar için: koordinat girişi ve (bölge sorularında) bölge düğmeleri
+      if (KP.coordForm) ctx.host.appendChild(KP.coordForm({ button: 'Haritada işaretle', onSubmit: function (a, o) { choose({ lat: a, lon: o }); } }));
+      if (c.answer && c.answer.mode === 'zone' && KP.ZONE_POINTS) {
+        var zr = U.el('div', { class: 'kp-row', role: 'group', 'aria-label': 'İklim bölgesi seç' });
+        Object.keys(KP.ZONE_POINTS).forEach(function (k) {
+          var z = KP.ZONE_POINTS[k];
+          zr.appendChild(U.el('button', { type: 'button', class: 'kp-btn kp-sm', text: z[2], onclick: function () { choose({ lat: z[0], lon: z[1], zone: k, zoneName: z[2] }); } }));
+        });
+        ctx.host.appendChild(zr);
+      }
       return {
         getAnswer: function () { return last; }, isReady: function () { return !!last; }, lock: function () {}, applyHint: function () {},
         destroy: function () { if (A.disableMapPick) A.disableMapPick(); if (A.clearMarkers) A.clearMarkers(); }

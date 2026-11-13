@@ -21,6 +21,12 @@ interface Durum {
   girisBitti: () => void
   aramaAsamaBitir: (jeton: number, son: boolean) => void
   aramaYenidenBasla: () => void
+  /** Soru sistemi köprüsü: pil ve jeton iframe motorundan gelir (mutlak değer). */
+  kpSenkron: (pil: number, jeton: number) => void
+  /** Soru sistemi: vaka çözüldü (jeton kpSenkron ile güncellendi; yalnızca defter ve biten kaydı). */
+  kpDogru: (vakaId: string, konu: KonuId) => void
+  /** Soru sistemi: yanlış defterine yaz (pil kpSenkron ile geldi). */
+  kpYanlis: (vakaId: string) => void
 }
 
 export const useOyun = create<Durum>()(
@@ -62,6 +68,13 @@ export const useOyun = create<Durum>()(
       aramaAsamaBitir: (jeton, son) =>
         set((s) => ({ jeton: s.jeton + jeton, aramaIlerleme: s.aramaIlerleme + 1, aramaBitti: s.aramaBitti || son })),
       aramaYenidenBasla: () => set({ aramaIlerleme: 0, aramaBitti: false }),
+      kpSenkron: (pil, jeton) => set({ pil: Math.max(0, Math.min(100, Math.round(pil))), jeton: Math.max(0, Math.round(jeton)) }),
+      kpDogru: (vakaId, konu) =>
+        set((s) => ({
+          bitenVakalar: s.bitenVakalar.includes(vakaId) ? s.bitenVakalar : [...s.bitenVakalar, vakaId],
+          defter: s.defter.includes(konu) ? s.defter : [...s.defter, konu],
+        })),
+      kpYanlis: (vakaId) => set((s) => ({ yanlisDefteri: s.yanlisDefteri.includes(vakaId) ? s.yanlisDefteri : [...s.yanlisDefteri, vakaId] })),
     }),
     { name: 'kayip-pilot-v1' },
   ),
