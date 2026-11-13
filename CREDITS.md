@@ -50,6 +50,5 @@ CC BY-NC lisanslı varlıklar bilerek onaylanmadıkça kullanılmaz (`registry.t
 
 | Ses | Kaynak | Not |
 |---|---|---|
-| Sinematik telsiz konuşmaları (`public/ses/konusma/`) | Microsoft Edge nöral metin-okuma sesleri (tr-TR-AhmetNeural, tr-TR-EmelNeural), `edge-tts` ile | Üretim: `scripts/konusma-uret.py`. Oyunda telsiz süzgecinden geçirilir. Resmî bir lisans dosyası yok; yayımlamadan önce Microsoft'un kullanım koşullarını kontrol et. |
-| Müzik, ortam ve efektler | Kodla üretilir (Web Audio) | Dış dosya yok. |
+| Müzik, ortam ve efektler | Kodla üretilir (Web Audio) | Dış dosya yok. Konuşma seslendirmesi kapalıdır (`src/game/konusma.ts`, `SESLENDIR = false`); ses dosyaları depoda tutulmaz. |
 
