@@ -11,6 +11,8 @@ CC BY 4.0 gereği: eser adı, yazar, bağlantı, lisans ve **yapılan değişikl
 | "Realistic Male Character" (oyunda: Nuri) | adhamasalah | https://sketchfab.com/3d-models/realistic-male-character-c67725338c4d40fcafa5918009ccbc37 | CC BY 4.0 | Sadeleştirildi (≈642 bin → ≈31 bin üçgen), doku WebP, **kollar T-pozdan aşağı indirildi (ağ düzenlendi)**, sahnede yüzü +z'ye çevrildi. |
 | "Female Character 2" (oyunda: Ayşe) | Empire's 3D | https://sketchfab.com/3d-models/female-character-2-5d139e8d106c425b9ab904674daa4fe5 | CC BY 4.0 | Sadeleştirildi (≈127 bin → ≈32 bin üçgen), dokular 1024 px WebP, **kemik pozu değiştirildi** (kollar indirildi, klavyeye uzatıldı), idle animasyonu kodla eklendi. |
 
+| "Valery tpose blender rigged woman" (telsiz odasında Ayşe ve Nuri; Nuri için renk varyantı) | xander.dice | Sketchfab (Avaturn tabanlı) | CC BY 4.0 | Oturma pozu ve renkler kodla değiştirildi. `public/oda/data/avatar_data.js` içinde gömülü. |
+
 Lisans bilgisi, yazar ve kaynak, dosyaların kendi `asset.extras` alanlarından alınmıştır. Dönüştürme: `scripts/glb-optimize.mjs` (ham dosyalar `.kaynak-modeller/`, repoda yok).
 
 ## Veri

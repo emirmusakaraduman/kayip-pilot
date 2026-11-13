@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { RadioRoom, KAMERALAR, type Kamera } from './RadioRoom'
+import { KAMERALAR, type Kamera, type Tiklama } from './kameralar'
+import { TelsizOdasi } from './TelsizOdasi'
 import { useOyun } from '../game/store'
 import { JETON, bitirmeJetonu, degerlendir, parazit } from '../game/engine'
 import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
@@ -11,7 +11,6 @@ import { DefterKitabi } from '../components/DefterKitabi'
 import { ARAMA_ASAMALARI, ARAMA_HIKAYE } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
 import type { Vaka, Verilen, Zorluk } from '../game/types'
-import type { Tiklama } from './ReliefMap'
 import { Sinematik } from '../cinematic/Sinematik'
 
 /** Telsiz altyazısı: kelime kelime yazılır; pil azaldıkça kelimeler "[cızırtı]" olur. */
@@ -155,17 +154,16 @@ export function OdaSahnesi() {
 
   return (
     <div className="oda">
-      <Canvas camera={{ position: KAMERALAR.oda.poz, fov: 41 }} dpr={[1, 1.75]} gl={{ preserveDrawingBuffer: import.meta.env.DEV }}>
-        <RadioRoom
-          kamera={kamera}
-          satir={metin}
-          pil={oyun.pil}
-          jeton={oyun.jeton}
-          vurgu={[...secBolgeler, ...aramaVurgu]}
-          onHarita={haritaTikla}
-          onDefter={() => setPanel('defter')}
-        />
-      </Canvas>
+      <TelsizOdasi
+        kamera={kamera}
+        satir={metin}
+        bitti={bitti}
+        pil={oyun.pil}
+        jeton={oyun.jeton}
+        vurgu={[...secBolgeler, ...aramaVurgu]}
+        onHarita={haritaTikla}
+        onDefter={() => setPanel('defter')}
+      />
 
       <div className="hud ust">
         <span>🔋 %{oyun.pil}</span>
