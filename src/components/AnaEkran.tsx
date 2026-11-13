@@ -6,6 +6,7 @@ import { ARAMA_ASAMALARI } from '../data/buyukArama'
 import { atifSatiri } from '../assets/registry'
 import { YUKSEKLIK_ATIF } from '../map/turkey'
 import type { Vaka, Zorluk } from '../game/types'
+import { CamYagmuru, KupaBuhari } from './AnaEkranFx'
 import './anaekran.css'
 
 /** Ana ekrandan odaya geçerken ne açılacağı. */
@@ -92,9 +93,10 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         <img className="ae-zemin" src="/arayuz/ana-ekran.webp" width={SAHNE.w} height={SAHNE.h} alt="" draggable={false} />
 
         {/* canlı ışık/yağmur katmanları */}
-        <div className="ae-yagmur" aria-hidden />
-        <div className="ae-simsek" aria-hidden />
+        <CamYagmuru className="ae-yagmur" />
+        <div className="ae-parilti" aria-hidden />
         <div className="ae-lamba" aria-hidden />
+        <KupaBuhari className="ae-buhar" />
 
         {/* sağ üst sayaçlar */}
         <div className="ae-cip" style={{ left: 808, top: 12, width: 68 }}>Jeton: <b>{jeton}</b></div>
@@ -160,8 +162,8 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
           <span className="ae-tarama" />
         </button>
 
-        {/* kavanoz etiketi */}
-        <div className="ae-etiket" style={{ left: 44, top: 460 }}><small>JETON</small><b>{jeton}</b></div>
+        {/* kavanozdaki parlayan jeton sayısı: görseldeki rakam silindi, canlı rakam aynı yerde parlar */}
+        <div className={'ae-sayi' + (jeton > 99 ? ' u3' : jeton > 9 ? ' u2' : '')} style={{ left: 40, top: 476, width: 68 }} aria-hidden>{jeton}</div>
 
         <div className="ae-alt">
           <small>İçerik uyarısı: kurgu bir uçak kazası ve yangın içerir.</small>
