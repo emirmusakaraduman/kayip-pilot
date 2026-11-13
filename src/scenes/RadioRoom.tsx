@@ -13,14 +13,17 @@ export const AY = 1.275 // arka masaların üst yüzeyi
 const DUVAR_Z = -4
 const NURI_X = 0.2
 const AYSE_X = 3.7
-const ARKA_MASA_Z = -2.9 // arka masaların merkezi
+const ARKA_MASA_Z = -2.9
+const LAMBA_X = 1.7
+const HARITA_X = 1.6
+const TELSIZ_X = -1.95
 
 export type Kamera = 'oda' | 'telsiz' | 'harita' | 'nuri' | 'ayse'
 
 export const KAMERALAR: Record<Kamera, { poz: [number, number, number]; bak: [number, number, number]; ad: string }> = {
-  oda: { poz: [0.5, 3.0, 6.3], bak: [0.4, 2.2, 0], ad: 'Oda' },
-  telsiz: { poz: [0.2, 2.2, 2.3], bak: [0.2, 1.45, -0.95], ad: 'Telsiz' },
-  harita: { poz: [0.3, 5.6, 2.9], bak: [0.3, DY, 0.45], ad: 'Harita' },
+  oda: { poz: [0.45, 2.2, 6.2], bak: [0.45, 2.4, -3.6], ad: 'Oda' },
+  telsiz: { poz: [-1.3, 2.1, 2.7], bak: [-2.4, 1.55, -0.5], ad: 'Telsiz' },
+  harita: { poz: [1.6, 5.2, 2.7], bak: [1.6, DY, 0.5], ad: 'Harita' },
   nuri: { poz: [-0.6, 2.7, -0.7], bak: [NURI_X, 1.9, -3.5], ad: 'Nuri' },
   ayse: { poz: [2.9, 2.7, -0.7], bak: [AYSE_X, 1.9, -3.5], ad: 'Ayşe' },
 }
@@ -35,7 +38,7 @@ float noise(vec2 p){
 }
 float fbm(vec2 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.03; a *= 0.5; } return v; }`
 
-/** Şimşek: 0..1 arası değer (çift vuruşlu), pencere ve ortam ışığı okur. */
+/** Şimşek: 0..1 arası değer (çift vuruşlu); pencere ve ortam ışığı okur. */
 const simsek = { deger: 0, sonraki: 6, basladi: -1 }
 
 function useCanvasDoku(w: number, h: number) {
@@ -49,24 +52,54 @@ function useCanvasDoku(w: number, h: number) {
   }, [w, h])
 }
 
+/** Koyu, çizgili (tahta lifleri) ahşap dokusu; masa ve zemin için. */
+function tahtaDoku(taban: string, acik: string, tekrarX: number, tekrarY: number, tahtaSayisi = 8) {
+  const c = document.createElement('canvas')
+  c.width = c.height = 1024
+  const x = c.getContext('2d')!
+  x.fillStyle = taban
+  x.fillRect(0, 0, 1024, 1024)
+  let a = 7
+  const r = () => ((a = (a * 16807) % 2147483647) / 2147483647)
+  const h = 1024 / tahtaSayisi
+  for (let t = 0; t < tahtaSayisi; t++) {
+    x.fillStyle = `rgba(255,255,255,${0.02 + r() * 0.05})`
+    x.fillRect(0, t * h, 1024, h)
+    for (let i = 0; i < 40; i++) { // lifler: ince yatay çizgiler
+      x.fillStyle = r() < 0.5 ? `rgba(0,0,0,${0.1 + r() * 0.25})` : `${acik}${Math.floor(10 + r() * 30).toString(16).padStart(2, '0')}`
+      x.fillRect(r() * 300, t * h + r() * h, 300 + r() * 724, 1 + r() * 2)
+    }
+    x.fillStyle = 'rgba(0,0,0,0.65)' // tahta derzi
+    x.fillRect(0, t * h, 1024, 3)
+  }
+  const tex = new THREE.CanvasTexture(c)
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+  tex.repeat.set(tekrarX, tekrarY)
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 8
+  return tex
+}
+
+function yumusakDaire(boyut = 128) {
+  const c = document.createElement('canvas')
+  c.width = c.height = boyut
+  const x = c.getContext('2d')!
+  const g = x.createRadialGradient(boyut / 2, boyut / 2, 0, boyut / 2, boyut / 2, boyut / 2)
+  g.addColorStop(0, 'rgba(255,255,255,1)')
+  g.addColorStop(0.35, 'rgba(255,255,255,0.45)')
+  g.addColorStop(1, 'rgba(255,255,255,0)')
+  x.fillStyle = g
+  x.fillRect(0, 0, boyut, boyut)
+  return new THREE.CanvasTexture(c)
+}
+
 /** Eşyaların altında yumuşak temas gölgesi lekesi. */
-function GolgeLekesi({ poz, w, d, rot = 0, yogunluk = 0.55 }: { poz: [number, number, number]; w: number; d: number; rot?: number; yogunluk?: number }) {
-  const tex = useMemo(() => {
-    const c = document.createElement('canvas')
-    c.width = c.height = 128
-    const x = c.getContext('2d')!
-    const g = x.createRadialGradient(64, 64, 4, 64, 64, 62)
-    g.addColorStop(0, 'rgba(0,0,0,1)')
-    g.addColorStop(0.5, 'rgba(0,0,0,0.5)')
-    g.addColorStop(1, 'rgba(0,0,0,0)')
-    x.fillStyle = g
-    x.fillRect(0, 0, 128, 128)
-    return new THREE.CanvasTexture(c)
-  }, [])
+function GolgeLekesi({ poz, w, d, rot = 0, yogunluk = 0.6 }: { poz: [number, number, number]; w: number; d: number; rot?: number; yogunluk?: number }) {
+  const tex = useMemo(() => yumusakDaire(128), [])
   return (
     <mesh position={poz} rotation={[-Math.PI / 2, 0, rot]} renderOrder={1}>
       <planeGeometry args={[w, d]} />
-      <meshBasicMaterial map={tex} transparent opacity={yogunluk} depthWrite={false} />
+      <meshBasicMaterial map={tex} color="#000" transparent opacity={yogunluk} depthWrite={false} />
     </mesh>
   )
 }
@@ -111,7 +144,6 @@ function KameraKurgusu({ kamera }: { kamera: Kamera }) {
     bak.current.x = THREE.MathUtils.damp(bak.current.x, k.bak[0], lam, dt)
     bak.current.y = THREE.MathUtils.damp(bak.current.y, k.bak[1], lam, dt)
     bak.current.z = THREE.MathUtils.damp(bak.current.z, k.bak[2], lam, dt)
-    // sürükleme: bakış yönünü kamera çevresinde döndür; hafif sallanma: küçük sinüsler
     const fark = bak.current.clone().sub(camera.position)
     fark.applyAxisAngle(new THREE.Vector3(0, 1, 0), b.yaw + Math.sin(t * 0.37) * 0.004)
     fark.y += Math.tan(b.pitch + Math.sin(t * 0.51) * 0.003) * fark.length()
@@ -120,26 +152,32 @@ function KameraKurgusu({ kamera }: { kamera: Kamera }) {
   return null
 }
 
-// ── Telsiz ──────────────────────────────────────────────────────────────────
+// ── Telsiz KS-7: sol uçta, büyük, yeşil-gri metal ───────────────────────────
 function Telsiz({ satir, pil, ...props }: { satir: string; pil: number } & React.ComponentProps<'group'>) {
-  const { canvas, tex, ctx } = useCanvasDoku(512, 256)
-  const plaka = useCanvasDoku(128, 40)
+  const ekran = useCanvasDoku(640, 320)
+  const pilEkrani = useCanvasDoku(256, 64)
+  const plaka = useCanvasDoku(384, 96)
   const son = useRef(0)
   const ref = useRef({ satir, pil })
   ref.current = { satir, pil }
   const ledler = useRef<(THREE.MeshStandardMaterial | null)[]>([])
+  const kucukLed = useRef<(THREE.MeshStandardMaterial | null)[]>([])
   const isik = useRef<THREE.PointLight>(null)
+  const isikTex = useMemo(() => yumusakDaire(64), [])
+  const onIsikHedef = useMemo(() => new THREE.Object3D(), []) // telsize bakan ön ışığın hedefi
+  const fenerRef = useRef<THREE.Sprite>(null)
 
   useEffect(() => {
     const x = plaka.ctx
-    x.fillStyle = '#1a1d20'
-    x.fillRect(0, 0, 128, 40)
-    x.strokeStyle = '#8a9096'
-    x.strokeRect(2, 2, 124, 36)
-    x.fillStyle = '#d8dde2'
-    x.font = 'bold 26px monospace'
+    x.fillStyle = '#c9d2c8'
+    x.fillRect(0, 0, 384, 96)
+    x.strokeStyle = '#37403a'
+    x.lineWidth = 6
+    x.strokeRect(3, 3, 378, 90)
+    x.fillStyle = '#20261f'
+    x.font = 'bold 54px "Barlow Condensed", "Arial Narrow", sans-serif'
     x.textAlign = 'center'
-    x.fillText('KS-7', 64, 29)
+    x.fillText('KS-7 TELSİZ', 192, 66)
     plaka.tex.needsUpdate = true
   }, [plaka])
 
@@ -147,97 +185,143 @@ function Telsiz({ satir, pil, ...props }: { satir: string; pil: number } & React
     const t = clock.elapsedTime
     const { pil: p } = ref.current
     const par = parazit(p)
+    // üst LED sırası: pil yüzdesi kadar yanar; parazitte titrer
     ledler.current.forEach((m, i) => {
-      if (m) m.emissiveIntensity = (p / 100) * (i === 2 ? 1.2 + Math.sin(t * 9) * 0.3 : 1.4) * (par > 0 && Math.random() < par * 0.15 ? 0.2 : 1)
+      if (!m) return
+      const yanik = i < Math.ceil(p / 10)
+      m.emissiveIntensity = yanik ? (1.1 + Math.sin(t * 5 + i) * 0.08) * (par > 0 && Math.random() < par * 0.12 ? 0.25 : 1) : 0.04
     })
-    if (isik.current) isik.current.intensity = (0.6 + 0.08 * Math.sin(t * 31)) * (0.4 + p / 160)
-    if (t - son.current < 0.12) return
+    kucukLed.current.forEach((m, i) => { if (m) m.emissiveIntensity = (p / 100) * (i === 1 ? 1.2 + Math.sin(t * 8) * 0.4 : 1.4) })
+    if (isik.current) isik.current.intensity = (1.1 + 0.1 * Math.sin(t * 31)) * (0.4 + p / 160)
+    if (fenerRef.current) (fenerRef.current.material as THREE.SpriteMaterial).opacity = 0.55 + 0.4 * Math.max(0, Math.sin(t * 2.2)) // anten ucundaki kırmızı uyarı ışığı
+    if (t - son.current < 0.1) return
     son.current = t
-    const s = ref.current.satir
-    ctx.fillStyle = '#031a08'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    const sapma = Math.sin(t * 19) * 0.6 // hafif titreme
-    ctx.fillStyle = '#4dff7a'
-    ctx.font = '22px monospace'
-    ctx.fillText(`PİL %${Math.round(p)}`, 16 + sapma, 28)
-    // 20 yarım segmentli pil çubuğu
-    const dolu = Math.round((p / 100) * 20)
-    for (let i = 0; i < 20; i++) {
-      ctx.fillStyle = i < dolu ? '#4dff7a' : 'rgba(77,255,122,0.15)'
-      ctx.fillRect(160 + i * 17, 11, 12, 16)
-    }
-    ctx.fillStyle = '#4dff7a'
-    ctx.font = '24px monospace'
+    const { satir: s } = ref.current
+    // yeşil ekran
+    const x = ekran.ctx
+    x.fillStyle = '#021208'
+    x.fillRect(0, 0, 640, 320)
+    const sapma = Math.sin(t * 19) * 0.7
+    x.fillStyle = '#6dff9a'
+    x.font = '600 29px "Cascadia Mono", Consolas, monospace'
     const kelimeler = s.split(' ')
     const satirlar: string[] = []
     let cur = ''
     for (const k of kelimeler) {
-      if ((cur + ' ' + k).length > 30) {
-        satirlar.push(cur)
-        cur = k
-      } else cur = cur ? cur + ' ' + k : k
+      if ((cur + ' ' + k).length > 31) { satirlar.push(cur); cur = k } else cur = cur ? cur + ' ' + k : k
     }
     if (cur) satirlar.push(cur)
-    satirlar.slice(-5).forEach((l, i) => ctx.fillText(l, 16 + sapma, 70 + i * 32))
-    if ((Math.floor(t * 2) & 1) === 0) ctx.fillRect(16, 232, 14, 10)
-    ctx.fillStyle = 'rgba(120,255,150,0.25)'
-    for (let i = 0; i < par * 40; i++) ctx.fillRect(Math.random() * 512, Math.random() * 256, 20 + Math.random() * 80, 2)
-    ctx.fillStyle = 'rgba(0,0,0,0.18)' // ince tarama çizgileri
-    for (let y = 0; y < 256; y += 4) ctx.fillRect(0, y, 512, 1)
-    tex.needsUpdate = true
+    const gor = satirlar.slice(-6)
+    gor.forEach((l, i) => x.fillText(l, 24 + sapma, 56 + i * 42))
+    // sondaki imleç: parazit varsa kırmızı blok ve "cızır"
+    const imlecY = 56 + (gor.length - 1) * 42
+    const sonG = x.measureText(gor[gor.length - 1] ?? '').width
+    if ((Math.floor(t * 2) & 1) === 0 || par > 0.05) {
+      x.fillStyle = par > 0.05 || Math.random() < 0.04 ? '#ff4a4a' : '#6dff9a'
+      x.fillRect(24 + sonG + 10, imlecY - 24, 34, 30)
+    }
+    if (par > 0.05) { x.fillStyle = '#ff4a4a'; x.fillText('cızır', 24 + sonG + 56, imlecY) }
+    x.fillStyle = 'rgba(120,255,160,0.22)'
+    for (let i = 0; i < par * 50; i++) x.fillRect(Math.random() * 640, Math.random() * 320, 20 + Math.random() * 90, 2)
+    x.fillStyle = 'rgba(0,0,0,0.2)'
+    for (let y = 0; y < 320; y += 4) x.fillRect(0, y, 640, 1)
+    ekran.tex.needsUpdate = true
+    // amber PİL ekranı
+    const q = pilEkrani.ctx
+    q.fillStyle = '#120a02'
+    q.fillRect(0, 0, 256, 64)
+    q.fillStyle = '#ffb347'
+    q.font = '700 40px "Barlow Condensed", "Arial Narrow", sans-serif'
+    q.textAlign = 'center'
+    q.fillText(`PİL %${Math.round(p)}`, 128, 46)
+    pilEkrani.tex.needsUpdate = true
   })
 
-  const metal = '#7d858c'
+  const govde = '#7f9887'
+  const parlak = '#97ab9d'
   return (
-    <group {...props} scale={0.97}>
-      <RoundedBox args={[1.5, 0.58, 0.6]} radius={0.03} smoothness={3} position={[0, 0.29, 0]}>
-        <meshStandardMaterial color={metal} metalness={0.7} roughness={0.45} />
+    <group {...props}>
+      {/* gövde */}
+      <RoundedBox args={[2.5, 1.05, 0.9]} radius={0.04} smoothness={3} position={[0, 0.525, 0]}>
+        <meshStandardMaterial color={govde} metalness={0.55} roughness={0.5} />
       </RoundedBox>
-      <mesh position={[-0.2, 0.3, 0.301]}>
-        <planeGeometry args={[1.02, 0.52]} />
-        <meshStandardMaterial color="#15181b" roughness={0.6} />
+      <mesh position={[0, 1.07, 0]}>
+        <boxGeometry args={[2.56, 0.05, 0.96]} />
+        <meshStandardMaterial color={parlak} metalness={0.6} roughness={0.45} />
       </mesh>
-      <mesh position={[-0.2, 0.3, 0.304]}>
-        <planeGeometry args={[0.96, 0.46]} />
-        <meshBasicMaterial map={tex} toneMapped={false} />
+      {/* tutamaç */}
+      <mesh position={[0, 1.1, 0.0]} rotation={[0, 0, 0]}>
+        <torusGeometry args={[0.28, 0.035, 10, 28, Math.PI]} />
+        <meshStandardMaterial color="#2a302c" metalness={0.6} roughness={0.4} />
       </mesh>
-      <mesh position={[0.5, 0.5, 0.301]}>
-        <planeGeometry args={[0.32, 0.1]} />
-        <meshStandardMaterial map={plaka.tex} roughness={0.5} metalness={0.4} />
-      </mesh>
-      {[[-0.7, 0.53], [0.7, 0.53], [-0.7, 0.05], [0.7, 0.05]].map(([sx, sy], i) => (
-        <mesh key={i} position={[sx, sy, 0.302]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.018, 0.018, 0.01, 8]} />
-          <meshStandardMaterial color="#bfc5ca" metalness={0.9} roughness={0.35} />
+      {/* üst LED sırası */}
+      {Array.from({ length: 10 }, (_, i) => (
+        <mesh key={i} position={[-1.05 + i * 0.21, 0.9, 0.452]}>
+          <boxGeometry args={[0.17, 0.1, 0.02]} />
+          <meshStandardMaterial ref={(m) => void (ledler.current[i] = m)} color="#8a4a44" emissive="#ff9d90" emissiveIntensity={1.1} />
         </mesh>
       ))}
-      {[0.4, 0.62].map((kx, i) => (
-        <mesh key={i} position={[kx, 0.24, 0.33]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.065, 0.07, 0.06, 18]} />
-          <meshStandardMaterial color="#202326" metalness={0.5} roughness={0.35} />
+      {/* PİL ekranı */}
+      <mesh position={[0.93, 0.9, 0.456]}>
+        <planeGeometry args={[0.52, 0.14]} />
+        <meshBasicMaterial map={pilEkrani.tex} toneMapped={false} />
+      </mesh>
+      {/* ana ekran: çerçeve + yazı */}
+      <mesh position={[-0.12, 0.5, 0.452]}>
+        <planeGeometry args={[1.82, 0.82]} />
+        <meshStandardMaterial color="#10150f" roughness={0.6} metalness={0.3} />
+      </mesh>
+      <mesh position={[-0.12, 0.5, 0.455]}>
+        <planeGeometry args={[1.68, 0.7]} />
+        <meshBasicMaterial map={ekran.tex} toneMapped={false} />
+      </mesh>
+      {/* KS-7 TELSİZ plakası */}
+      <mesh position={[-0.12, 0.1, 0.452]}>
+        <planeGeometry args={[0.62, 0.155]} />
+        <meshStandardMaterial map={plaka.tex} roughness={0.55} metalness={0.2} />
+      </mesh>
+      {/* iki büyük düğme */}
+      {[-0.95, -0.55].map((kx, i) => (
+        <group key={i} position={[kx, 0.14, 0.5]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.13, 0.145, 0.1, 28]} />
+            <meshStandardMaterial color="#1d211e" metalness={0.5} roughness={0.35} />
+          </mesh>
+          <mesh position={[0.05, 0.05, 0.055]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.012, 0.012, 0.02, 8]} />
+            <meshStandardMaterial color="#d8ddd8" emissive="#fff" emissiveIntensity={0.2} />
+          </mesh>
+        </group>
+      ))}
+      {/* havalandırma ızgarası */}
+      {Array.from({ length: 6 }, (_, i) => (
+        <mesh key={i} position={[0.88, 0.2 + i * 0.045, 0.451]}>
+          <boxGeometry args={[0.38, 0.018, 0.012]} />
+          <meshStandardMaterial color="#0e120f" />
         </mesh>
       ))}
-      {[0, 1, 2, 3].map((i) => (
-        <mesh key={i} position={[0.42 + i * 0.085, 0.1, 0.305]}>
-          <sphereGeometry args={[0.014, 10, 10]} />
-          <meshStandardMaterial
-            ref={(m) => void (ledler.current[i] = m)}
-            color="#222"
-            emissive={i === 3 ? '#ff4030' : i === 2 ? '#ffb030' : '#40ff70'}
-            emissiveIntensity={1.4}
-          />
+      {/* yan küçük ışıklar */}
+      {[[-1.18, 0.22, '#ffffff'], [-1.18, 0.1, '#ffa040']].map(([lx, ly, renk], i) => (
+        <mesh key={i} position={[lx as number, ly as number, 0.452]}>
+          <sphereGeometry args={[0.024, 12, 12]} />
+          <meshStandardMaterial ref={(m) => void (kucukLed.current[i] = m)} color="#222" emissive={renk as string} emissiveIntensity={1.4} />
         </mesh>
       ))}
-      <mesh position={[0, 0.64, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[0.07, 0.014, 8, 16, Math.PI]} />
-        <meshStandardMaterial color="#2b2f33" metalness={0.6} roughness={0.4} />
+      {/* anten + kırmızı uyarı ışığı (parlama yalnızca antenin ucunda; ekranın üstünde değil) */}
+      <mesh position={[0.95, 2.1, -0.3]}>
+        <cylinderGeometry args={[0.012, 0.018, 2.1, 8]} />
+        <meshStandardMaterial color="#9aa2a8" metalness={0.9} roughness={0.3} />
       </mesh>
-      <mesh position={[0.62, 0.95, -0.15]}>
-        <cylinderGeometry args={[0.008, 0.012, 0.7, 8]} />
-        <meshStandardMaterial color="#b9c0c6" metalness={0.9} roughness={0.3} />
+      <mesh position={[0.95, 3.18, -0.3]}>
+        <sphereGeometry args={[0.035, 12, 12]} />
+        <meshStandardMaterial color="#401010" emissive="#ff3030" emissiveIntensity={2.2} />
       </mesh>
-      {/* ekran ışığı pile bağlı; ayrı bir parlama sprite'ı YOK (radyo üstünde leke yapıyordu) */}
-      <pointLight ref={isik} position={[-0.2, 0.32, 0.6]} color="#5dff90" intensity={0.6} distance={2.6} decay={2} />
+      <sprite ref={fenerRef} position={[0.95, 3.18, -0.3]} scale={[0.75, 0.75, 1]}>
+        <spriteMaterial map={isikTex} color="#ff3a3a" transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} />
+      </sprite>
+      <pointLight ref={isik} position={[-0.12, 0.5, 1.0]} color="#5dff90" intensity={0.45} distance={2.4} decay={2} />
+      <primitive object={onIsikHedef} position={[0, 0.5, 0.3]} />
+      <spotLight position={[0.6, 2.6, 2.6]} target={onIsikHedef} angle={0.7} penumbra={0.9} intensity={14} distance={7} decay={2} color="#ffe9d2" />
     </group>
   )
 }
@@ -261,7 +345,7 @@ function Buhar(props: React.ComponentProps<'group'>) {
                 float genislik = mix(0.06, 0.28, y);
                 float serit = smoothstep(genislik, 0.0, d);
                 float yog = fbm(vec2(vUv.x * 4.0 + uFaz, y * 3.0 - uT * 0.9));
-                float a = serit * smoothstep(0.25, 0.75, yog) * smoothstep(1.0, 0.45, y) * smoothstep(0.0, 0.08, y) * 0.32;
+                float a = serit * smoothstep(0.25, 0.75, yog) * smoothstep(1.0, 0.45, y) * smoothstep(0.0, 0.08, y) * 0.4;
                 gl_FragColor = vec4(vec3(0.92, 0.94, 0.97), a);
               }`,
             transparent: true,
@@ -273,7 +357,7 @@ function Buhar(props: React.ComponentProps<'group'>) {
   const ref = useRef<THREE.Group>(null)
   useFrame(({ clock, camera }) => {
     for (const m of mats) m.uniforms.uT.value = clock.elapsedTime
-    ref.current?.children.forEach((m) => m.quaternion.copy(camera.quaternion)) // kameraya dönük şeritler
+    ref.current?.children.forEach((m) => m.quaternion.copy(camera.quaternion))
   })
   return (
     <group {...props} ref={ref}>
@@ -293,11 +377,11 @@ function Kupa(props: React.ComponentProps<'group'>) {
     <group {...props}>
       <mesh position={[0, H / 2, 0]}>
         <cylinderGeometry args={[R, R, H, 40, 1, true]} />
-        <meshStandardMaterial color="#f4f1ea" roughness={0.18} metalness={0.05} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#f6f4ee" roughness={0.16} metalness={0.05} side={THREE.DoubleSide} />
       </mesh>
       <mesh position={[0, 0.004, 0]}>
         <cylinderGeometry args={[R, R, 0.008, 40]} />
-        <meshStandardMaterial color="#f4f1ea" roughness={0.2} />
+        <meshStandardMaterial color="#f6f4ee" roughness={0.2} />
       </mesh>
       <mesh position={[0, H * 0.7, 0]}>
         <cylinderGeometry args={[R + 0.0015, R + 0.0015, 0.014, 40, 1, true]} />
@@ -305,65 +389,111 @@ function Kupa(props: React.ComponentProps<'group'>) {
       </mesh>
       <mesh position={[0, H - 0.028, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[R * 0.96, 36]} />
-        <meshStandardMaterial color="#6d4326" roughness={0.35} />
+        <meshStandardMaterial color="#3a2012" roughness={0.3} />
       </mesh>
       <mesh position={[0.01, H - 0.027, 0.006]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.02, 0.058, 24, 1, 0.4, 4.4]} />
-        <meshStandardMaterial color="#c9a37a" roughness={0.5} />
+        <meshStandardMaterial color="#b88f66" roughness={0.5} />
       </mesh>
       <mesh position={[R + 0.004, H * 0.52, 0]} rotation={[0, 0, -Math.PI / 2]}>
         <torusGeometry args={[0.058, 0.0125, 10, 24, Math.PI]} />
-        <meshStandardMaterial color="#f4f1ea" roughness={0.18} />
+        <meshStandardMaterial color="#f6f4ee" roughness={0.16} />
       </mesh>
       <Buhar position={[0, H - 0.02, 0]} />
     </group>
   )
 }
 
-// ── Jeton kavanozu ──────────────────────────────────────────────────────────
+// ── Jeton kavanozu: cam, siyah kapak, kâğıt etiket ──────────────────────────
 function JetonKavanozu({ jeton, ...props }: { jeton: number } & React.ComponentProps<'group'>) {
   const adet = Math.min(Math.max(jeton, 0), 30)
-  const etiket = useCanvasDoku(256, 64)
+  const etiket = useCanvasDoku(256, 96)
   useEffect(() => {
     const x = etiket.ctx
-    x.clearRect(0, 0, 256, 64)
-    x.fillStyle = 'rgba(10,10,10,0.75)'
-    x.beginPath()
-    x.roundRect(4, 4, 248, 56, 12)
-    x.fill()
-    x.fillStyle = '#ffd25a'
-    x.font = 'bold 32px sans-serif'
+    x.fillStyle = '#ece6d4'
+    x.fillRect(0, 0, 256, 96)
+    x.strokeStyle = '#3a3226'
+    x.lineWidth = 4
+    x.strokeRect(2, 2, 252, 92)
+    x.fillStyle = '#2a241a'
+    x.font = 'bold 46px "Barlow Condensed", "Arial Narrow", sans-serif'
     x.textAlign = 'center'
-    x.fillText(`${jeton} jeton`, 128, 44)
+    x.fillText(`${jeton} jeton`, 128, 64)
     etiket.tex.needsUpdate = true
   }, [jeton, etiket])
-  const etiketRef = useRef<THREE.Mesh>(null)
-  useFrame(({ camera }) => etiketRef.current?.quaternion.copy(camera.quaternion))
   return (
     <group {...props}>
-      <mesh position={[0, 0.21, 0]}>
-        <cylinderGeometry args={[0.2, 0.2, 0.42, 36, 1, true]} />
-        <meshPhysicalMaterial color="#cfe8ff" transparent opacity={0.22} roughness={0.05} side={THREE.DoubleSide} />
+      <mesh position={[0, 0.24, 0]}>
+        <cylinderGeometry args={[0.24, 0.24, 0.48, 40, 1, true]} />
+        <meshPhysicalMaterial color="#d4ecff" transparent opacity={0.2} roughness={0.04} side={THREE.DoubleSide} />
       </mesh>
-      <mesh position={[0, 0.425, 0]}>
-        <cylinderGeometry args={[0.21, 0.21, 0.025, 36]} />
-        <meshStandardMaterial color="#8a6b3d" roughness={0.5} />
+      <mesh position={[0, 0.5, 0]}>
+        <cylinderGeometry args={[0.25, 0.25, 0.07, 40]} />
+        <meshStandardMaterial color="#141516" roughness={0.5} metalness={0.3} />
       </mesh>
       {Array.from({ length: adet }, (_, i) => (
-        <mesh key={i} position={[Math.sin(i * 2.4) * 0.11, 0.015 + Math.floor(i / 4) * 0.022, Math.cos(i * 2.4) * 0.11]} rotation={[(i % 3) * 0.12, i, (i % 5) * 0.1]}>
+        <mesh key={i} position={[Math.sin(i * 2.4) * 0.12, 0.015 + Math.floor(i / 4) * 0.022, Math.cos(i * 2.4) * 0.12]} rotation={[(i % 3) * 0.12, i, (i % 5) * 0.1]}>
           <cylinderGeometry args={[0.055, 0.055, 0.018, 18]} />
-          <meshStandardMaterial color="#f0b830" metalness={0.9} roughness={0.28} />
+          <meshStandardMaterial color="#e8b028" metalness={0.9} roughness={0.28} />
         </mesh>
       ))}
-      <mesh ref={etiketRef} position={[0, 0.62, 0]}>
-        <planeGeometry args={[0.5, 0.125]} />
-        <meshBasicMaterial map={etiket.tex} transparent depthWrite={false} toneMapped={false} />
+      <mesh position={[0, 0.2, 0.243]}>
+        <planeGeometry args={[0.3, 0.113]} />
+        <meshStandardMaterial map={etiket.tex} roughness={0.9} />
       </mesh>
     </group>
   )
 }
 
-// ── Duvar saati: 02:47, saniye kolu tik tak ─────────────────────────────────
+// ── Defter (kapalı, tıklanabilir) ───────────────────────────────────────────
+function DefterObjesi({ onDefter, ...props }: { onDefter: () => void } & React.ComponentProps<'group'>) {
+  return (
+    <group
+      {...props}
+      onClick={(e) => { e.stopPropagation(); onDefter() }}
+      onPointerOver={() => { document.body.style.cursor = 'pointer' }}
+      onPointerOut={() => { document.body.style.cursor = 'default' }}
+    >
+      <RoundedBox args={[0.6, 0.08, 0.44]} radius={0.01} smoothness={3} position={[0, 0.04, 0]}>
+        <meshStandardMaterial color="#5a2a1f" roughness={0.55} />
+      </RoundedBox>
+      <mesh position={[0.02, 0.04, 0]}>
+        <boxGeometry args={[0.57, 0.06, 0.41]} />
+        <meshStandardMaterial color="#e8dfc7" roughness={0.9} />
+      </mesh>
+      <mesh position={[-0.285, 0.04, 0]}>
+        <boxGeometry args={[0.03, 0.085, 0.45]} />
+        <meshStandardMaterial color="#3d1a13" roughness={0.5} />
+      </mesh>
+      <mesh position={[0.1, 0.0815, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.28, 0.09]} />
+        <meshStandardMaterial color="#c9a23a" metalness={0.8} roughness={0.4} />
+      </mesh>
+    </group>
+  )
+}
+
+/** Yeşil kapaklı spiralsiz not defteri + kalem (masa üstü dekoru). */
+function NotDefteri(props: React.ComponentProps<'group'>) {
+  return (
+    <group {...props}>
+      <mesh position={[0, 0.012, 0]}>
+        <boxGeometry args={[0.62, 0.024, 0.44]} />
+        <meshStandardMaterial color="#7d8a6c" roughness={0.85} />
+      </mesh>
+      <mesh position={[0, 0.026, 0]}>
+        <boxGeometry args={[0.58, 0.008, 0.4]} />
+        <meshStandardMaterial color="#e8e2cf" roughness={0.9} />
+      </mesh>
+      <mesh position={[0.08, 0.038, 0.03]} rotation={[0, 0.2, Math.PI / 2]}>
+        <cylinderGeometry args={[0.008, 0.008, 0.28, 8]} />
+        <meshStandardMaterial color="#202020" roughness={0.4} />
+      </mesh>
+    </group>
+  )
+}
+
+// ── Duvar saati ─────────────────────────────────────────────────────────────
 function Saat(props: React.ComponentProps<'group'>) {
   const { tex, ctx } = useCanvasDoku(256, 256)
   const sn = useRef(-1)
@@ -371,51 +501,52 @@ function Saat(props: React.ComponentProps<'group'>) {
     const s = new Date().getSeconds()
     if (s === sn.current) return
     sn.current = s
-    ctx.fillStyle = '#e8e0cc'
+    ctx.fillStyle = '#e6dcc4'
     ctx.beginPath()
     ctx.arc(128, 128, 126, 0, Math.PI * 2)
     ctx.fill()
-    ctx.strokeStyle = '#222'
-    ctx.lineWidth = 7
+    ctx.strokeStyle = '#1c1a16'
+    ctx.lineWidth = 8
     ctx.stroke()
-    ctx.lineWidth = 3
+    ctx.lineWidth = 4
     for (let i = 0; i < 12; i++) {
       const a = (i * Math.PI) / 6
       ctx.beginPath()
-      ctx.moveTo(128 + Math.sin(a) * 108, 128 - Math.cos(a) * 108)
+      ctx.moveTo(128 + Math.sin(a) * 104, 128 - Math.cos(a) * 104)
       ctx.lineTo(128 + Math.sin(a) * 120, 128 - Math.cos(a) * 120)
       ctx.stroke()
     }
-    const el = (aci: number, uz: number, kalin: number, renk = '#222') => {
+    const el = (aci: number, uz: number, kalin: number, renk = '#1c1a16') => {
       ctx.strokeStyle = renk
       ctx.lineWidth = kalin
+      ctx.lineCap = 'round'
       ctx.beginPath()
       ctx.moveTo(128, 128)
       ctx.lineTo(128 + Math.sin(aci) * uz, 128 - Math.cos(aci) * uz)
       ctx.stroke()
     }
-    el((2 + 47 / 60) * (Math.PI / 6), 58, 9) // saat kolu: 02:47
-    el(47 * (Math.PI / 30), 90, 6) // dakika kolu
-    el(s * (Math.PI / 30), 100, 2, '#b22') // saniye kolu: tik tak
+    el((2 + 47 / 60) * (Math.PI / 6), 58, 10) // 02:47
+    el(47 * (Math.PI / 30), 92, 6)
+    el(s * (Math.PI / 30), 104, 2, '#a02020') // tik tak
     tex.needsUpdate = true
   })
   return (
     <group {...props}>
       <mesh position={[0, 0, -0.01]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.33, 0.33, 0.04, 32]} />
-        <meshStandardMaterial color="#1c1c1c" />
+        <cylinderGeometry args={[0.35, 0.35, 0.05, 36]} />
+        <meshStandardMaterial color="#1c1a16" />
       </mesh>
       <mesh position={[0, 0, 0.016]}>
-        <circleGeometry args={[0.3, 40]} />
-        <meshStandardMaterial map={tex} emissiveMap={tex} emissive="#ffffff" emissiveIntensity={0.18} />
+        <circleGeometry args={[0.31, 44]} />
+        <meshStandardMaterial map={tex} emissiveMap={tex} emissive="#ffffff" emissiveIntensity={0.14} />
       </mesh>
     </group>
   )
 }
 
-// ── Pencere: yağmur, hareketli bulutlar, şimşek, perdeler ───────────────────
+// ── Pencere: telsizin arkasında; yağmur, koyu bulutlar, şimşek ──────────────
 function Pencere({ x, y }: { x: number; y: number }) {
-  const W = 2.5, H = 2.3
+  const W = 2.7, H = 1.8
   const mat = useMemo(
     () =>
       new THREE.ShaderMaterial({
@@ -425,9 +556,9 @@ function Pencere({ x, y }: { x: number; y: number }) {
           uniform float uT, uFlas; varying vec2 vUv;
           ${GURULTU}
           void main(){
-            vec2 p = vUv * vec2(2.6, 2.0) + vec2(uT * 0.025, 0.0);
+            vec2 p = vUv * vec2(3.2, 2.2) + vec2(uT * 0.03, 0.0);
             float c = fbm(p + fbm(p * 1.7 + uT * 0.02));
-            vec3 gece = mix(vec3(0.02, 0.035, 0.08), vec3(0.09, 0.12, 0.2), smoothstep(0.3, 0.8, c));
+            vec3 gece = mix(vec3(0.045, 0.05, 0.06), vec3(0.2, 0.22, 0.25), smoothstep(0.3, 0.85, c));
             vec3 flas = mix(vec3(0.5, 0.6, 0.85), vec3(0.95, 0.97, 1.0), smoothstep(0.4, 0.8, c));
             gl_FragColor = vec4(mix(gece, flas, uFlas), 1.0);
           }`,
@@ -435,13 +566,13 @@ function Pencere({ x, y }: { x: number; y: number }) {
     [],
   )
   const yagmur = useRef<THREE.LineSegments>(null)
-  const n = 220
+  const n = 260
   const veri = useMemo(() => {
     const a = new Float32Array(n * 6)
     for (let i = 0; i < n; i++) {
       const px = -W / 2 + 0.05 + Math.random() * (W - 0.1)
       const py = -H / 2 + Math.random() * H
-      a.set([px, py, 0.03, px, py - 0.14, 0.03], i * 6)
+      a.set([px, py, 0.03, px - 0.01, py - 0.16, 0.03], i * 6)
     }
     return a
   }, [])
@@ -453,31 +584,20 @@ function Pencere({ x, y }: { x: number; y: number }) {
     const p = yagmur.current?.geometry.attributes.position as THREE.BufferAttribute | undefined
     if (p) {
       for (let i = 0; i < n; i++) {
-        let py = p.getY(i * 2) - dt * 2.4
+        let py = p.getY(i * 2) - dt * 2.6
         if (py < -H / 2) py = H / 2
         p.setY(i * 2, py)
-        p.setY(i * 2 + 1, py - 0.14)
+        p.setY(i * 2 + 1, py - 0.16)
       }
       p.needsUpdate = true
     }
-    damla.current?.children.forEach((m, i) => { // camda süzülen damlalar
+    damla.current?.children.forEach((m, i) => {
       const d = damlalar[i]
       if (d.bekle > 0) { d.bekle -= dt; return }
       d.y -= d.hiz * dt * (1 + Math.sin(clock.elapsedTime * 1.3 + i) * 0.4)
       if (d.y < -H / 2) { d.y = H / 2; d.x = (Math.random() - 0.5) * (W - 0.2); d.bekle = Math.random() * 4 }
       m.position.set(d.x, d.y, 0.04)
     })
-  })
-  const perdeGeo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(0.85, 2.7, 16, 1)
-    const pos = g.attributes.position
-    for (let i = 0; i < pos.count; i++) pos.setZ(i, Math.sin(pos.getX(i) * 22) * 0.04)
-    g.computeVertexNormals()
-    return g
-  }, [])
-  const perdeler = useRef<THREE.Group>(null)
-  useFrame(({ clock }) => {
-    perdeler.current?.children.forEach((c, i) => { c.rotation.y = Math.sin(clock.elapsedTime * 0.5 + i * 2) * 0.03 })
   })
   return (
     <group position={[x, y, DUVAR_Z + 0.02]}>
@@ -488,35 +608,24 @@ function Pencere({ x, y }: { x: number; y: number }) {
         {damlalar.map((_, i) => (
           <mesh key={i}>
             <sphereGeometry args={[0.012, 8, 8]} />
-            <meshBasicMaterial color="#a9c8f0" transparent opacity={0.55} />
+            <meshBasicMaterial color="#b9d3f4" transparent opacity={0.6} />
           </mesh>
         ))}
       </group>
-      {[[0, H / 2 + 0.05, W + 0.2, 0.1], [0, -H / 2 - 0.05, W + 0.3, 0.12], [-W / 2 - 0.05, 0, 0.1, H], [W / 2 + 0.05, 0, 0.1, H], [0, 0, 0.05, H]].map(([bx, by, bw, bh], i) => (
+      {/* çerçeve: 2×2 cam bölmesi */}
+      {[[0, H / 2 + 0.05, W + 0.2, 0.1], [0, -H / 2 - 0.05, W + 0.3, 0.12], [-W / 2 - 0.05, 0, 0.1, H], [W / 2 + 0.05, 0, 0.1, H], [0, 0, 0.06, H], [0, 0, W, 0.06]].map(([bx, by, bw, bh], i) => (
         <mesh key={i} position={[bx, by, 0.04]}>
           <boxGeometry args={[bw, bh, 0.08]} />
-          <meshStandardMaterial color="#17191c" roughness={0.6} />
+          <meshStandardMaterial color="#15171a" roughness={0.6} />
         </mesh>
       ))}
-      <group ref={perdeler}>
-        <mesh geometry={perdeGeo} position={[-W / 2 - 0.1, 0.1, 0.16]}>
-          <meshStandardMaterial color="#6a2b2f" roughness={0.95} side={THREE.DoubleSide} />
-        </mesh>
-        <mesh geometry={perdeGeo} position={[W / 2 + 0.1, 0.1, 0.16]}>
-          <meshStandardMaterial color="#6a2b2f" roughness={0.95} side={THREE.DoubleSide} />
-        </mesh>
-      </group>
-      <mesh position={[0, H / 2 + 0.2, 0.2]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.025, 0.025, W + 0.9, 10]} />
-        <meshStandardMaterial color="#2a2118" metalness={0.5} />
-      </mesh>
       <lineSegments ref={yagmur}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[veri, 3]} />
         </bufferGeometry>
-        <lineBasicMaterial color="#9cc4e8" transparent opacity={0.55} />
+        <lineBasicMaterial color="#c4daf5" transparent opacity={0.6} />
       </lineSegments>
-      <pointLight position={[0, 0, 1.2]} color="#7fa0ff" intensity={0.25} distance={5} decay={2} />
+      <pointLight position={[0, 0, 1.2]} color="#7fa0ff" intensity={0.3} distance={5} decay={2} />
     </group>
   )
 }
@@ -540,46 +649,52 @@ function Kagit({ poz, rot, w = 0.3, h = 0.21, renk = '#ece7da' }: { poz: [number
   )
 }
 
-// ── Sarkıt lamba: koni abajur, titreşim, iç içe koni ışık huzmesi ───────────
+// ── Sarkıt lamba: siyah koni abajur, parlak ampul + hale, ışık huzmesi ──────
 function SarkitLamba({ x, z, hemi }: { x: number; z: number; hemi: React.RefObject<THREE.HemisphereLight | null> }) {
   const spot = useRef<THREE.SpotLight>(null)
   const ampul = useRef<THREE.MeshStandardMaterial>(null)
   const huzme = useRef<THREE.Group>(null)
+  const haleRef = useRef<THREE.Sprite>(null)
+  const hale = useMemo(() => yumusakDaire(256), [])
   const hedef = useMemo(() => new THREE.Object3D(), [])
   const f = useRef({ t: 0, deger: 1, sonraki: 4 })
   useFrame(({ clock }, dt) => {
     const t = clock.elapsedTime
-    f.current.t += dt // arada kısa titreşim
+    f.current.t += dt
     if (f.current.t > f.current.sonraki) { f.current.deger = 0.55 + Math.random() * 0.2; f.current.t = 0; f.current.sonraki = 3 + Math.random() * 7 }
     f.current.deger += (1 - f.current.deger) * Math.min(1, dt * 14)
     const titrek = f.current.deger * (1 + Math.sin(t * 2.3) * 0.015)
-    if (spot.current) spot.current.intensity = 120 * titrek
-    if (ampul.current) ampul.current.emissiveIntensity = 3.2 * titrek
-    huzme.current?.children.forEach((m) => { ((m as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = 0.032 * titrek })
-    if (hemi.current) hemi.current.intensity = 1.7 + simsek.deger * 3.0
+    if (spot.current) spot.current.intensity = 52 * titrek
+    if (ampul.current) ampul.current.emissiveIntensity = 3.4 * titrek
+    if (haleRef.current) (haleRef.current.material as THREE.SpriteMaterial).opacity = 0.62 * titrek
+    huzme.current?.children.forEach((m) => { ((m as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = 0.04 * titrek })
+    if (hemi.current) hemi.current.intensity = 1.0 + simsek.deger * 3.0
   })
-  const Y = 4.05
+  const Y = 3.45
   return (
     <group position={[x, 0, z]}>
-      <primitive object={hedef} position={[0, DY, 0]} />
+      <primitive object={hedef} position={[0, DY, 0.5]} />
       <mesh position={[0, (Y + 6.2) / 2 + 0.2, 0]}>
         <cylinderGeometry args={[0.012, 0.012, 6.2 - Y + 0.4, 6]} />
-        <meshStandardMaterial color="#111" />
+        <meshStandardMaterial color="#0c0c0c" />
       </mesh>
-      <mesh position={[0, Y + 0.28, 0]}>
-        <coneGeometry args={[0.62, 0.5, 40, 1, true]} />
-        <meshStandardMaterial color="#c9a23a" roughness={0.5} metalness={0.5} side={THREE.DoubleSide} emissive="#5a3b08" emissiveIntensity={0.5} />
+      <mesh position={[0, Y + 0.3, 0]}>
+        <coneGeometry args={[0.58, 0.5, 44, 1, true]} />
+        <meshStandardMaterial color="#17181a" roughness={0.55} metalness={0.3} side={THREE.DoubleSide} />
       </mesh>
-      <mesh position={[0, Y - 0.05, 0]}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial ref={ampul} color="#fff2cf" emissive="#ffc46a" emissiveIntensity={3.2} />
+      <mesh position={[0, Y - 0.04, 0]}>
+        <sphereGeometry args={[0.09, 16, 16]} />
+        <meshStandardMaterial ref={ampul} color="#fff6e2" emissive="#ffd9a0" emissiveIntensity={3.4} />
       </mesh>
-      <spotLight ref={spot} position={[0, Y - 0.1, 0]} target={hedef} angle={0.95} penumbra={0.85} intensity={120} distance={14} decay={2} color="#ffd6a0" />
-      <group ref={huzme} position={[0, Y - 1.5, 0]}>
+      <sprite ref={haleRef} position={[0, Y - 0.04, 0]} scale={[2.6, 2.6, 1]}>
+        <spriteMaterial map={hale} color="#ffe4b8" transparent opacity={0.62} depthWrite={false} blending={THREE.AdditiveBlending} />
+      </sprite>
+      <spotLight ref={spot} position={[0, Y - 0.1, 0]} target={hedef} angle={0.9} penumbra={0.9} intensity={52} distance={14} decay={2} color="#ffd9a8" />
+      <group ref={huzme} position={[0, Y - 1.4, 0]}>
         {[1, 0.78, 0.56].map((s, i) => (
           <mesh key={i} scale={[s, 1, s]} renderOrder={2}>
-            <coneGeometry args={[1.7, 3.0, 32, 1, true]} />
-            <meshBasicMaterial color="#ffd9a0" transparent opacity={0.032} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
+            <coneGeometry args={[1.9, 2.8, 32, 1, true]} />
+            <meshBasicMaterial color="#ffdcae" transparent opacity={0.04} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
           </mesh>
         ))}
       </group>
@@ -587,24 +702,14 @@ function SarkitLamba({ x, z, hemi }: { x: number; z: number; hemi: React.RefObje
   )
 }
 
-// ── Havada toz ──────────────────────────────────────────────────────────────
+// ── Havada toz: lamba konisinde süzülen yumuşak noktalar ────────────────────
 function Toz() {
-  const n = 140
-  const yuvarlak = useMemo(() => {
-    const c = document.createElement('canvas')
-    c.width = c.height = 32
-    const x = c.getContext('2d')!
-    const g = x.createRadialGradient(16, 16, 0, 16, 16, 16)
-    g.addColorStop(0, 'rgba(255,255,255,1)')
-    g.addColorStop(1, 'rgba(255,255,255,0)')
-    x.fillStyle = g
-    x.fillRect(0, 0, 32, 32)
-    return new THREE.CanvasTexture(c)
-  }, [])
+  const n = 170
   const ref = useRef<THREE.Points>(null)
+  const yuvarlak = useMemo(() => yumusakDaire(32), [])
   const veri = useMemo(() => {
     const a = new Float32Array(n * 3)
-    for (let i = 0; i < n; i++) a.set([(Math.random() - 0.5) * 3.4 + 0.2, 1.2 + Math.random() * 2.8, (Math.random() - 0.5) * 3.0], i * 3)
+    for (let i = 0; i < n; i++) a.set([(Math.random() - 0.5) * 5.2 + LAMBA_X, 1.2 + Math.random() * 2.8, (Math.random() - 0.5) * 4.4], i * 3)
     return a
   }, [])
   useFrame(({ clock }, dt) => {
@@ -612,7 +717,7 @@ function Toz() {
     if (!p) return
     const t = clock.elapsedTime
     for (let i = 0; i < n; i++) {
-      p.setX(i, p.getX(i) + Math.sin(t * 0.3 + i) * dt * 0.02)
+      p.setX(i, p.getX(i) + Math.sin(t * 0.3 + i) * dt * 0.03)
       let y = p.getY(i) - dt * (0.012 + (i % 5) * 0.004)
       if (y < 1.1) y = 4
       p.setY(i, y)
@@ -624,73 +729,67 @@ function Toz() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[veri, 3]} />
       </bufferGeometry>
-      <pointsMaterial map={yuvarlak} color="#ffe2b5" size={0.03} transparent opacity={0.55} alphaTest={0.02} depthWrite={false} blending={THREE.AdditiveBlending} sizeAttenuation />
+      <pointsMaterial map={yuvarlak} color="#fff0d6" size={0.045} transparent opacity={0.7} alphaTest={0.02} depthWrite={false} blending={THREE.AdditiveBlending} sizeAttenuation />
     </points>
   )
 }
 
-// ── Arka masa: dizüstü bilgisayar, yüksek sandalye, karakter, rim ışığı ─────
-function ArkaMasa({ x, varlik, ekranRenk }: { x: number; varlik: 'nuri' | 'ayse'; ekranRenk: string }) {
-  const ahsap = '#5b4129'
+// ── Arka masa: dizüstü bilgisayar, yüksek sandalye, karakter, ışıklar ───────
+function ArkaMasa({ x, varlik, ekranRenk, tahta }: { x: number; varlik: 'nuri' | 'ayse'; ekranRenk: string; tahta: THREE.Texture }) {
   const ekran = useRef<THREE.MeshStandardMaterial>(null)
   const rimHedef = useMemo(() => new THREE.Object3D(), [])
-  useFrame(({ clock }) => { if (ekran.current) ekran.current.emissiveIntensity = 0.9 + Math.sin(clock.elapsedTime * 3 + x) * 0.06 })
+  useFrame(({ clock }) => { if (ekran.current) ekran.current.emissiveIntensity = 0.7 + Math.sin(clock.elapsedTime * 3 + x) * 0.05 })
   return (
     <group position={[x, 0, ARKA_MASA_Z]}>
       <RoundedBox args={[2.3, 0.08, 1.0]} radius={0.02} smoothness={3} position={[0, AY - 0.04, 0]}>
-        <meshStandardMaterial color="#7a5836" roughness={0.45} metalness={0.05} />
+        <meshStandardMaterial map={tahta} color="#d9c0a0" roughness={0.5} metalness={0.05} />
       </RoundedBox>
       <mesh position={[0, (AY - 0.08) / 2, 0.47]}>
         <boxGeometry args={[2.2, AY - 0.08, 0.05]} />
-        <meshStandardMaterial color={ahsap} roughness={0.8} />
+        <meshStandardMaterial color="#2a2018" roughness={0.85} />
       </mesh>
       {[-1.1, 1.1].map((sx) => (
         <mesh key={sx} position={[sx, (AY - 0.08) / 2, 0]}>
           <boxGeometry args={[0.05, AY - 0.08, 1.0]} />
-          <meshStandardMaterial color={ahsap} roughness={0.8} />
+          <meshStandardMaterial color="#2a2018" roughness={0.85} />
         </mesh>
       ))}
-      {/* dizüstü bilgisayar (1,25 kat büyütülmüş) */}
+      {/* siyah dizüstü bilgisayar (1,25 kat büyütülmüş) */}
       <group position={[0, AY, 0.12]} scale={1.25}>
         <mesh position={[0, 0.01, 0]}>
           <boxGeometry args={[0.34, 0.02, 0.24]} />
-          <meshStandardMaterial color="#9aa0a6" metalness={0.8} roughness={0.35} />
-        </mesh>
-        <mesh position={[0, 0.021, 0.02]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[0.28, 0.1]} />
-          <meshStandardMaterial color="#25282b" roughness={0.7} />
+          <meshStandardMaterial color="#121314" metalness={0.7} roughness={0.35} />
         </mesh>
         <group position={[0, 0.02, -0.12]} rotation={[-0.3, 0, 0]}>
           <mesh position={[0, 0.115, 0]}>
             <boxGeometry args={[0.34, 0.23, 0.012]} />
-            <meshStandardMaterial color="#9aa0a6" metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial color="#121314" metalness={0.7} roughness={0.35} />
           </mesh>
-          <mesh position={[0, 0.115, 0.0068]}>
-            <planeGeometry args={[0.31, 0.2]} />
-            <meshStandardMaterial ref={ekran} color="#111" emissive={ekranRenk} emissiveIntensity={0.9} />
+          <mesh position={[0, 0.115, -0.0068]} rotation={[0, Math.PI, 0]}>
+            <circleGeometry args={[0.012, 12]} />
+            <meshStandardMaterial ref={ekran} color="#111" emissive={ekranRenk} emissiveIntensity={0.7} />
           </mesh>
         </group>
       </group>
-      {/* yüksek sandalye */}
+      {/* yüksek sandalye (gri) */}
       <mesh position={[0, 0.6, -0.72]}>
         <boxGeometry args={[0.55, 0.06, 0.5]} />
-        <meshStandardMaterial color="#1f2328" roughness={0.7} />
+        <meshStandardMaterial color="#3a3f45" roughness={0.7} />
       </mesh>
       <mesh position={[0, 1.0, -0.98]}>
         <boxGeometry args={[0.55, 0.7, 0.06]} />
-        <meshStandardMaterial color="#1f2328" roughness={0.7} />
+        <meshStandardMaterial color="#3a3f45" roughness={0.7} />
       </mesh>
       <mesh position={[0, 0.3, -0.72]}>
         <cylinderGeometry args={[0.035, 0.035, 0.6, 8]} />
         <meshStandardMaterial color="#111" />
       </mesh>
       <AssetModel varlik={varlik} oturan position={[0, 0, -0.7]} />
-      {/* rim ışığı: arkadan-yukarıdan karaktere bakan spot (duvarı aydınlatmaz); yoksa karakterler karanlıkta kaybolur */}
+      {/* rim ışığı + önden yumuşak ana ışık */}
       <primitive object={rimHedef} position={[0, 1.55, -0.7]} />
-      {/* ana ışık: önden-yukarıdan yumuşak, yüz ve gövdeyi okutur */}
-      <spotLight position={[0.2, 3.3, 1.6]} target={rimHedef} angle={0.28} penumbra={0.9} intensity={26} distance={9} decay={2} color={ekranRenk === '#ffd27a' ? '#ffe2c4' : '#e8efff'} />
       <spotLight position={[-0.75, 3.1, -0.78]} target={rimHedef} angle={0.5} penumbra={0.9} intensity={14} distance={4} decay={2} color="#8fb6ff" />
       <spotLight position={[0.75, 3.1, -0.78]} target={rimHedef} angle={0.5} penumbra={0.9} intensity={9} distance={4} decay={2} color="#ffb880" />
+      <spotLight position={[0.2, 3.3, 1.6]} target={rimHedef} angle={0.28} penumbra={0.9} intensity={26} distance={9} decay={2} color={varlik === 'ayse' ? '#ffe2c4' : '#e8efff'} />
       <GolgeLekesi poz={[0, AY + 0.003, 0.12]} w={0.6} d={0.45} />
     </group>
   )
@@ -720,8 +819,11 @@ export function RadioRoom({
     gl.toneMapping = THREE.ACESFilmicToneMapping
     gl.toneMappingExposure = 1.15
   }, [gl])
+  const masaDoku = useMemo(() => tahtaDoku('#4a3626', '#b89066', 3, 1, 7), [])
+  const zeminDoku = useMemo(() => tahtaDoku('#2e231b', '#7d6248', 6, 5, 10), [])
+  const arkaDoku = useMemo(() => tahtaDoku('#2a1f17', '#a58260', 1.2, 1, 5), [])
 
-  // şimşek: aralıklı, çift vuruşlu; oda kısa süre mavi-beyaza döner
+  // şimşek: aralıklı, çift vuruşlu
   useFrame(({ clock }) => {
     const t = clock.elapsedTime
     if (t > simsek.sonraki && simsek.basladi < 0) { simsek.basladi = t; simsek.sonraki = t + 9 + Math.random() * 14 }
@@ -730,115 +832,90 @@ export function RadioRoom({
       simsek.deger = u < 0.07 ? u / 0.07 : u < 0.18 ? 1 - (u - 0.07) * 4 : u < 0.27 ? 0.5 + (u - 0.18) * 4 : u < 0.6 ? Math.max(0, 0.9 - (u - 0.27) * 2.8) : 0
       if (u > 0.6) { simsek.basladi = -1; simsek.deger = 0 }
     }
-    if (dolgu.current) dolgu.current.intensity = 0.3 + simsek.deger * 1.2
+    if (dolgu.current) dolgu.current.intensity = 0.22 + simsek.deger * 1.2
   })
 
-  const masaRenk = '#8a6a44'
   return (
     <>
-      <color attach="background" args={['#05070c']} />
-      <fog attach="fog" args={['#05070c', 12, 26]} />
+      <color attach="background" args={['#030407']} />
+      <fog attach="fog" args={['#030407', 12, 28]} />
       <PerformanceMonitor onChange={({ factor }) => setDpr(Math.min(1.75, Math.max(0.8, 0.8 + factor * 0.95)))} />
       <KameraKurgusu kamera={kamera} />
 
       {/* ışık: lamba ana, ortam çok düşük; ortam yansıması ≤ 0,45 */}
-      <ambientLight ref={dolgu} intensity={0.3} color="#7f93b8" />
-      <hemisphereLight ref={hemi} args={['#7088b4', '#2a1d14', 1.7]} />
-      <SarkitLamba x={0.2} z={0} hemi={hemi} />
+      <ambientLight ref={dolgu} intensity={0.22} color="#7f93b8" />
+      <hemisphereLight ref={hemi} args={['#6b82ac', '#2a1d14', 1.0]} />
+      <SarkitLamba x={LAMBA_X} z={0} hemi={hemi} />
       <Environment resolution={64} background={false} environmentIntensity={0.4}>
-        <Lightformer form="rect" color="#ffcf8a" intensity={3} position={[0.2, 4, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[3, 3, 1]} />
+        <Lightformer form="rect" color="#ffcf8a" intensity={3} position={[LAMBA_X, 4, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[3, 3, 1]} />
         <Lightformer form="rect" color="#5f7fb8" intensity={0.6} position={[-6, 3, 1]} scale={[6, 4, 1]} />
-        <Lightformer form="rect" color="#59ff8f" intensity={0.5} position={[0.2, 1.4, 2]} scale={[1.2, 0.6, 1]} />
+        <Lightformer form="rect" color="#59ff8f" intensity={0.5} position={[TELSIZ_X, 1.4, 2]} scale={[1.2, 0.6, 1]} />
       </Environment>
 
-      {/* oda: zemin, arka duvar + süpürgelik, yan duvarlar, tavan */}
+      {/* oda: tahta zemin, koyu arka duvar + süpürgelik, yan duvarlar, tavan */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 2]}>
         <planeGeometry args={[26, 16]} />
-        <meshStandardMaterial color="#2b1f16" roughness={0.75} />
+        <meshStandardMaterial map={zeminDoku} color="#c8b098" roughness={0.65} />
       </mesh>
       <mesh position={[0, 3.1, DUVAR_Z]}>
         <planeGeometry args={[26, 6.2]} />
-        <meshStandardMaterial color="#43525e" roughness={0.95} />
+        <meshStandardMaterial color="#2a3640" roughness={0.95} />
       </mesh>
       <mesh position={[0, 0.11, DUVAR_Z + 0.025]}>
         <boxGeometry args={[26, 0.22, 0.05]} />
-        <meshStandardMaterial color="#3d2f26" roughness={0.6} />
+        <meshStandardMaterial color="#2c221b" roughness={0.6} />
       </mesh>
       <mesh position={[-13, 3.1, 2]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[16, 6.2]} />
-        <meshStandardMaterial color="#1f2830" />
+        <meshStandardMaterial color="#1a2229" />
       </mesh>
       <mesh position={[13, 3.1, 2]} rotation={[0, -Math.PI / 2, 0]}>
         <planeGeometry args={[16, 6.2]} />
-        <meshStandardMaterial color="#1f2830" />
+        <meshStandardMaterial color="#1a2229" />
       </mesh>
       <mesh position={[0, 6.2, 2]} rotation={[Math.PI / 2, 0, 0]}>
         <planeGeometry args={[26, 16]} />
-        <meshStandardMaterial color="#15191e" />
+        <meshStandardMaterial color="#111418" />
       </mesh>
 
       {/* ana masa 11 × 3,3 m, üst yüzey y = 1,06 */}
       <RoundedBox args={[11, 0.12, 3.3]} radius={0.04} smoothness={4} position={[0, DY - 0.06, 0]}>
-        <meshStandardMaterial color={masaRenk} roughness={0.38} metalness={0.04} />
+        <meshStandardMaterial map={masaDoku} color="#ffffff" roughness={0.42} metalness={0.04} />
       </RoundedBox>
       <mesh position={[0, (DY - 0.12) / 2, 1.58]}>
         <boxGeometry args={[10.8, DY - 0.12, 0.08]} />
-        <meshStandardMaterial color="#4a3622" roughness={0.8} />
+        <meshStandardMaterial color="#1f1711" roughness={0.85} />
       </mesh>
       {[-5.3, 5.3].flatMap((lx) => [-1.5, 1.5].map((lz) => (
         <mesh key={`${lx}${lz}`} position={[lx, (DY - 0.12) / 2, lz]}>
           <boxGeometry args={[0.25, DY - 0.12, 0.25]} />
-          <meshStandardMaterial color="#4a3622" roughness={0.8} />
+          <meshStandardMaterial color="#1f1711" roughness={0.85} />
         </mesh>
       )))}
 
-      {/* masa üstü */}
-      <Telsiz position={[0.2, DY, -0.95]} rotation={[0, 0.12, 0]} satir={satir} pil={pil} />
-      <GolgeLekesi poz={[0.2, DY + 0.003, -0.95]} w={1.9} d={0.95} rot={0.12} />
-      <ReliefMap position={[0.3, DY + 0.003, 0.62]} genislik={4.56} vurgu={vurgu} onTikla={onHarita} />
-      <JetonKavanozu position={[-4.1, DY, 0.3]} jeton={jeton} />
-      <GolgeLekesi poz={[-4.1, DY + 0.003, 0.3]} w={0.6} d={0.6} />
-      <Kupa position={[-2.8, DY, -0.5]} />
-      <GolgeLekesi poz={[-2.8, DY + 0.003, -0.5]} w={0.35} d={0.35} />
-      {/* defter: kapalı, deri kaplı, tıklanabilir */}
-      <group
-        position={[3.9, DY, 0.85]}
-        rotation={[0, -0.25, 0]}
-        scale={0.92}
-        onClick={(e) => { e.stopPropagation(); onDefter() }}
-        onPointerOver={() => { document.body.style.cursor = 'pointer' }}
-        onPointerOut={() => { document.body.style.cursor = 'default' }}
-      >
-        <RoundedBox args={[0.6, 0.08, 0.44]} radius={0.01} smoothness={3} position={[0, 0.04, 0]}>
-          <meshStandardMaterial color="#5a2a1f" roughness={0.55} />
-        </RoundedBox>
-        <mesh position={[0.02, 0.04, 0]}>
-          <boxGeometry args={[0.57, 0.06, 0.41]} />
-          <meshStandardMaterial color="#e8dfc7" roughness={0.9} />
-        </mesh>
-        <mesh position={[-0.285, 0.04, 0]}>
-          <boxGeometry args={[0.03, 0.085, 0.45]} />
-          <meshStandardMaterial color="#3d1a13" roughness={0.5} />
-        </mesh>
-        <mesh position={[0.1, 0.0815, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[0.28, 0.09]} />
-          <meshStandardMaterial color="#c9a23a" metalness={0.8} roughness={0.4} />
-        </mesh>
-      </group>
-      <GolgeLekesi poz={[3.9, DY + 0.003, 0.85]} w={0.85} d={0.65} rot={-0.25} />
-      <Kagit poz={[-1.6, DY + 0.004, -1.05]} rot={0.4} />
-      <Kagit poz={[-1.35, DY + 0.008, -0.95]} rot={-0.25} renk="#e4dfd0" />
-      <Kagit poz={[2.9, DY + 0.004, -1.2]} rot={-0.6} w={0.34} h={0.24} />
-      <Kagit poz={[-3.6, DY + 0.004, -1.1]} rot={0.9} renk="#e9e2cf" />
+      {/* masa üstü: telsiz sol uçta, harita lambanın altında */}
+      <Telsiz position={[TELSIZ_X, DY, -0.55]} rotation={[0, 0.3, 0]} scale={0.88} satir={satir} pil={pil} />
+      <GolgeLekesi poz={[TELSIZ_X, DY + 0.003, -0.55]} w={2.7} d={1.15} rot={0.3} />
+      <ReliefMap position={[HARITA_X, DY + 0.003, 0.55]} genislik={4.56} vurgu={vurgu} onTikla={onHarita} />
+      <JetonKavanozu position={[-0.85, DY, 0.45]} jeton={jeton} />
+      <GolgeLekesi poz={[-0.85, DY + 0.003, 0.45]} w={0.7} d={0.7} />
+      <NotDefteri position={[-1.7, DY, 1.05]} rotation={[0, 0.12, 0]} />
+      <Kupa position={[4.85, DY, 1.0]} />
+      <GolgeLekesi poz={[4.85, DY + 0.003, 1.0]} w={0.38} d={0.38} />
+      <DefterObjesi onDefter={onDefter} position={[-3.9, DY, 1.0]} rotation={[0, 0.3, 0]} scale={0.92} />
+      <GolgeLekesi poz={[-3.9, DY + 0.003, 1.0]} w={0.85} d={0.65} rot={0.3} />
+      <Kagit poz={[-0.95, DY + 0.004, 1.2]} rot={0.4} />
+      <Kagit poz={[-0.75, DY + 0.008, 1.3]} rot={-0.25} renk="#e4dfd0" />
+      <Kagit poz={[1.3, DY + 0.004, -0.95]} rot={-0.6} w={0.34} h={0.24} />
 
       {/* arka masalar + karakterler */}
-      <ArkaMasa x={NURI_X} varlik="nuri" ekranRenk="#6fb6ff" />
-      <ArkaMasa x={AYSE_X} varlik="ayse" ekranRenk="#ffd27a" />
+      <ArkaMasa x={NURI_X} varlik="nuri" ekranRenk="#9fd0ff" tahta={arkaDoku} />
+      <ArkaMasa x={AYSE_X} varlik="ayse" ekranRenk="#ffd7a0" tahta={arkaDoku} />
 
-      {/* duvar: harita (Ayşe'nin arkasında), saat, pencere (solda, perdeli) */}
+      {/* duvar: harita (Ayşe'nin arkasında), saat (lambanın altında), pencere (telsizin arkasında) */}
       <DuvarHaritasi position={[AYSE_X, 3.1, DUVAR_Z + 0.04]} genislik={2.2} vurgu={vurgu} />
-      <Saat position={[-1.9, 4.1, DUVAR_Z + 0.04]} />
-      <Pencere x={-4.8} y={3.2} />
+      <Saat position={[0.85, 3.25, DUVAR_Z + 0.04]} />
+      <Pencere x={-2.9} y={2.55} />
 
       <Toz />
     </>

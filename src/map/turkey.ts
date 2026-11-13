@@ -11,16 +11,23 @@ export type Bolge = 'akdeniz' | 'karadeniz' | 'karasal' | 'sert-karasal'
 
 export const BOLGELER: Bolge[] = ['akdeniz', 'karadeniz', 'karasal', 'sert-karasal']
 export const BOLGE_AD: Record<Bolge, string> = {
-  akdeniz: 'Akdeniz iklimi',
-  karadeniz: 'Karadeniz iklimi',
-  karasal: 'Karasal iklim',
-  'sert-karasal': 'Sert karasal iklim',
+  akdeniz: 'Akdeniz',
+  karadeniz: 'Karadeniz',
+  karasal: 'Ilıman karasal',
+  'sert-karasal': 'Sert karasal',
 }
 export const BOLGE_RENK: Record<Bolge, string> = {
-  akdeniz: '#d99a3d',
-  karadeniz: '#3f9a58',
-  karasal: '#cdbb7c',
-  'sert-karasal': '#8fa6bd',
+  akdeniz: '#98915a',
+  karadeniz: '#4d9456',
+  karasal: '#d8cc82',
+  'sert-karasal': '#a65540',
+}
+/** Etiketlerin durduğu yaklaşık nokta [boylam, enlem] (bölgenin içinde). */
+export const BOLGE_ETIKET: Record<Bolge, [number, number]> = {
+  akdeniz: [28.2, 37.2],
+  karadeniz: [34.2, 41.55],
+  karasal: [32.0, 39.2],
+  'sert-karasal': [42.2, 39.9],
 }
 
 export const LON0 = 25.5
@@ -46,6 +53,9 @@ const NEHIRLER: [number, number][][] = [
   [[37.0, 40.0], [37.5, 40.3], [36.5, 40.7], [36.6, 41.3]], // Yeşilırmak
   [[30.2, 38.4], [28.5, 37.8], [27.2, 37.7]], // Büyük Menderes
   [[35.5, 38.2], [35.4, 37.4], [35.2, 36.9]], // Seyhan
+  [[36.9, 37.6], [36.2, 37.3], [35.8, 36.9]], // Ceyhan
+  [[40.2, 40.3], [40.8, 40.2], [41.4, 40.4], [41.55, 41.0], [41.6, 41.5]], // Çoruh
+  [[29.2, 38.9], [27.9, 38.7], [27.0, 38.6]], // Gediz
 ]
 
 /** [boylam, enlem, yarıçap boylam, yarıçap enlem] */
@@ -54,6 +64,8 @@ const GOLLER: [number, number, number, number][] = [
   [33.4, 38.7, 0.3, 0.2], // Tuz
   [31.5, 37.75, 0.15, 0.2], // Beyşehir
   [30.9, 37.9, 0.12, 0.2], // Eğirdir
+  [38.5, 37.5, 0.24, 0.1], // Atatürk Barajı
+  [39.0, 38.85, 0.28, 0.09], // Keban Barajı
 ]
 
 export function icerde(lon: number, lat: number): boolean {
@@ -116,6 +128,8 @@ export interface HaritaVerisi {
   kara: Uint8Array
   bolge: Uint8Array // BOLGELER indeksi
   yuk: Float32Array // km
+  /** Kara maskesinin geniş bulanıklığı (0..1): denizde kıyıya yakınlık, sığ deniz rengi için. */
+  kiyi: Float32Array
 }
 
 function bulanikla(src: Float32Array, w: number, h: number, r: number): Float32Array {
@@ -171,7 +185,7 @@ export function haritaUret(w = 640, h = 290): HaritaVerisi {
       const [lon, lat] = pikselKoordinat(x, y, w, h)
       yuk[i] = yukseklikKm(lon, lat) * smooth(0.5, 0.95, bulanik[i])
     }
-  onbellek = { w, h, kara, bolge, yuk: bulanikla(yuk, w, h, 2) }
+  onbellek = { w, h, kara, bolge, yuk: bulanikla(yuk, w, h, 2), kiyi: bulanikla(maske, w, h, 30) }
   return onbellek
 }
 
@@ -179,33 +193,66 @@ function hex(c: string): [number, number, number] {
   return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]
 }
 
-/** Haritayı tuvale çizer. vurgu: parlatılacak bölgeler. */
+const karistir = (a: [number, number, number], b: [number, number, number], t: number): [number, number, number] => [
+  a[0] + (b[0] - a[0]) * t,
+  a[1] + (b[1] - a[1]) * t,
+  a[2] + (b[2] - a[2]) * t,
+]
+
+/** Haritayı tuvale çizer: parlayan sığ/derin deniz + ızgara, iklim renkleri, kabartma gölgesi, kaya/kar, bölge sınırları, nehir ve göller. */
 export function dokuCiz(v: HaritaVerisi, canvas: HTMLCanvasElement, vurgu: Bolge[] = []) {
-  canvas.width = v.w
-  canvas.height = v.h
-  const ctx = canvas.getContext('2d')!
-  const img = ctx.createImageData(v.w, v.h)
+  const OLCEK = 3 // düşük çözünürlükte hesaplanır, yumuşak büyütülüp üstüne ince çizgiler çizilir
+  const kucuk = document.createElement('canvas')
+  kucuk.width = v.w
+  kucuk.height = v.h
+  const kctx = kucuk.getContext('2d')!
+  const img = kctx.createImageData(v.w, v.h)
   const renkler = BOLGELER.map((b) => hex(BOLGE_RENK[b]))
+  const derin = hex('#0a2656'), sigl = hex('#37b0d6'), kaya = hex('#8a7c6c'), kar: [number, number, number] = [244, 247, 250]
+  const lonAdim = (LON1 - LON0) / (v.w - 1), latAdim = (LAT1 - LAT0) / (v.h - 1)
   for (let y = 0; y < v.h; y++)
     for (let x = 0; x < v.w; x++) {
       const i = y * v.w + x
       const p = i * 4
       if (!v.kara[i]) {
-        img.data.set([13, 43, 69, 255], p)
+        // deniz: kıyıdan açığa doğru parlak turkuazdan koyu laciverte
+        const t = Math.pow(smooth(0.0, 0.42, v.kiyi[i]), 0.8)
+        let c = karistir(derin, sigl, t)
+        // ızgara: her 2° boylam ve 1° enlemde ince açık çizgi
+        const lon = LON0 + x * lonAdim, lat = LAT1 - y * latAdim
+        const gb = Math.abs(((lon + 1e-6) % 2 + 2) % 2), ge = Math.abs(((lat + 1e-6) % 1 + 1) % 1)
+        if (gb < lonAdim * 1.1 || gb > 2 - lonAdim * 1.1 || ge < latAdim * 1.1 || ge > 1 - latAdim * 1.1) c = karistir(c, [160, 225, 255], 0.4)
+        img.data.set([c[0], c[1], c[2], 255], p)
         continue
       }
       const bi = v.bolge[i]
+      const h = v.yuk[i]
       const parlak = vurgu.includes(BOLGELER[bi]) ? 1.3 : 1
-      const sol = v.yuk[y * v.w + Math.max(0, x - 1)]
-      const ust = v.yuk[Math.max(0, y - 1) * v.w + x]
-      const golge = Math.min(1.25, Math.max(0.65, 1 + (sol - v.yuk[i] + ust - v.yuk[i]) * 1.5))
-      const [r, gg, b] = renkler[bi]
-      img.data.set([Math.min(255, r * golge * parlak), Math.min(255, gg * golge * parlak), Math.min(255, b * golge * parlak), 255], p)
+      // yüksek yerlerde kayaya, çok yüksek yerlerde kara doğru
+      let c = renkler[bi]
+      c = karistir(c, kaya, Math.min(0.65, Math.max(0, (h - 1.7) / 1.8)))
+      c = karistir(c, kar, Math.min(0.95, Math.max(0, (h - 3.0) / 0.7)))
+      // eğim gölgesi (ışık kuzeybatıdan)
+      const sol = v.yuk[y * v.w + Math.max(0, x - 1)], ust = v.yuk[Math.max(0, y - 1) * v.w + x]
+      const golge = Math.min(1.45, Math.max(0.5, 1 + (sol - h + ust - h) * 2.6))
+      // bölge sınırı ve kıyı çizgisi: koyu
+      const sag = x + 1 < v.w ? i + 1 : i, alt = y + 1 < v.h ? i + v.w : i
+      const sinir = (v.kara[sag] && v.bolge[sag] !== bi) || (v.kara[alt] && v.bolge[alt] !== bi)
+      const kiyiCizgi = !v.kara[sag] || !v.kara[alt] || (x > 0 && !v.kara[i - 1]) || (y > 0 && !v.kara[i - v.w])
+      const k = kiyiCizgi ? 0.45 : sinir ? 0.55 : 1
+      img.data.set([Math.min(255, c[0] * golge * parlak * k), Math.min(255, c[1] * golge * parlak * k), Math.min(255, c[2] * golge * parlak * k), 255], p)
     }
-  ctx.putImageData(img, 0, 0)
-  const px = (lon: number, lat: number): [number, number] => [((lon - LON0) / (LON1 - LON0)) * (v.w - 1), ((LAT1 - lat) / (LAT1 - LAT0)) * (v.h - 1)]
-  ctx.strokeStyle = '#4aa3df'
-  ctx.lineWidth = 1.6
+  kctx.putImageData(img, 0, 0)
+  canvas.width = v.w * OLCEK
+  canvas.height = v.h * OLCEK
+  const ctx = canvas.getContext('2d')!
+  ctx.imageSmoothingEnabled = true
+  ctx.imageSmoothingQuality = 'high'
+  ctx.drawImage(kucuk, 0, 0, canvas.width, canvas.height)
+  const px = (lon: number, lat: number): [number, number] => [((lon - LON0) / (LON1 - LON0)) * canvas.width, ((LAT1 - lat) / (LAT1 - LAT0)) * canvas.height]
+  ctx.strokeStyle = '#5db4ee'
+  ctx.lineWidth = 1.8 * OLCEK / 2
+  ctx.lineJoin = 'round'
   for (const n of NEHIRLER) {
     ctx.beginPath()
     n.forEach(([lo, la], k) => {
@@ -215,11 +262,11 @@ export function dokuCiz(v: HaritaVerisi, canvas: HTMLCanvasElement, vurgu: Bolge
     })
     ctx.stroke()
   }
-  ctx.fillStyle = '#2f7fc0'
+  ctx.fillStyle = '#2f86d0'
   for (const [lo, la, rx, ry] of GOLLER) {
     const [x, y] = px(lo, la)
     ctx.beginPath()
-    ctx.ellipse(x, y, (rx / (LON1 - LON0)) * v.w, (ry / (LAT1 - LAT0)) * v.h, 0, 0, Math.PI * 2)
+    ctx.ellipse(x, y, (rx / (LON1 - LON0)) * canvas.width, (ry / (LAT1 - LAT0)) * canvas.height, 0, 0, Math.PI * 2)
     ctx.fill()
   }
 }
