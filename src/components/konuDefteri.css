@@ -1,0 +1,41 @@
+/* Masadaki açık defter: eskitilmiş kâğıt, daktilo yazısı, fosforlu kalem, mühürlü vaka kâğıtları */
+.kd-kapsam { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: rgba(4, 6, 8, .45); padding: 12px; box-sizing: border-box; }
+.kd { position: relative; display: grid; grid-template-columns: 1fr 22px 1fr; width: min(1000px, 96vw); max-height: 88vh; background: #fdfaf0; color: #2b2214; border-radius: 10px 14px 14px 10px; box-shadow: 0 18px 60px rgba(0,0,0,.7), inset 0 0 90px rgba(150, 110, 50, .18); transform: rotate(-.6deg); font-family: Georgia, 'Times New Roman', serif; overflow: hidden; }
+.kd::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.5), transparent 55%), repeating-linear-gradient(0deg, transparent 0 27px, rgba(70,100,160,.12) 27px 28px); }
+.kd-cilt { background: linear-gradient(90deg, rgba(60,40,20,0) 0%, rgba(60,40,20,.28) 45%, rgba(40,26,12,.5) 50%, rgba(60,40,20,.28) 55%, rgba(60,40,20,0) 100%); }
+.kd-sayfa { position: relative; padding: 26px 26px 22px; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.kd-sayfa h3 { margin: 0 0 4px; font-family: 'Caveat', cursive; font-size: 2rem; font-weight: 700; color: #3a2a14; }
+.kd-sol ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.kd-sol ul li { position: relative; isolation: isolate; }
+button.kd-konu { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 8px; cursor: pointer; font-family: 'Courier New', 'American Typewriter', monospace; font-size: 1rem; line-height: 1.3; color: #2b2214; border-radius: 3px; position: relative; }
+button.kd-konu:focus-visible { outline: 2px dashed #8a5a1a; outline-offset: 1px; }
+button.kd-konu .kd-no { opacity: .55; min-width: 1.8em; }
+button.kd-konu.kd-bitti .kd-ad { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: rgba(90, 40, 30, .7); opacity: .7; }
+button.kd-konu.kd-kilit-satir { cursor: not-allowed; opacity: .5; }
+.kd-kilit { margin-left: auto; flex: none; }
+/* sarı fosforlu kalem */
+button.kd-konu.kd-sec::before { content: ''; position: absolute; inset: 3px -4px 2px -6px; z-index: -1; background: linear-gradient(100deg, rgba(255,232,64,.2), rgba(255,226,50,.85) 6%, rgba(255,230,70,.8) 94%, rgba(255,232,64,.25)); border-radius: 4px 14px 6px 12px / 8px 5px 10px 6px; transform: rotate(-.7deg); }
+button.kd-arama { all: unset; box-sizing: border-box; margin-top: auto; align-self: flex-start; cursor: pointer; font-family: 'Caveat', cursive; font-size: 1.35rem; color: #6a2d1e; border-bottom: 2px dashed rgba(106,45,30,.6); padding: 2px 4px; }
+button.kd-arama:focus-visible { outline: 2px dashed #8a5a1a; }
+.kd-not { margin: 0 0 6px; font-family: 'Caveat', cursive; font-size: 1.25rem; color: #6b5a3a; }
+.kd-kagitlar { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; justify-content: center; padding: 6px 0 12px; }
+button.kd-kagit { all: unset; box-sizing: border-box; position: relative; flex: 1 1 105px; max-width: 190px; min-height: 180px; padding: 40px 10px 16px; cursor: pointer; color: #2b2214; box-shadow: 0 6px 14px rgba(40, 25, 8, .4), 0 1px 0 rgba(255,255,255,.4) inset; transition: transform .15s ease, box-shadow .15s ease; }
+button.kd-kagit:focus-visible { outline: 3px solid #8a5a1a; outline-offset: 3px; }
+button.kd-kagit.kd-kolay { background: #f7ef9a; transform: rotate(-2.6deg); }
+button.kd-kagit.kd-orta { background: #f4c8a8; transform: rotate(1.8deg) translateY(8px); }
+button.kd-kagit.kd-zor { background: #c9d9ec; transform: rotate(-1.2deg) translateY(-2px); }
+button.kd-kagit:hover:not(:disabled), button.kd-kagit.kd-secili-kagit { transform: rotate(0deg) translateY(-6px) scale(1.03); box-shadow: 0 12px 22px rgba(40,25,8,.5); z-index: 1; }
+button.kd-kagit:disabled { opacity: .5; cursor: not-allowed; }
+.kd-baslik { display: block; font-family: 'Caveat', cursive; font-size: 1.4rem; line-height: 1.15; font-weight: 700; }
+/* kâğıda vurulmuş mühür */
+.kd-muhur { position: absolute; top: 8px; left: 10px; padding: 1px 10px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 1.05rem; border: 3px double currentColor; border-radius: 4px; transform: rotate(-5deg); opacity: .85; mix-blend-mode: multiply; }
+.kd-m-kolay { color: #2c6a3a; } .kd-m-orta { color: #b4561a; } .kd-m-zor { color: #a02a2a; }
+.kd-cozuldu { position: absolute; right: 6px; bottom: 10px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: .12em; font-size: 1rem; color: #7a1f1f; border: 3px solid #7a1f1f; border-radius: 4px; padding: 0 8px; transform: rotate(-9deg); opacity: .8; mix-blend-mode: multiply; }
+.kd-x { all: unset; position: absolute; top: 6px; right: 12px; z-index: 2; cursor: pointer; font-size: 1.8rem; line-height: 1; color: #5a4a2a; padding: 4px 8px; }
+.kd-x:focus-visible { outline: 2px dashed #8a5a1a; }
+@media (max-width: 760px) {
+  .kd { grid-template-columns: 1fr; overflow: auto; transform: none; }
+  .kd-cilt { display: none; }
+  button.kd-kagit { max-width: none; min-height: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { button.kd-kagit { transition: none; } }

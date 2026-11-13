@@ -4,13 +4,13 @@ import { TelsizOdasi } from './TelsizOdasi'
 import { useOyun } from '../game/store'
 import { JETON, bitirmeJetonu, degerlendir, parazit } from '../game/engine'
 import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
-import { KONULAR } from '../data/topics'
-import { VAKALAR } from '../data/cases'
 import { DEFTER } from '../data/defter'
 import { DefterKitabi } from '../components/DefterKitabi'
+import { KonuDefteri } from '../components/KonuDefteri'
+import { useDefterUI } from '../game/defterUI'
 import { ARAMA_ASAMALARI, ARAMA_HIKAYE } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
-import type { Vaka, Verilen, Zorluk } from '../game/types'
+import type { Vaka, Verilen } from '../game/types'
 import { Sinematik } from '../cinematic/Sinematik'
 import type { Acilis } from '../components/AnaEkran'
 import type { KpIstek, KpOlay } from '../game/kpKopru'
@@ -70,7 +70,13 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(acilis?.vaka ?? null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
-  const [vakaPaneli, setVakaPaneli] = useState(false) // Konu Modu paneli varsayılan olarak kapalı
+  // Konu Defteri (masadaki açık defter) durumu zustand'da (useDefterUI), varsayılan kapalı
+  const vakaPaneli = useDefterUI((x) => x.acik)
+  const setVakaPaneli = (v: boolean | ((x: boolean) => boolean)) => {
+    const d = useDefterUI.getState()
+    if (typeof v === 'function' ? v(d.acik) : v) d.ac()
+    else d.kapat()
+  }
   // Soru sistemi (iframe motoru): Konu Modu'nda seçilen vaka, istek ve sayaç
   const [kpVaka, setKpVaka] = useState<Vaka | null>(null)
   const [kpIstek, setKpIstek] = useState<KpIstek | null>(null)
@@ -235,10 +241,9 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
       </div>
 
       {asama === 'sec' && vakaPaneli && panel === null && (
-        <VakaSecici
+        <KonuDefteri
           onSec={(v) => { setVakaPaneli(false); setArama(null); setKisaSinema(v) }}
           onArama={() => { setVakaPaneli(false); setPanel('arama') }}
-          kapat={() => setVakaPaneli(false)}
         />
       )}
       {panel === 'arama' && <AramaGiris baslat={(i) => aramaBaslat(i)} kapat={() => setPanel(null)} />}
@@ -350,35 +355,6 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
 
       {(panel === 'defter' || panel === 'yanlis') && <DefterKitabi key={panel} yanlisAc={panel === 'yanlis'} kapat={() => setPanel(null)} />}
     </div>
-  )
-}
-
-function VakaSecici({ onSec, onArama, kapat }: { onSec: (v: Vaka) => void; onArama: () => void; kapat: () => void }) {
-  const biten = useOyun((s) => s.bitenVakalar)
-  const ilerleme = useOyun((s) => s.aramaIlerleme)
-  const zorluklar: Zorluk[] = ['kolay', 'orta', 'zor']
-  return (
-    <div className="hud panel sol">
-      <button className="kucuk kapat" onClick={kapat}>Kapat</button>
-      <h3>Konu Defteri</h3>
-      <div className="konular">
-        {KONULAR.map((k) => (
-          <div key={k.id} className="konu">
-            <span>{k.ad}</span>
-            <span>
-              {zorluklar.map((z) => {
-                const v = VAKALAR.find((x) => x.konu === k.id && x.zorluk === z)
-                return (
-                  <button key={z} className={'kucuk' + (v && biten.includes(v.id) ? ' secili' : '')} disabled={!v} onClick={() => v && onSec(v)}>
-                    {z}
-                  </button>
-                )
-              })}
-            </span>
-          </div>
-        ))}
-      </div>
-      <button className="kucuk" onClick={onArama}>Büyük Arama ({ilerleme}/{ARAMA_ASAMALARI.length})</button>    </div>
   )
 }
 
