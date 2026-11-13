@@ -1,0 +1,16 @@
+.karne-kapsam { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .45); }
+.karne { position: relative; width: min(620px, 94vw); max-height: 86vh; overflow: auto; padding: 18px 20px; border-radius: 10px; background: rgba(12, 16, 20, .94); box-shadow: inset 0 0 0 1px rgba(255, 235, 200, .12), 0 12px 40px rgba(0, 0, 0, .6); color: #e6eee8; }
+.karne h3 { margin: 0 0 10px; font-size: 1.25rem; }
+.karne h4 { margin: 16px 0 6px; font-size: 1rem; color: #f2b94d; }
+.karne small { font-weight: 400; color: #9aa7a0; margin-left: 6px; }
+.karne-x { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: inherit; font-size: 1.5rem; cursor: pointer; }
+.karne ul { list-style: none; margin: 0; padding: 0; }
+.karne-konular li { display: grid; grid-template-columns: minmax(0, 1.6fr) 1fr 3.2em 3.4em; gap: 10px; align-items: center; padding: 3px 0; font-size: .9rem; }
+.karne-ad { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.karne-cubuk { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+.karne-cubuk i { display: block; height: 100%; background: #f2b94d; }
+.karne-sayi { color: #9aa7a0; text-align: right; }
+.karne-oran { text-align: right; color: #8cffc1; }
+.karne-oran.dusuk { color: #ff8a73; }
+.karne-tekrar li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 4px 0; font-size: .9rem; }
+.karne-bos { margin: 0; color: #9aa7a0; font-size: .9rem; }

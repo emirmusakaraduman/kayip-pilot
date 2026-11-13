@@ -3,12 +3,16 @@ import type { Bolge } from '../map/turkey'
 import type { Kamera, Tiklama } from './kameralar'
 export type EkranTuru = 'telsiz' | 'nuri' | 'ayse'
 import { KP_KONU, KP_ZORLUK, type KpIstek, type KpOlay } from '../game/kpKopru'
+import { useOyun } from '../game/store'
+import { VAKALAR } from '../data/cases'
+import { ilerlemeOrani, izSayilari, kilometreSatiri } from '../game/hikaye'
 
 /** public/oda/ içindeki three r128 sahnesinin (window.ODA) köprüsü. */
 interface OdaKopru {
   onHarita: ((bolge: string, u: number, v: number) => void) | null
   onDefter: (() => void) | null
   onTelsiz?: (() => void) | null
+  onArama?: (() => void) | null
   telsizMetni?: () => string[]
   kpIpucu?: (who: 'nuri' | 'ayse') => void
   setCam: (n: string) => void
@@ -18,6 +22,11 @@ interface OdaKopru {
   setJeton: (n: number) => void
   setDefter: (n: number) => void
   setSecili: (a: string[]) => void
+  /** Hikâye cilası: ilerleme 0..1, bölge izleri, yanlışta cızırtı, Deniz'in kilometre taşı satırı. */
+  setIlerleme?: (f: number) => void
+  setIz?: (o: Record<string, number>) => void
+  parazit?: () => void
+  hikaye?: (satir: string) => void
   /** Soru sistemi köprüsü (?kp=bridge): iframe motoru olayları buraya bildirir. */
   onKp?: ((o: KpOlay) => void) | null
   kpBaslat?: (konu: string, zorluk: number, durum: { pil: number; jeton: number }, tekrar: boolean) => string | null
@@ -40,8 +49,10 @@ function enlemBoylam(u: number, v: number): [number, number] {
 }
 
 export function TelsizOdasi({
-  kamera, satir, bitti, pil, jeton, defter, vurgu, onHarita, onDefter, baslangicKamera, onHazir, kp, onTelsiz, ekran, ekranKapat,
+  kamera, satir, bitti, pil, jeton, defter, vurgu, onHarita, onDefter, baslangicKamera, onHazir, kp, onTelsiz, onArama, ekran, ekranKapat,
 }: {
+  /** Masadaki "Büyük Arama Modu" klasörüne tıklanınca (3B nesne) çağrılır. */
+  onArama?: () => void
   /** Soru sistemi: istek doluyken iframe o vakayı açar, null olunca kapatır; olaylar onOlay'a gelir. */
   /** Masadaki telsize tıklanınca (3B nesne) çağrılır. */
   onTelsiz?: () => void
@@ -64,8 +75,8 @@ export function TelsizOdasi({
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
   const [kopru, setKopru] = useState<OdaKopru | null>(null)
-  const cb = useRef({ onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz })
-  cb.current = { onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz }
+  const cb = useRef({ onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz, onArama })
+  cb.current = { onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz, onArama }
 
   // sahne betikleri yüklenince window.ODA belirir
   useEffect(() => {
@@ -80,8 +91,17 @@ export function TelsizOdasi({
         cb.current.onHarita({ bolge, enlem, boylam })
       }
       k.onDefter = () => cb.current.onDefter()
-      k.onKp = (o) => cb.current.kp?.onOlay(o)
+      k.onKp = (o) => {
+        const once = useOyun.getState().bitenVakalar.length
+        cb.current.kp?.onOlay(o)
+        if (o.tur === 'yanlis') k.parazit?.()
+        if (o.tur === 'dogru') {
+          const satir = kilometreSatiri(once, useOyun.getState().bitenVakalar.length)
+          if (satir) k.hikaye?.(satir)
+        }
+      }
       k.onTelsiz = () => cb.current.onTelsiz?.()
+      k.onArama = () => cb.current.onArama?.()
       if (cb.current.baslangicKamera) k.snapCam(cb.current.baslangicKamera)
       setKopru(k)
       cb.current.onHazir?.()
@@ -103,6 +123,14 @@ export function TelsizOdasi({
   useEffect(() => { kopru?.setJeton(jeton) }, [kopru, jeton])
   useEffect(() => { kopru?.setDefter(defter) }, [kopru, defter])
   useEffect(() => { kopru?.setSecili(vurgu.map((b) => OYUN_BOLGE[b])) }, [kopru, vurgu])
+  // sahne cilası: çözülen vaka sayısı pencerede şafağı, telsizde sinyali ve haritada bölge izlerini sürer
+  const biten = useOyun((s) => s.bitenVakalar)
+  useEffect(() => {
+    if (!kopru) return
+    const cozulen = VAKALAR.filter((v) => biten.includes(v.id))
+    kopru.setIlerleme?.(ilerlemeOrani(cozulen.length, VAKALAR.length))
+    kopru.setIz?.(izSayilari(cozulen.map((v) => v.ortam)))
+  }, [kopru, biten])
 
   // telsiz ekranı açılırken Deniz'in mesajları iframe'den okunur
   const [mesajlar, setMesajlar] = useState<string[]>([])

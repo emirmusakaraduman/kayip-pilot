@@ -219,6 +219,11 @@
     var hz = wg.createLinearGradient(0, WH * 0.55, 0, WH);
     hz.addColorStop(0, 'rgba(46,66,76,0)'); hz.addColorStop(1, 'rgba(60,82,92,0.55)');
     wg.fillStyle = hz; wg.fillRect(0, WH * 0.55, WW, WH * 0.45);
+    if (state.ilerleme > 0) { // ilerledikçe ufuktan sıcak bir şafak aydınlığı
+      var dw = wg.createLinearGradient(0, WH * 0.35, 0, WH);
+      dw.addColorStop(0, 'rgba(255,170,90,0)'); dw.addColorStop(1, 'rgba(255,170,90,' + (state.ilerleme * 0.32).toFixed(3) + ')');
+      wg.fillStyle = dw; wg.fillRect(0, WH * 0.35, WW, WH * 0.65);
+    }
     if (bolt && flash > 0.12) {
       wg.save();
       wg.strokeStyle = 'rgba(235,245,255,' + Math.min(1, flash * 1.3) + ')';
@@ -226,7 +231,7 @@
       strokePath(bolt.main, 2.8); strokePath(bolt.branch, 1.6);
       wg.restore();
     }
-    wg.strokeStyle = 'rgba(175,205,218,0.42)'; wg.lineWidth = 1.5;
+    wg.strokeStyle = 'rgba(175,205,218,' + (0.42 * (1 - state.ilerleme * 0.5)).toFixed(3) + ')'; wg.lineWidth = 1.5;
     for (var k = 0; k < drops.length; k++) {
       var d = drops[k];
       d.y += d.v; d.x -= d.v * 0.12;
@@ -545,8 +550,14 @@
   sg.font = FONT;
   var CW = sg.measureText('M').width || 14.4;
   var typed = 0, holdT = 0, scrClock = 0;
-  var state = { pil: 100, secili: {}, hover: null };
+  var state = { pil: 100, secili: {}, hover: null, ilerleme: 0, iz: {}, parazit: 0 };
 
+  // boştaki ekran: ilerledikçe sinyal çubukları dolar (Deniz'in konumu netleşir)
+  function idleLines() {
+    var n = Math.round(state.ilerleme * 5), bars = '';
+    for (var i = 0; i < 5; i++) bars += i < n ? '|' : '.';
+    return state.ilerleme > 0 ? ['KS-7 HAZIR', 'Sinyal [' + bars + '] %' + Math.round(state.ilerleme * 100), 'Deniz bekleniyor...'] : IDLE;
+  }
   function drawScreen(t) {
     sg.clearRect(0, 0, 640, 264);
     sg.fillStyle = '#04120b'; sg.fillRect(0, 0, 640, 264);
@@ -554,7 +565,7 @@
     sg.shadowColor = 'rgba(140,255,193,0.8)'; sg.shadowBlur = 8;
     sg.fillStyle = '#8cffc1';
     var y0 = 42, lh = 33, cl = 0, cn = 0;
-    var vis = LINES.length ? LINES.slice(-6) : IDLE;
+    var vis = LINES.length ? LINES.slice(-6) : idleLines();
     if (!LINES.length) sg.globalAlpha = 0.6;
     for (var i = 0; i < vis.length; i++) { sg.fillText(vis[i], 28, y0 + i * lh); cl = i; cn = vis[i].length; }
     sg.globalAlpha = 1;
@@ -568,6 +579,14 @@
     if (Math.random() < g * 0.18) {
       var by = Math.floor(Math.random() * 230), bh = 4 + Math.floor(Math.random() * 14), dx = (Math.random() - 0.5) * 40;
       sg.drawImage(scrC, 0, by, 640, bh, dx, by, 640, bh);
+    }
+    if (state.parazit > 0) { // yanlış cevapta kısa bir cızırtı patlaması
+      for (var ps = 0; ps < 14; ps++) {
+        var py = Math.floor(Math.random() * 250), ph = 2 + Math.floor(Math.random() * 10);
+        sg.fillStyle = 'rgba(140,255,193,' + (0.08 + Math.random() * 0.25 * state.parazit) + ')';
+        sg.fillRect(Math.random() * 60, py, 480 + Math.random() * 160, ph);
+      }
+      state.parazit = Math.max(0, state.parazit - 0.05);
     }
     sg.fillStyle = 'rgba(0,0,0,0.22)';
     for (var yy = 0; yy < 264; yy += 3) sg.fillRect(0, yy, 640, 1);
@@ -1657,6 +1676,17 @@
       defterN = n;
       var c = pageTex.image; drawPage(c.getContext('2d'), c.width, c.height); pageTex.needsUpdate = true;
     },
+    // oyun ilerlemesi 0..1: pencerede şafak, ışıkta ısınma, telsiz ekranında sinyal çubukları
+    setIlerleme: function (f) {
+      f = Math.max(0, Math.min(1, f || 0)); state.ilerleme = f;
+      if (typeof winLight !== 'undefined') { winLight.color.setHex(0x6f9fd8).lerp(new THREE.Color(0xffc48a), f * 0.55); winLight.intensity = 0.22 + f * 0.1; }
+    },
+    // çözülen vakaların bölgelere göre sayısı: {karasal, akdeniz, karadeniz, sert}
+    setIz: function (o) { state.iz = o || {}; },
+    // yanlış cevapta telsiz ekranında cızırtı patlaması
+    parazit: function () { state.parazit = 1; },
+    // Deniz'in kilometre taşı satırı: sıradaki telsiz mesajı olarak daktilo ile yazılır
+    hikaye: function (satir) { if (!satir) return; KPS.q.push(satir); }, // doğru cevaptan hemen sonra çağrılır: motorun yazdığı mesajın ardından sıraya girer
     setSecili: function (arr) { var o = {}; (arr || []).forEach(function (k) { o[k] = true; }); state.secili = o; }
   };
 
@@ -1882,7 +1912,7 @@
       var hov = climate && state.hover === k && !sel;
       zi.sprite.visible = climate;
       var tgt = sel ? 1.7 : (hov ? 1.2 : 1);
-      var emi = sel ? 0.4 : (hov ? 0.14 : 0);
+      var emi = sel ? 0.4 : (hov ? 0.14 : (climate && state.iz[k] ? 0.05 + 0.03 * Math.min(state.iz[k], 6) : 0)); // çözülen vakalar bölgede kalıcı sıcak iz bırakır
       zi.meshes.forEach(function (m) {
         m.scale.z += (tgt - m.scale.z) * 0.12;
         m.material.emissiveIntensity += (emi - m.material.emissiveIntensity) * 0.15;

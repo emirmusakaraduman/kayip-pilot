@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { KonuId } from './types'
 import { JETON, pilYanlis } from './engine'
+import { dogruIsle, yanlisIsle, type VakaIst } from './karne'
 
 interface Durum {
   pil: number
@@ -9,6 +10,7 @@ interface Durum {
   defter: KonuId[] // kazanılmış sayfalar
   bitenVakalar: string[]
   yanlisDefteri: string[] // yanlış yapılan vaka id'leri
+  istatistik: Record<string, VakaIst> // vaka başına doğru/yanlış sayısı ve aralıklı tekrar kutusu
   sesAcik: boolean
   girisIzlendi: boolean
   aramaIlerleme: number // Büyük Arama'da tamamlanan aşama sayısı
@@ -37,6 +39,7 @@ export const useOyun = create<Durum>()(
       defter: [],
       bitenVakalar: [],
       yanlisDefteri: [],
+      istatistik: {},
       sesAcik: true,
       girisIzlendi: false,
       aramaIlerleme: 0,
@@ -44,11 +47,13 @@ export const useOyun = create<Durum>()(
       yanlisYap: (vakaId) =>
         set((s) => ({
           pil: pilYanlis(s.pil),
+          istatistik: { ...s.istatistik, [vakaId]: yanlisIsle(s.istatistik[vakaId], Date.now()) },
           yanlisDefteri: s.yanlisDefteri.includes(vakaId) ? s.yanlisDefteri : [...s.yanlisDefteri, vakaId],
         })),
       vakaBitir: (vakaId, konu, jeton) =>
         set((s) => ({
           jeton: s.jeton + jeton,
+          istatistik: { ...s.istatistik, [vakaId]: dogruIsle(s.istatistik[vakaId], Date.now()) },
           bitenVakalar: s.bitenVakalar.includes(vakaId) ? s.bitenVakalar : [...s.bitenVakalar, vakaId],
           defter: s.defter.includes(konu) ? s.defter : [...s.defter, konu],
         })),
@@ -71,10 +76,11 @@ export const useOyun = create<Durum>()(
       kpSenkron: (pil, jeton) => set({ pil: Math.max(0, Math.min(100, Math.round(pil))), jeton: Math.max(0, Math.round(jeton)) }),
       kpDogru: (vakaId, konu) =>
         set((s) => ({
+          istatistik: { ...s.istatistik, [vakaId]: dogruIsle(s.istatistik[vakaId], Date.now()) },
           bitenVakalar: s.bitenVakalar.includes(vakaId) ? s.bitenVakalar : [...s.bitenVakalar, vakaId],
           defter: s.defter.includes(konu) ? s.defter : [...s.defter, konu],
         })),
-      kpYanlis: (vakaId) => set((s) => ({ yanlisDefteri: s.yanlisDefteri.includes(vakaId) ? s.yanlisDefteri : [...s.yanlisDefteri, vakaId] })),
+      kpYanlis: (vakaId) => set((s) => ({ istatistik: { ...s.istatistik, [vakaId]: yanlisIsle(s.istatistik[vakaId], Date.now()) }, yanlisDefteri: s.yanlisDefteri.includes(vakaId) ? s.yanlisDefteri : [...s.yanlisDefteri, vakaId] })),
     }),
     { name: 'kayip-pilot-v1' },
   ),

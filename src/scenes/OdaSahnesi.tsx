@@ -7,6 +7,7 @@ import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
 import { DEFTER } from '../data/defter'
 import { DefterKitabi } from '../components/DefterKitabi'
 import { KonuDefteri } from '../components/KonuDefteri'
+import { Karne } from '../components/Karne'
 import { useDefterUI } from '../game/defterUI'
 import { ARAMA_ASAMALARI, ARAMA_HIKAYE } from '../data/buyukArama'
 import { BOLGE_AD, type Bolge } from '../map/turkey'
@@ -66,7 +67,7 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
   const [sira, setSira] = useState<string[]>([])
   const [ipuclari, setIpuclari] = useState<string[]>([])
   const [mesaj, setMesaj] = useState<{ dogru: boolean; metin: string } | null>(null)
-  const [panel, setPanel] = useState<'defter' | 'yanlis' | 'arama' | null>(acilis?.arama ? 'arama' : null)
+  const [panel, setPanel] = useState<'defter' | 'yanlis' | 'arama' | 'karne' | null>(acilis?.arama ? 'arama' : null)
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(acilis?.vaka ?? null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
@@ -178,6 +179,12 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
   }
 
   const telsizAc = () => { setKamera('telsiz'); setEkran('telsiz') }
+  // masadaki sarı "Büyük Arama Modu" klasörü: vaka seçme ekranındayken Büyük Arama panelini açar
+  const aramaAc = () => {
+    if (asama !== 'sec' || kpVaka) return
+    setVakaPaneli(false)
+    setPanel('arama')
+  }
 
   const ipucuIste = (kim: 'Nuran' | 'Fatma') => {
     const t = kim === 'Nuran' ? vaka?.ipucuNuri : vaka?.ipucuAyse
@@ -222,6 +229,7 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
         defter={oyun.defter.length}
         onDefter={defterAc}
         onTelsiz={telsizAc}
+        onArama={aramaAc}
         ekran={ekran}
         ekranKapat={() => setEkran(null)}
         kp={{ istek: kpIstek, onOlay: kpOlay }}
@@ -231,10 +239,16 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
         {anaEkran && <button className="kucuk" onClick={anaEkran}>← Ana Ekran</button>}
         <button className="kucuk" onClick={defterAc}>Pilotun Defteri</button>
         <button className="kucuk" onClick={() => { setVakaPaneli(false); setPanel('yanlis') }}>Hata Defteri</button>
+        <button className="kucuk" onClick={() => { setVakaPaneli(false); setPanel('karne') }}>Karne</button>
         {kpVaka && <button className="kucuk" onClick={kpCik}>Vakadan çık</button>}
         {asama === 'sec' && !kpVaka && (
           <button className={'kucuk' + (vakaPaneli ? ' secili' : '')} onClick={() => setVakaPaneli((x) => !x)}>Konu Defteri</button>
         )}
+      </div>
+
+      <div className="hud merkez" aria-label="İlerleme">
+        <span>🪙 Jeton: <b>{oyun.jeton}</b></span>
+        <span>📓 Defter: <b>{oyun.defter.length}/15</b></span>
       </div>
 
       <div className="hud kameralar">
@@ -251,6 +265,9 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
           onSec={(v) => { setVakaPaneli(false); setArama(null); setKisaSinema(v) }}
           onArama={() => { setVakaPaneli(false); setPanel('arama') }}
         />
+      )}
+      {panel === 'karne' && (
+        <Karne kapat={() => setPanel(null)} onTekrar={(v) => { setPanel(null); setArama(null); setKisaSinema(v) }} />
       )}
       {panel === 'arama' && <AramaGiris baslat={(i) => aramaBaslat(i)} kapat={() => setPanel(null)} />}
 
