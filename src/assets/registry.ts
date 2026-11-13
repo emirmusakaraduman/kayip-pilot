@@ -30,6 +30,11 @@ export interface AssetSlot {
    * (modelin kendi eksenleri, donusY uygulanmadan önce); `aci` radyan. Dönüş kemiğin ebeveyn çerçevesinde uygulanır.
    */
   kemikPozu?: { ad: string; eksen: [number, number, number]; aci: number }[]
+  /**
+   * İskeletsiz modelde bacakları gizlemek için: boyun bu oranının (0–1) altında kalan üçgenler atılır (kalça hizası ≈ 0,47).
+   * Oturan karakterde bacaklar koltuğun/gövdenin içinde kalacağı için kesilir; modelin tabanı yine ayak hizası sayılır.
+   */
+  kes?: number
   /** `oturan` kullanıldığında modelin tabanı bu kadar aşağı indirilir (kalçanın sandalye yüksekliğine gelmesi için). */
   oturma?: number
   /** Model içindeki adlandırılmış parçalar (sinematikte rotor döndürmek/koparmak için). */
@@ -70,7 +75,21 @@ export const ASSETS = {
   agacCam: { id: 'agacCam', etiket: 'Ağaç: Çam', placeholder: 'tree-pine', url: null, ...bos },
   agacYaprakli: { id: 'agacYaprakli', etiket: 'Ağaç: Geniş yapraklı', placeholder: 'tree-broadleaf', url: null, ...bos },
   agacPalmiye: { id: 'agacPalmiye', etiket: 'Ağaç: Akdeniz/Zeytin', placeholder: 'tree-palm', url: null, ...bos },
-  deniz: { id: 'deniz', etiket: 'Karakter: Deniz (pilot)', placeholder: 'person', url: null, ...bos },
+  deniz: {
+    id: 'deniz',
+    etiket: 'Karakter: Deniz (pilot)',
+    placeholder: 'person',
+    url: '/models/nuri.glb', // Nuri ile aynı eser (aynı küçültülmüş dosya); sinematikte kabinde oturur
+    hedefBoy: 1.75,
+    donusY: -Math.PI / 2, // model +x'e bakıyor; sahnede +z'ye (helikopterin burnu) çevrilir
+    kes: 0.47, // bacaklar kesilir: kalça koltukta, gövde ve kafa kabinde
+    taban: -0.47 * 1.75, // kesim hizası (kalça) grup orijinine gelir → grup konumu = koltuk noktası
+    baslik: 'Realistic Male Character',
+    yazar: 'adhamasalah',
+    kaynak: 'https://sketchfab.com/3d-models/realistic-male-character-c67725338c4d40fcafa5918009ccbc37',
+    lisans: CC_BY,
+    degistirildi: true,
+  },
   nuri: {
     id: 'nuri',
     etiket: 'Karakter: Nuran (meteorolog)',

@@ -28,6 +28,29 @@ function GlbModel({ slot, oturan }: { slot: AssetSlot; oturan: boolean }) {
     const kutu = new THREE.Box3().setFromObject(kopya)
     const boyut = kutu.getSize(new THREE.Vector3())
     const orta = kutu.getCenter(new THREE.Vector3())
+    if (slot.kes) {
+      // bacak kısmını at: ağırlık merkezi kesim hizasının altında kalan üçgenleri sil (iskeletsiz model)
+      const kesY = kutu.min.y + slot.kes * boyut.y
+      const v = new THREE.Vector3()
+      kopya.traverse((o) => {
+        const m = o as THREE.Mesh
+        if (!m.isMesh) return
+        const g = m.geometry as THREE.BufferGeometry
+        const pos = g.attributes.position
+        const dizin = g.index
+        const adet = dizin ? dizin.count : pos.count
+        const kalan: number[] = []
+        for (let i = 0; i < adet; i += 3) {
+          const id = [0, 1, 2].map((k) => (dizin ? dizin.getX(i + k) : i + k))
+          let ys = 0
+          for (const j of id) ys += v.fromBufferAttribute(pos, j).applyMatrix4(m.matrixWorld).y
+          if (ys / 3 >= kesY) kalan.push(...id)
+        }
+        const ng = g.clone()
+        ng.setIndex(kalan)
+        m.geometry = ng
+      })
+    }
     const olcek = slot.hedefBoy
       ? slot.hedefBoy / boyut.y
       : slot.hedefUzunluk
@@ -44,7 +67,7 @@ function GlbModel({ slot, oturan }: { slot: AssetSlot; oturan: boolean }) {
 }
 
 /** GLB dosyası yüklenemezse (404, bozuk dosya) oyunu çökertmek yerine yer tutucuya döner. */
-class YukleHatasi extends Component<{ yedek: ReactNode; children: ReactNode }, { hata: boolean }> {
+export class YukleHatasi extends Component<{ yedek: ReactNode; children: ReactNode }, { hata: boolean }> {
   state = { hata: false }
   static getDerivedStateFromError() {
     return { hata: true }

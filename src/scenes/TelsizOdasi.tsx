@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Bolge } from '../map/turkey'
 import type { Kamera, Tiklama } from './kameralar'
+export type EkranTuru = 'telsiz' | 'nuri' | 'ayse'
 import { KP_KONU, KP_ZORLUK, type KpIstek, type KpOlay } from '../game/kpKopru'
 
 /** public/oda/ içindeki three r128 sahnesinin (window.ODA) köprüsü. */
 interface OdaKopru {
   onHarita: ((bolge: string, u: number, v: number) => void) | null
   onDefter: (() => void) | null
+  onTelsiz?: (() => void) | null
+  telsizMetni?: () => string[]
+  kpIpucu?: (who: 'nuri' | 'ayse') => void
   setCam: (n: string) => void
   snapCam: (n: string) => void
   setText: (t: string, bitti: boolean) => void
@@ -20,6 +24,11 @@ interface OdaKopru {
   kpDur?: () => void
 }
 
+const KARAKTER: Record<'nuri' | 'ayse', { ad: string; meslek: string; ek: string; tanim: string; konular: string }> = {
+  nuri: { ad: 'Nuran', meslek: 'Meteorolog', ek: 'a', tanim: 'Hava ve iklimi, hesapları ve doğa olaylarını bilir. Harita sorularında Fatma\'ya yönlendirir.', konular: 'Dünya\'nın hareketleri · İklim elemanları · İç kuvvetler · Su kaynakları · Nüfus · Göç · Doğal afetler' },
+  ayse: { ad: 'Fatma', meslek: 'Haritacı', ek: 'ya', tanim: 'Haritayı, koordinatı ve rotayı bilir. Harita dışındaki sorularda Nuran\'a yönlendirir.', konular: 'Coğrafi konum · Harita bilgisi · Haritaya işaretleme ve rota soruları' },
+}
+
 const SAHNE_BOLGE: Record<string, Bolge> = { akdeniz: 'akdeniz', karadeniz: 'karadeniz', karasal: 'karasal', sert: 'sert-karasal' }
 const OYUN_BOLGE: Record<Bolge, string> = { akdeniz: 'akdeniz', karadeniz: 'karadeniz', karasal: 'karasal', 'sert-karasal': 'sert' }
 
@@ -31,9 +40,14 @@ function enlemBoylam(u: number, v: number): [number, number] {
 }
 
 export function TelsizOdasi({
-  kamera, satir, bitti, pil, jeton, defter, vurgu, onHarita, onDefter, baslangicKamera, onHazir, kp,
+  kamera, satir, bitti, pil, jeton, defter, vurgu, onHarita, onDefter, baslangicKamera, onHazir, kp, onTelsiz, ekran, ekranKapat,
 }: {
   /** Soru sistemi: istek doluyken iframe o vakayı açar, null olunca kapatır; olaylar onOlay'a gelir. */
+  /** Masadaki telsize tıklanınca (3B nesne) çağrılır. */
+  onTelsiz?: () => void
+  /** Açık ekran paneli: telsiz ekranı ya da Nuran / Fatma kartı; kapatma isteği. */
+  ekran?: EkranTuru | null
+  ekranKapat?: () => void
   kp?: { istek: KpIstek | null; onOlay: (o: KpOlay) => void }
   /** Sahne hazır olunca kamerayı yumuşatmasız bu önayara koyar (sinematikten geçiş). */
   baslangicKamera?: Kamera
@@ -50,8 +64,8 @@ export function TelsizOdasi({
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
   const [kopru, setKopru] = useState<OdaKopru | null>(null)
-  const cb = useRef({ onHarita, onDefter, onHazir, baslangicKamera, kp })
-  cb.current = { onHarita, onDefter, onHazir, baslangicKamera, kp }
+  const cb = useRef({ onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz })
+  cb.current = { onHarita, onDefter, onHazir, baslangicKamera, kp, onTelsiz }
 
   // sahne betikleri yüklenince window.ODA belirir
   useEffect(() => {
@@ -67,6 +81,7 @@ export function TelsizOdasi({
       }
       k.onDefter = () => cb.current.onDefter()
       k.onKp = (o) => cb.current.kp?.onOlay(o)
+      k.onTelsiz = () => cb.current.onTelsiz?.()
       if (cb.current.baslangicKamera) k.snapCam(cb.current.baslangicKamera)
       setKopru(k)
       cb.current.onHazir?.()
@@ -89,5 +104,43 @@ export function TelsizOdasi({
   useEffect(() => { kopru?.setDefter(defter) }, [kopru, defter])
   useEffect(() => { kopru?.setSecili(vurgu.map((b) => OYUN_BOLGE[b])) }, [kopru, vurgu])
 
-  return <iframe ref={frame} src="/oda/index.html?kp=bridge" title="Telsiz odası" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />
+  // telsiz ekranı açılırken Deniz'in mesajları iframe'den okunur
+  const [mesajlar, setMesajlar] = useState<string[]>([])
+  useEffect(() => {
+    if (ekran) setMesajlar(kopru?.telsizMetni?.() ?? [])
+  }, [ekran, kopru, istekSayac])
+  useEffect(() => {
+    if (!ekran) return
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') ekranKapat?.() }
+    window.addEventListener('keydown', k)
+    return () => window.removeEventListener('keydown', k)
+  }, [ekran, ekranKapat])
+
+  return (
+    <>
+      <iframe ref={frame} src="/oda/index.html?kp=bridge" title="Telsiz odası" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />
+      {ekran === 'telsiz' && (
+        <div className="telsiz-ekran" role="dialog" aria-label="Telsiz ekranı">
+          <div className="te-ust"><span>TELSİZ · PİL %{pil}</span><button className="te-x" onClick={ekranKapat} aria-label="Telsiz ekranını kapat">×</button></div>
+          <div className="te-govde" aria-live="polite">
+            {mesajlar.length ? mesajlar.map((m, i) => <p key={i}>{m}</p>) : <p className="te-bos">Sinyal bekleniyor… Bir vaka seçince Deniz burada konuşur.</p>}
+          </div>
+        </div>
+      )}
+      {(ekran === 'nuri' || ekran === 'ayse') && (
+        <div className="telsiz-ekran karakter-ekran" role="dialog" aria-label={KARAKTER[ekran].ad + ' kartı'}>
+          <div className="te-ust"><span>{KARAKTER[ekran].ad.toUpperCase()} · {KARAKTER[ekran].meslek.toUpperCase()}</span><button className="te-x" onClick={ekranKapat} aria-label="Kartı kapat">×</button></div>
+          <div className="te-govde">
+            <p>{KARAKTER[ekran].tanim}</p>
+            <p className="te-konular">{KARAKTER[ekran].konular}</p>
+            {kp?.istek ? (
+              <button className="te-ipucu" onClick={() => { ekranKapat?.(); kopru?.kpIpucu?.(ekran) }}>{KARAKTER[ekran].ad}'{KARAKTER[ekran].ek} sor (1 jeton)</button>
+            ) : (
+              <p className="te-bos">Bir vaka açınca ipucunu buradan da isteyebilirsin.</p>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  )
 }

@@ -547,14 +547,6 @@
     if (!LINES.length) sg.globalAlpha = 0.6;
     for (var i = 0; i < vis.length; i++) { sg.fillText(vis[i], 28, y0 + i * lh); cl = i; cn = vis[i].length; }
     sg.globalAlpha = 1;
-    var done = scrDone && LINES.length > 0;
-    if (done) {
-      var glyphs = '▒▓░█', tail = 'cızır', out = '';
-      for (var c = 0; c < 4; c++) out += glyphs[Math.floor(Math.random() * 4)];
-      sg.fillStyle = '#ff5a4d'; sg.shadowColor = 'rgba(255,90,77,0.8)';
-      sg.fillText(out + ' ' + tail, 28, y0 + vis.length * lh);
-      cl = vis.length; cn = (out + ' ' + tail).length;
-    }
     sg.shadowBlur = 0;
     if (Math.floor(t * 2) % 2 === 0) {
       sg.fillStyle = '#ffc47a';
@@ -619,6 +611,7 @@
   shadows(nb);
   var pickables = zoneMeshes.slice();
   nb.traverse(function (o) { if (o.isMesh) { o.userData.nb = true; pickables.push(o); } });
+  radio.traverse(function (o) { if (o.isMesh) { o.userData.rd = true; pickables.push(o); } }); // telsize tıklayınca telsiz ekranı açılır
 
   /* ---------- jeton kavanozu ---------- */
   var jar = new THREE.Group();
@@ -1515,6 +1508,7 @@
   /* ---------- etkileşim ---------- */
   var ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   var nbMeshes = pickables.filter(function (o) { return o.userData.nb; });
+  var rdMeshes = pickables.filter(function (o) { return o.userData.rd; });
   var gridG = null, gridH = null, GW = 0, GH = 0, PWm = 1, PHm = 1;
   (function () {
     var MD = window.MAP_DATA;
@@ -1531,6 +1525,8 @@
     var best = null, bestD = 1e9;
     var hits = ray.intersectObjects(nbMeshes, false);
     if (hits.length) { best = 'notebook'; bestD = hits[0].distance; }
+    var rh = ray.intersectObjects(rdMeshes, false);
+    if (rh.length && rh[0].distance < bestD) { best = 'radio'; bestD = rh[0].distance; }
     if (gridG && ray.ray.direction.y < -1e-4) {
       var o = ray.ray.origin, d = ray.ray.direction;
       var tTop = (DY + 0.30 - o.y) / d.y, tBot = (DY + 0.02 - o.y) / d.y, cv = 255, tHit = 0;
@@ -1576,6 +1572,7 @@
         KPS.pickCb({ lat: ll.lat, lon: ll.lon, x: (pickUV[0] - 0.5) * PWm, y: (pickUV[1] - 0.5) * PHm, zone: z });
       }
       else if (z === 'notebook') { if (api.onDefter) api.onDefter(); }
+      else if (z === 'radio') { if (api.onTelsiz) api.onTelsiz(); }
       else if (z && pickUV && api.onHarita) api.onHarita(z, pickUV[0], pickUV[1]);
     }
   });
@@ -1597,6 +1594,11 @@
   var api = window.ODA = {
     onHarita: null, // function (bolge, u, v): bolge 'karasal' | 'akdeniz' | 'karadeniz' | 'sert'; u, v levha üzerinde 0..1 (v = 1 kuzey)
     onDefter: null, // function ()
+    onTelsiz: null, // function (): masadaki telsize tıklandı
+    // React'teki karakter kartından ipucu iste: who 'nuri' | 'ayse' (açık vaka yoksa bir şey yapmaz)
+    kpIpucu: function (who) { var E = window.KP && window.KP.engine; if (E && E.cur) E.hint(who); },
+    // telsiz ekranında gösterilecek Deniz mesajları (açık vaka varsa onun telsiz metni)
+    telsizMetni: function () { var E = window.KP && window.KP.engine; return E && E.cur && E.cur.radio ? E.cur.radio.slice() : []; },
     setCam: function (n) { if (presets[n]) setCam(n); },
     snapCam: function (n) { if (presets[n]) { setCam(n); camPos.copy(presets[n].pos); camLook.copy(presets[n].look); } }, // yumuşatmasız anında konum (sinematikten geçişte masa yakın planı)
     setText: function (text, bitti) { LINES = text ? wrapText(text, 36) : []; scrDone = !!bitti; },

@@ -5,8 +5,8 @@
 //   0–8    huzurlu ama gergin: gün batımı, sağ-arka çaprazdan eşlik
 //   8–15   arıza ve yangın: kamera öne geçer, kabin ve Deniz; "Mayday" telsizi
 //   15–23  kontrol kaybı: kuyruk savrulur, drone bakışıyla spiral
-//   23–28  ağaç tepelerine çarpma, yere iniş, yan yatma
-//   28–33  patlama, enkazdan uzaklaşan kamera, telsizin son sinyali
+//   23–28  ağaç tepelerine çarpma (pervane kopar), açıklığa sert iniş, yerde sürüklenip yan yatma
+//   28–33  helikopter durur (PATLAMA YOK: pilot hayatta); yalnızca sol motor tütüyor, kamera uzaklaşır
 //   33–38  duman ekranı kaplar, kararır → telsiz odasına geçiş
 
 export type V3 = [number, number, number]
@@ -19,14 +19,18 @@ export const OLAY = {
   yanginBasla: 8,
   kuyrukKaybi: 15,
   agacCarpma: 23,
-  yereInis: 25,
-  yanYatma: 26.8,
-  patlama: 28,
+  yereInis: 25.2,
+  yanYatma: 27.2,
+  /** Helikopter tamamen durur; kamera uzaklaşmaya başlar. */
+  durma: 28.5,
 } as const
+
+/** Sürüklenme süresi ve ağaçlarla çarpışma hesabında kullanılan "yer seviyesi" için zaman sabitleri. */
+export const SURUKLEME = 3.6
 
 /** Enkazın son durağı (temizlik alanının merkezi). */
 export const ENKAZ: V3 = [59, 0, 6.3]
-export const CARPMA_YERI: V3 = [46, 8.5, 3.5]
+export const CARPMA_YERI: V3 = [42, 8.5, 3.5]
 
 const lerp = (a: number, b: number, u: number) => a + (b - a) * u
 const kelep = (x: number) => Math.min(1, Math.max(0, x))
@@ -50,6 +54,21 @@ const salinim = (t: number) => 0.3 * Math.sin(1.9 * t) * yumusat((t - OLAY.kuyru
 const sarsinti = (t: number) =>
   yumusat((t - OLAY.yanginBasla) / 2) * (1 - yumusat((t - OLAY.agacCarpma) / (OLAY.yereInis - OLAY.agacCarpma)))
 
+/** Kuyruk kaybından sonra kendi ekseninde dönüş; çarpmadan sonra yavaşlayıp yerde durur. */
+const DONUS_K = 0.13
+const DONUS_SON = 2.8
+function donus(t: number): number {
+  const d = Math.min(t, OLAY.agacCarpma) - OLAY.kuyrukKaybi
+  if (d <= 0) return 0
+  let a = DONUS_K * d * d
+  if (t > OLAY.agacCarpma) {
+    const w0 = 2 * DONUS_K * (OLAY.agacCarpma - OLAY.kuyrukKaybi)
+    const tau = Math.min(t - OLAY.agacCarpma, DONUS_SON)
+    a += w0 * (tau - (tau * tau) / (2 * DONUS_SON)) // doğrusal yavaşlama
+  }
+  return a
+}
+
 const KRUVAZIYER_X = -50 + 4.7 * OLAY.kuyrukKaybi // kontrol kaybı anındaki x
 
 export function heliDurum(t: number): HeliDurum {
@@ -70,13 +89,15 @@ export function heliDurum(t: number): HeliDurum {
     y = lerp(CARPMA_YERI[1], 0.75, Math.pow(u, 1.8))
     z = lerp(CARPMA_YERI[2], 6, u)
   } else {
-    const u = yumusat((t - OLAY.yereInis) / 4)
+    // yerde sürüklenme: hızlı başlar, sürtünmeyle yavaşlayarak durur
+    const s = kelep((t - OLAY.yereInis) / SURUKLEME)
+    const u = 1 - Math.pow(1 - s, 2.2)
     x = 55 + 4 * u
     y = lerp(0.75, 0.7, u)
     z = 6 + 0.3 * u
   }
 
-  const yaw = Math.PI / 2 + (t <= OLAY.kuyrukKaybi ? 0 : 0.13 * Math.pow(Math.min(t, OLAY.yereInis) - OLAY.kuyrukKaybi, 2))
+  const yaw = Math.PI / 2 + donus(t)
   const pitch =
     t <= OLAY.kuyrukKaybi
       ? 0.03 * Math.sin(17 * t + 1) * sarsinti(t)
@@ -126,7 +147,7 @@ export interface Kamera {
 
 export function kamera(t: number): Kamera {
   const h = heliDurum(t).poz
-  const { yanginBasla: YB, kuyrukKaybi: KK, agacCarpma: AC, yereInis: YI, patlama: PT } = OLAY
+  const { yanginBasla: YB, kuyrukKaybi: KK, agacCarpma: AC, yereInis: YI, durma: DR } = OLAY
   // 0–8 sn: sağ-arka çaprazdan eşlik; gün batımı kadrajda, sona doğru öne doğru ilerler
   if (t < YB) {
     const u = t / YB
@@ -150,20 +171,19 @@ export function kamera(t: number): Kamera {
     const r = lerp(24, 15, u)
     return { poz: ekle(h, [r * Math.cos(a), lerp(15, 12.5, u), r * Math.sin(a)]), bak: h, fov: lerp(44, 40, u) }
   }
-  // 23–25.5 sn: orman zeminine yakın sabit kamera; ağaç tepelerine çarpış ve çöküş
+  // 23–25.7 sn: orman zeminine yakın sabit kamera; ağaç tepelerine çarpış ve sert iniş
   if (t < YI + 0.5) return { poz: [69, 2.2, 20], bak: ekle(h, [0, 1.5, 0]), fov: 36 }
-  // 25.5–28 sn: yerdeki enkaz yan yatar
-  if (t < PT) {
-    const u = (t - (YI + 0.5)) / (PT - YI - 0.5)
-    return { poz: lerp3([72, 9, 24], [68, 7, 19], u), bak: [58, 1.5, 6.3], fov: 40 }
+  // 25.7–28.5 sn: yerde sürüklenen helikopter yan yatar
+  if (t < DR) {
+    const u = (t - (YI + 0.5)) / (DR - YI - 0.5)
+    return { poz: lerp3([72, 9, 24], [68, 7, 19], u), bak: ekle(h, [0, 1.2, 0]), fov: 40 }
   }
-  // 28–38 sn: patlama sarsıntısı, ardından enkazdan yavaşça uzaklaşan kamera
-  const s = 0.5 * Math.exp(-1.5 * (t - PT))
-  const u = yumusat((t - PT) / (TOPLAM - PT))
+  // 28.5–38 sn: patlama yok; enkazdan yavaşça uzaklaşan, sakin çekim (sol motordan duman tütüyor)
+  const u = yumusat((t - DR) / (TOPLAM - DR))
   return {
-    poz: ekle(lerp3([36, 12, -16], [26, 18, -34], u), [s * Math.sin(60 * t), s * Math.sin(47 * t + 1), s * Math.sin(53 * t + 2)]),
+    poz: lerp3([40, 11, -14], [26, 18, -34], u),
     bak: [59, lerp(3, 2.5, u), 6.3],
-    fov: lerp(45, 40, u),
+    fov: lerp(42, 40, u),
   }
 }
 

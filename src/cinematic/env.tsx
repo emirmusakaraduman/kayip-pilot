@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { OrtamAyar } from './ortam'
-import { ENKAZ, CARPMA_YERI } from './timeline'
+import { ZEMIN_DOKU } from './dokular'
+import { arazi, rastgele, toprakAgirlik } from './orman'
 
 /** Güneş yönü: ufka yakın (≈9°), uçuş yönünün önünde; kahramanlar kontrajurda kalır. */
 export const GUNES_YON = new THREE.Vector3(0.85, 0.16, -0.5).normalize()
@@ -75,16 +75,6 @@ export function Gokyuzu({ ayar }: { ayar: OrtamAyar }) {
   )
 }
 
-function rastgele(seed: number) {
-  let a = seed >>> 0
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
-}
-
 /** Tarla parçalı zemin dokusu. */
 function tarlaDokusu(renkler: string[]) {
   const c = document.createElement('canvas')
@@ -117,13 +107,75 @@ function tarlaDokusu(renkler: string[]) {
   return tex
 }
 
+/** Dalgalı arazi: yükseklik `arazi()` ile; açıklık yeşil çayır, yalnızca hafif toprak lekeli. PBR dokuları dokular.ts'ten takılabilir. */
 export function Zemin({ ayar }: { ayar: OrtamAyar }) {
-  const tex = useMemo(() => tarlaDokusu(ayar.tarla), [ayar])
+  const tex = useMemo(() => {
+    const t = tarlaDokusu(ayar.tarla)
+    t.repeat.set(ZEMIN_DOKU.tekrar, ZEMIN_DOKU.tekrar)
+    return t
+  }, [ayar])
+  const geo = useMemo(() => {
+    const g = new THREE.PlaneGeometry(900, 900, 300, 300)
+    g.rotateX(-Math.PI / 2)
+    g.translate(40, 0, 0)
+    const p = g.attributes.position
+    const toprak = new Float32Array(p.count)
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), z = p.getZ(i)
+      p.setY(i, arazi(x, z))
+      toprak[i] = toprakAgirlik(x, z)
+    }
+    g.setAttribute('aToprak', new THREE.BufferAttribute(toprak, 1))
+    g.computeVertexNormals()
+    return g
+  }, [])
+  const mat = useMemo(() => {
+    const m = new THREE.MeshStandardMaterial({ map: tex, roughness: 1 })
+    m.onBeforeCompile = (s) => {
+      s.vertexShader = s.vertexShader
+        .replace('#include <common>', '#include <common>\nattribute float aToprak;\nvarying float vToprak;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvToprak = aToprak;')
+      s.fragmentShader = s.fragmentShader
+        .replace('#include <common>', '#include <common>\nvarying float vToprak;')
+        .replace(
+          '#include <map_fragment>',
+          `#include <map_fragment>
+          vec3 toprak = vec3(0.46, 0.32, 0.2) * (0.7 + 1.1 * diffuseColor.g);
+          diffuseColor.rgb = mix(diffuseColor.rgb, toprak, vToprak * 0.18);
+          diffuseColor.rgb *= vec3(1.0 + 0.9 * vToprak, 1.0 + 1.5 * vToprak, 1.0 + 0.5 * vToprak);`,
+        )
+    }
+    return m
+  }, [tex])
+
+  // Gerçek PBR dokuları verilmişse yer tutucunun yerine geçer.
+  useEffect(() => {
+    const yukle = new THREE.TextureLoader()
+    const hazirla = (url: string | null, renk: boolean, uygula: (t: THREE.Texture) => void) => {
+      if (!url) return
+      yukle.load(url, (t) => {
+        t.wrapS = t.wrapT = THREE.RepeatWrapping
+        t.repeat.set(ZEMIN_DOKU.tekrar, ZEMIN_DOKU.tekrar)
+        t.anisotropy = 8
+        if (renk) t.colorSpace = THREE.SRGBColorSpace
+        uygula(t)
+        mat.needsUpdate = true
+      })
+    }
+    hazirla(ZEMIN_DOKU.renk, true, (t) => { mat.map = t })
+    hazirla(ZEMIN_DOKU.normal, false, (t) => { mat.normalMap = t })
+    hazirla(ZEMIN_DOKU.puruz, false, (t) => { mat.roughnessMap = t })
+  }, [mat])
+
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <planeGeometry args={[3000, 3000]} />
-      <meshStandardMaterial map={tex} roughness={1} />
-    </mesh>
+    <>
+      <mesh geometry={geo} material={mat} receiveShadow />
+      {/* arazinin ötesi: düz taban (arazi kenarlarda zaten sıfıra iner) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, 0]} receiveShadow>
+        <planeGeometry args={[3000, 3000]} />
+        <meshStandardMaterial map={tex} roughness={1} />
+      </mesh>
+    </>
   )
 }
 
@@ -193,161 +245,5 @@ export function BulutGolgesi({ ayar }: { ayar: OrtamAyar }) {
     <mesh ref={ref} material={mat} rotation={[-Math.PI / 2, 0, 0]} frustumCulled={false}>
       <planeGeometry args={[1400, 1400]} />
     </mesh>
-  )
-}
-
-interface Agac {
-  x: number
-  z: number
-  olcek: number
-  faz: number
-  ton: number
-}
-
-const YAKIN = 70
-
-/** Tepeden dibe doğru koyulaşan köşe rengi: ağaçlara hacim ve iç gölge hissi verir (örnek rengiyle çarpılır). */
-function golgele(g: THREE.BufferGeometry, y0: number, y1: number, alt: number, ust: number) {
-  const p = g.attributes.position
-  const c = new Float32Array(p.count * 3)
-  for (let i = 0; i < p.count; i++) {
-    const k = alt + (ust - alt) * Math.min(1, Math.max(0, (p.getY(i) - y0) / (y1 - y0)))
-    c[i * 3] = c[i * 3 + 1] = c[i * 3 + 2] = k
-  }
-  g.setAttribute('color', new THREE.BufferAttribute(c, 3))
-  return g
-}
-
-/**
- * Taç geometrileri (yükseklik ≈ 3,2 birim, merkez y=0; gövde ayrı). Çam: üst üste üç koni; geniş yapraklı: birleşik küreler.
- * Uzak sürüm çok daha az üçgenlidir (LOD).
- */
-function agacGeometrileri(tur: 'ibre' | 'genis') {
-  const govde = new THREE.CylinderGeometry(0.12, 0.2, 1.2, 6)
-  if (tur === 'ibre') {
-    const kat = (r: number, h: number, taban: number, kenar: number) => {
-      const g = new THREE.ConeGeometry(r, h, kenar, 1, false)
-      g.translate(0, taban + h / 2 - 1.6, 0)
-      return g
-    }
-    const yap = (kenar: number, katlar: [number, number, number][]) =>
-      golgele(mergeGeometries(katlar.map(([r, h, t]) => kat(r, h, t, kenar)))!, -1.6, 1.6, 0.55, 1.05)
-    return {
-      yakinTac: yap(9, [[1.3, 1.5, 0], [1.0, 1.4, 0.9], [0.66, 1.3, 1.9]]),
-      uzakTac: yap(5, [[1.25, 1.9, 0], [0.8, 1.7, 1.5]]),
-      govde,
-    }
-  }
-  const kure = (r: number, x: number, y: number, z: number, detay: number) => {
-    const g = new THREE.IcosahedronGeometry(r, detay)
-    g.scale(1, 0.88, 1)
-    g.translate(x, y, z)
-    return g
-  }
-  return {
-    yakinTac: golgele(
-      mergeGeometries([kure(1.15, 0, -0.35, 0, 1), kure(0.85, 0.55, 0.35, 0.25, 1), kure(0.9, -0.5, 0.5, -0.3, 1), kure(0.7, 0.05, 1.0, 0.15, 1)])!,
-      -1.5, 1.7, 0.5, 1.05,
-    ),
-    uzakTac: golgele(mergeGeometries([kure(1.2, 0, -0.2, 0, 0), kure(0.9, 0.1, 0.8, 0, 0)])!, -1.5, 1.7, 0.55, 1.05),
-    govde,
-  }
-}
-
-/**
- * Orman: örnekli çizim + yakınlığa göre ayrıntı seviyesi.
- * Yakın ağaçlar gövdeli, ayrıntılı taçlı ve rüzgârda sallanır; uzaktakiler tek parça, düşük üçgenli taçtır.
- * Ortama göre katmanlı çam (karadeniz, sert-karasal) ya da yuvarlak tepeli yapraklı ağaç (akdeniz, karasal) çizilir.
- */
-export function Agaclar({ ayar }: { ayar: OrtamAyar }) {
-  const kamera = useThree((s) => s.camera)
-  const yakinTac = useRef<THREE.InstancedMesh>(null)
-  const yakinGovde = useRef<THREE.InstancedMesh>(null)
-  const uzakTac = useRef<THREE.InstancedMesh>(null)
-  const son = useRef(-1)
-
-  const agaclar = useMemo<Agac[]>(() => {
-    const r = rastgele(42)
-    const liste: Agac[] = []
-    // Enkaz alanı ve sabit kamera noktaları ağaçsız kalır (kamera ağacın içine düşmesin).
-    const bosluklar: [number, number, number][] = [
-      [ENKAZ[0] - 2, ENKAZ[2], 11], [-14, 40, 16], [72, 24, 9], [68, 19, 9], [36, -16, 11], [46, -6, 9],
-    ]
-    const temiz = (x: number, z: number) => bosluklar.some(([bx, bz, br]) => Math.hypot(x - bx, z - bz) < br)
-    while (liste.length < ayar.agacAdet) {
-      const x = -140 + r() * 320
-      const z = -170 + r() * 340
-      if (temiz(x, z)) continue
-      liste.push({ x, z, olcek: ayar.agacOlcek[0] + r() * (ayar.agacOlcek[1] - ayar.agacOlcek[0]), faz: r() * 6.28, ton: r() })
-    }
-    // Rotorun çarpacağı yere yoğun, yüksek bir koru: çarpma sahnesinin güvencesi.
-    for (let i = 0; i < 45; i++) {
-      const a = r() * 6.28
-      const d = r() * 7
-      liste.push({ x: CARPMA_YERI[0] + Math.cos(a) * d, z: CARPMA_YERI[2] + Math.sin(a) * d, olcek: 2.5 + r() * 0.5, faz: r() * 6.28, ton: r() })
-    }
-    return liste
-  }, [ayar])
-
-  const geo = useMemo(() => agacGeometrileri(ayar.agacTuru), [ayar.agacTuru])
-  const tacMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9, vertexColors: true, flatShading: true }), [])
-  const govdeMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#4a3520', roughness: 1 }), [])
-  const temel = useMemo(() => new THREE.Color(ayar.agacRenk), [ayar])
-  const d = useMemo(() => new THREE.Object3D(), [])
-  const renk = useMemo(() => new THREE.Color(), [])
-
-  useEffect(() => {
-    son.current = -1 // ayar değişince yeniden doldur
-  }, [agaclar])
-
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime
-    if (t - son.current < 0.08) return
-    son.current = t
-    const yt = yakinTac.current, yg = yakinGovde.current, ut = uzakTac.current
-    if (!yt || !yg || !ut) return
-    let ny = 0, nu = 0
-    const cx = kamera.position.x, cz = kamera.position.z
-    for (const a of agaclar) {
-      const yakin = (a.x - cx) ** 2 + (a.z - cz) ** 2 < YAKIN * YAKIN
-      renk.copy(temel).offsetHSL(0, 0, (a.ton - 0.5) * 0.08)
-      if (yakin) {
-        const sallan = Math.sin(t * 1.6 + a.faz) * 0.045
-        d.position.set(a.x, 0, a.z)
-        d.rotation.set(0, 0, sallan)
-        d.scale.setScalar(a.olcek)
-        d.position.y = 0.6 * a.olcek
-        d.updateMatrix()
-        yg.setMatrixAt(ny, d.matrix)
-        d.position.y = (0.6 + 1.6) * a.olcek
-        d.rotation.set(sallan * 0.6, 0, sallan)
-        d.updateMatrix()
-        yt.setMatrixAt(ny, d.matrix)
-        yt.setColorAt(ny, renk)
-        ny++
-      } else {
-        d.position.set(a.x, (0.6 + 1.6) * a.olcek, a.z)
-        d.rotation.set(0, 0, 0)
-        d.scale.setScalar(a.olcek)
-        d.updateMatrix()
-        ut.setMatrixAt(nu, d.matrix)
-        ut.setColorAt(nu, renk)
-        nu++
-      }
-    }
-    for (const [m, n] of [[yt, ny], [yg, ny], [ut, nu]] as const) {
-      m.count = n
-      m.instanceMatrix.needsUpdate = true
-      if (m.instanceColor) m.instanceColor.needsUpdate = true
-    }
-  })
-
-  const n = agaclar.length
-  return (
-    <>
-      <instancedMesh key={ayar.agacTuru + 'y'} ref={yakinTac} args={[geo.yakinTac, tacMat, n]} frustumCulled={false} castShadow receiveShadow />
-      <instancedMesh ref={yakinGovde} args={[geo.govde, govdeMat, n]} frustumCulled={false} castShadow />
-      <instancedMesh key={ayar.agacTuru + 'u'} ref={uzakTac} args={[geo.uzakTac, tacMat, n]} frustumCulled={false} castShadow />
-    </>
   )
 }

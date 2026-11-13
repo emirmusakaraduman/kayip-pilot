@@ -113,7 +113,8 @@ export function sinematikSesBaslat(): SinematikSes | null {
   const olaylar: [number, () => void][] = [
     [OLAY.agacCarpma, () => { patlat(0.7, 'bandpass', 1400, 200, 0.5); gurleme(160, 60, 0.5, 0.3) }], // dal ve rotor kırılması
     [OLAY.yereInis, () => { gurleme(140, 32, 1.0, 0.7); patlat(1.0, 'lowpass', 900, 80, 0.7) }], // sert iniş
-    [OLAY.patlama, () => { patlat(3.2, 'lowpass', 3000, 70, 1.0); gurleme(60, 28, 1.8, 0.9); patlat(0.4, 'highpass', 4000, 800, 0.4) }],
+    [OLAY.yereInis + 0.3, () => patlat(2.6, 'bandpass', 2600, 380, 0.3)], // yerde sürtünen metal
+    [OLAY.durma, () => gurleme(70, 40, 0.8, 0.25)], // son sarsıntı; patlama yok
   ]
 
   return {
@@ -139,7 +140,7 @@ export function sinematikSesBaslat(): SinematikSes | null {
       alarm.frequency.setValueAtTime(vurus % 2 === 0 ? 880 : 660, now)
       alarmG.gain.setTargetAtTime(alarmAcik && vurus % 2 === 0 ? 0.025 : 0, now, 0.01)
 
-      const ates = t > OLAY.yanginBasla ? (t > OLAY.patlama ? 0.1 : 0.03) : 0
+      const ates = t > OLAY.yanginBasla ? (t > OLAY.durma ? 0.05 : 0.03) : 0
       yangin.g.gain.setTargetAtTime(Math.random() < 0.35 ? ates * (0.5 + Math.random()) : 0, now, 0.02)
 
       for (const [te, fn] of olaylar) if (onceki < te && t >= te) fn()

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { KAMERALAR, type Kamera, type Tiklama } from './kameralar'
-import { TelsizOdasi } from './TelsizOdasi'
+import { TelsizOdasi, type EkranTuru } from './TelsizOdasi'
 import { useOyun } from '../game/store'
 import { JETON, bitirmeJetonu, degerlendir, parazit } from '../game/engine'
 import { bip, cizirti, dogruSes, yanlisSes } from '../game/audio'
@@ -70,6 +70,7 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
   const [kisaSinema, setKisaSinema] = useState<Vaka | null>(acilis?.vaka ?? null) // bölüm başı kısa sinematik
   const [arama, setArama] = useState<number | null>(null) // Büyük Arama'da şu anki aşama (Konu Modu'nda null)
   const [defterOku, setDefterOku] = useState(false)
+  const [ekran, setEkran] = useState<EkranTuru | null>(null) // "Telsiz", "Nuran", "Fatma" ya da masadaki telsize basınca açılan ekran paneli
   // Konu Defteri (masadaki açık defter) durumu zustand'da (useDefterUI), varsayılan kapalı
   const vakaPaneli = useDefterUI((x) => x.acik)
   const setVakaPaneli = (v: boolean | ((x: boolean) => boolean)) => {
@@ -176,6 +177,8 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
     }
   }
 
+  const telsizAc = () => { setKamera('telsiz'); setEkran('telsiz') }
+
   const ipucuIste = (kim: 'Nuran' | 'Fatma') => {
     const t = kim === 'Nuran' ? vaka?.ipucuNuri : vaka?.ipucuAyse
     if (!t || !oyun.ipucuAl()) return
@@ -218,6 +221,9 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
         onHarita={haritaTikla}
         defter={oyun.defter.length}
         onDefter={defterAc}
+        onTelsiz={telsizAc}
+        ekran={ekran}
+        ekranKapat={() => setEkran(null)}
         kp={{ istek: kpIstek, onOlay: kpOlay }}
       />
 
@@ -234,7 +240,7 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
       <div className="hud kameralar">
         <button className="kucuk" onClick={oyun.sesDegistir} aria-label="Ses">{oyun.sesAcik ? '🔊' : '🔇'}</button>
         {(Object.keys(KAMERALAR) as Kamera[]).map((k) => (
-          <button key={k} className={'kucuk' + (k === kamera ? ' secili' : '')} onClick={() => setKamera(k)}>
+          <button key={k} className={'kucuk' + (k === kamera ? ' secili' : '')} onClick={() => { setKamera(k); setEkran(k === 'telsiz' || k === 'nuri' || k === 'ayse' ? (kamera === k && ekran === k ? null : k) : null) }}>
             {KAMERALAR[k].ad}
           </button>
         ))}

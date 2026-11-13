@@ -17,7 +17,7 @@ describe('sinematik zaman çizelgesi', () => {
   })
 
   it('kamera kesintileri dışında kamera da sıçramaz', () => {
-    const kesit = [OLAY.kuyrukKaybi, OLAY.agacCarpma, OLAY.yereInis + 0.5, OLAY.patlama]
+    const kesit = [OLAY.kuyrukKaybi, OLAY.agacCarpma, OLAY.yereInis + 0.5, OLAY.durma]
     for (let i = 1; i < adimlar.length; i++) {
       if (kesit.some((k) => adimlar[i - 1] < k && adimlar[i] >= k - 1e-9)) continue
       const a = kamera(adimlar[i - 1]).poz
@@ -26,10 +26,10 @@ describe('sinematik zaman çizelgesi', () => {
     }
   })
 
-  it('olaylar sıralı: yangın < kuyruk < ağaç < iniş < patlama < bitiş', () => {
+  it('olaylar sıralı: yangın < kuyruk < ağaç < iniş < durma < bitiş', () => {
     const o = OLAY
     expect(o.yanginBasla < o.kuyrukKaybi && o.kuyrukKaybi < o.agacCarpma && o.agacCarpma < o.yereInis).toBe(true)
-    expect(o.yereInis < o.yanYatma && o.yanYatma < o.patlama && o.patlama < TOPLAM).toBe(true)
+    expect(o.yereInis < o.yanYatma && o.yanYatma < o.durma && o.durma < TOPLAM).toBe(true)
   })
 
   it('helikopter enkaz bölgesine iner, yan yatar ve rotor önceden kopar', () => {

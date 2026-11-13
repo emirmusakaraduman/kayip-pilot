@@ -82,3 +82,21 @@ button.sayfa.secili { outline: 2px solid #f0a020; }
 /* Sinematikten telsiz odasına geçiş: siyahtan yavaşça açılır */
 .oda-gecis { position: fixed; inset: 0; z-index: 50; background: #000; pointer-events: none; animation: oda-gecis 3.2s ease-out forwards; }
 @keyframes oda-gecis { 0% { opacity: 1; } 35% { opacity: 1; } 100% { opacity: 0; } }
+
+/* telsiz ekranı: "Telsiz"e basınca açılan büyük CRT paneli */
+.telsiz-ekran { position: absolute; z-index: 4; left: 16px; top: 60px; width: min(560px, 56vw); max-height: 60vh; display: flex; flex-direction: column; background: #050b07; border: 3px solid #2e3a33; border-radius: 12px; box-shadow: 0 0 0 2px #0e1511, 0 12px 40px rgba(0,0,0,.7), inset 0 0 60px rgba(60,255,150,.08); color: #8cffc1; font-family: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace; overflow: hidden; }
+.telsiz-ekran::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+.te-ust { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid #1d3a2a; font-size: .85rem; letter-spacing: .12em; color: #5fd49a; }
+.te-x { padding: 0 8px; font-size: 1.4rem; line-height: 1.2; background: transparent; color: #8cffc1; border-radius: 4px; }
+.te-govde { padding: 14px 18px 18px; overflow: auto; font-size: 1.15rem; line-height: 1.55; text-shadow: 0 0 6px rgba(80,255,170,.45); }
+.te-govde p { margin: 0 0 12px; }
+.te-bos { opacity: .7; }
+@media (max-width: 900px) { .telsiz-ekran { top: 100px; width: calc(100vw - 32px); } }
+
+/* Nuran / Fatma kartı (telsiz ekranıyla aynı panel) */
+.karakter-ekran { border-color: #8a6a30; box-shadow: 0 0 0 2px #1a130b, 0 12px 40px rgba(0,0,0,.7), inset 0 0 60px rgba(217,184,114,.08); color: #ecd08e; }
+.karakter-ekran .te-ust { color: #d9b872; border-bottom-color: #4a3a1c; }
+.karakter-ekran .te-x { color: #ecd08e; }
+.karakter-ekran .te-govde { text-shadow: 0 0 6px rgba(217,184,114,.35); }
+.te-konular { opacity: .8; font-size: 1rem; }
+.te-ipucu { padding: 8px 16px; font-size: 1rem; background: #d9b872; color: #1a130b; }
