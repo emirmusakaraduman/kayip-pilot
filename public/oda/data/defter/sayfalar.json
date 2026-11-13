@@ -1,0 +1,77 @@
+[
+ {
+  "n": 1,
+  "konu": "dunya-sekli",
+  "metin": "Dünya kutuplardan hafif basık bir küredir (geoid).\nDönme: 24 saat, batıdan doğuya. Sonucu: gece-gündüz, yerel saat farkı, hareketli cisimlerin sapması (Kuzey Yarım Küre'de sağa).\nDolanma: yaklaşık 365 gün 6 saat. Eksen eğikliği (23°27') yüzünden mevsimler oluşur.\n21 Haziran: ışınlar Yengeç Dönencesi'ne dik. 21 Aralık: Oğlak Dönencesi'ne dik. 21 Mart ve 23 Eylül: gece-gündüz eşit.\nNot: Kutup Yıldızı'nın ufuktan yüksekliği = bulunduğum enlem."
+ },
+ {
+  "n": 2,
+  "konu": "cografi-konum",
+  "metin": "Matematik konum: enlem ve boylamla bulunur. Türkiye yaklaşık 36°-42° Kuzey, 26°-45° Doğu arasında.\nÖzel konum: üç tarafı deniz, Asya ile Avrupa'nın kavşağı, boğazlar Türkiye'de.\n1° boylam = 4 dakika. Doğuya gidince saat ileri, batıya gidince geri gider.\nİki paralel arası her yerde yaklaşık 111 km. Meridyenler arası uzaklık ekvatorda en fazla, kutuplarda sıfır.\nNot: Türkiye'nin doğusu ile batısı arasında yerel saat farkı yaklaşık 76 dakika."
+ },
+ {
+  "n": 3,
+  "konu": "harita",
+  "metin": "Ölçek haritanın küçültme oranıdır. 1/100.000 ölçekte 1 cm = 1 km. Ölçek küçüldükçe alan genişler, ayrıntı azalır.\nEş yükselti eğrileri: sık ise yamaç dik, seyrek ise eğim az. Yüksek kotlara girinti yapan eğri vadi, alçak kotlara çıkıntı yapan eğri sırt demektir.\nEğim (%) = yükselti farkı ÷ yatay uzaklık × 100.\nİzdüşüm: küreyi düzleme, silindire veya koniye yansıtarak harita çizilir; her yöntemde bir şey bozulur.\nNot: Haritayı okurken önce ölçeğe, sonra eğrilere bak."
+ },
+ {
+  "n": 4,
+  "konu": "iklim-elemanlari",
+  "metin": "Sıcaklık: yükseldikçe her 200 m'de 1°C azalır. Enlem, denize uzaklık, akıntılar ve bakı da etkiler.\nBasınç: sıcak hava hafif, alçak basınç; soğuk hava ağır, yüksek basınç. Rüzgâr yüksek basınçtan alçak basınca eser.\nMeltem: gündüz denizden karaya, gece karadan denize.\nYağış: yamaç yağışı (dağa çarpıp yükselen nemli hava), konveksiyonel (ısınıp yükselen hava), cephe yağışı (sıcak ve soğuk havanın karşılaşması).\nFön: dağın arkasına inen sıcak ve kuru rüzgâr."
+ },
+ {
+  "n": 5,
+  "konu": "iklim-bitki",
+  "metin": "Akdeniz iklimi: yaz sıcak ve kurak, kış ılık ve yağışlı. Bitki örtüsü maki; zeytin, incir, narenciye yetişir.\nKaradeniz iklimi: her mevsim yağışlı. Sık ormanlar; çay ve fındık.\nKarasal iklim: yağış az, yaz-kış farkı büyük. Bitki örtüsü bozkır (step); buğday ve arpa.\nSert karasal iklim (Doğu Anadolu): kış çok uzun ve karlı, yaz kısa. Yüksek yerlerde çayır ve mera.\nNot: Bitkiyi görünce iklimi tahmin edebilirim."
+ },
+ {
+  "n": 6,
+  "konu": "ic-kuvvetler",
+  "metin": "İç kuvvetler yer kabuğunu içeriden şekillendirir.\nOrojenez: tabakaların kıvrılması ve kırılması (dağ oluşumu). Epirojenez: geniş alanların yavaşça yükselmesi veya alçalması.\nDeprem: fay hatlarında enerji boşalması. Türkiye'de en önemlileri Kuzey Anadolu ve Doğu Anadolu fay hatları.\nVolkanizma: magmanın yüzeye çıkması (Erciyes, Ağrı, Nemrut).\nEge'de doğu-batı uzanan horst ve grabenler var. Van Gölü, Nemrut'un lavlarının oluşturduğu volkanik set gölüdür."
+ },
+ {
+  "n": 7,
+  "konu": "dis-kuvvetler",
+  "metin": "Dış kuvvetler yüzeyi aşındırır, taşır, biriktirir.\nAyrışma: fiziksel (don çatlaması) ve kimyasal (suyla çözünme).\nAkarsu: yüksek eğimde derin V vadi, ovada menderes, ağızda delta.\nRüzgâr: kurak yerlerde kum tepeleri. Buzul: sirk ve U vadi. Dalga: falez, tombolo.\nKarstlaşma: kireçtaşında çözünme; dolin, düden, polye, mağara. Yüzeyde akarsu yok, kaynaklar güçlü.\nKapadokya peribacaları: sert ve yumuşak tabakaların farklı aşınması."
+ },
+ {
+  "n": 8,
+  "konu": "kayac-toprak",
+  "metin": "Kayaçlar: magmatik (derinlik: granit; püskürük: bazalt), tortul (kil, kireçtaşı, kömür; katmanlı, fosilli), başkalaşım (mermer, gnays).\nTopraklar iklime göre oluşur.\nTerra rossa: Akdeniz ikliminde kireçtaşı üstünde, kırmızı.\nÇernozyom: bozkırda, kara ve humusça zengin; Türkiye'de Kuzeydoğu Anadolu'da görülür.\nPodzol: soğuk ve nemli ormanlık alanlarda, kumlu ve verimsiz.\nAlüvyal toprak: akarsuların biriktirdiği taze, verimli toprak."
+ },
+ {
+  "n": 9,
+  "konu": "su-kaynaklari",
+  "metin": "Akarsu rejimi beslenmeye bağlı: Doğu Anadolu'da karla beslenir (ilkbahar-yaz başında yüksek), Akdeniz kıyısında yağmurla beslenir (kışın yüksek, yazın düşük), Karadeniz'de düzenlidir.\nFırat, Karasu ile Murat'ın birleşmesiyle oluşur ve Basra Körfezi'ne ulaşır.\nKızılırmak Türkiye'nin en uzun akarsuyudur ve Karadeniz'e dökülür.\nGöller: tektonik (Tuz Gölü), volkanik set (Van Gölü), karstik ve baraj gölleri.\nAğızda biriken alüvyon delta oluşturur; Çukurova bir örnektir."
+ },
+ {
+  "n": 10,
+  "konu": "turkiye-yer-iklim",
+  "metin": "Dağlar: Kuzey Anadolu Dağları Karadeniz'e, Toroslar Akdeniz'e paralel uzanır. En yüksek nokta Ağrı Dağı (5137 m).\nOvalar: Çukurova, Konya, Ergene. Ege'de grabenler denize açılır.\nİklim: kıyılar ılıman, iç kesimler karasal. En çok yağış Doğu Karadeniz'de, en az yağış İç Anadolu'da.\nTuz Gölü İç Anadolu'da, Türkiye'nin ikinci büyük gölü.\nNot: Denizi hangi yanımda gördüğüm, hangi kıyıda olduğumu söyler."
+ },
+ {
+  "n": 11,
+  "konu": "nufus-yerlesme",
+  "metin": "Nüfus yoğunluğu = nüfus ÷ yüzölçümü (kişi/km²).\nDoğal artış hızı = doğum hızı − ölüm hızı. Nüfus artış hızı = doğal artış + net göç.\nTürkiye'de nüfus kıyılarda ve Marmara ile Ege'de yoğun, Doğu Anadolu'nun yüksek kesimlerinde seyrek.\nYerleşme: toplu (düz, verimli, su kıt yerler) ve dağınık (engebeli, yağışlı, ormanlık yerler; Karadeniz kırsalı).\nNot: Köy ve kent ayrımını işlevlerine bakarak yapıyorum."
+ },
+ {
+  "n": 12,
+  "konu": "goc",
+  "metin": "Göç, yer değiştirmedir: iç göç (ülke içi) ve dış göç.\nGönüllü göçte itici (işsizlik, arazi azlığı) ve çekici (iş, eğitim, sağlık) etkenler vardır. Zorunlu göç: savaş, afet, mübadele (1923).\nMevsimlik göç geçicidir: yaylacılık, tarım işçiliği.\nNet göç hızı = (gelen − giden) ÷ nüfus × 1000. Negatifse bölge göç verir.\nSonuç: göç veren yerde yaşlı oranı artar; göç alan yerde konut ve altyapı sorunları yaşanır."
+ },
+ {
+  "n": 13,
+  "konu": "ekonomi",
+  "metin": "Tarım: çay ve fındık Karadeniz'de, zeytin ve incir Ege'de, narenciye ve pamuk Akdeniz kıyılarında, buğday İç Anadolu'da.\nHayvancılık: ekstansif (geniş meralar, düşük sermaye) ve entansif (ahır, yem, yüksek sermaye).\nMadencilik: Zonguldak Türkiye'nin tek taş kömürü havzası; linyit, bor ve krom da önemli.\nSanayi ham maddeye, enerjiye, pazara ve ulaşıma yakın kurulur.\nTurizm: deniz, tarih, kış ve inanç turizmi."
+ },
+ {
+  "n": 14,
+  "konu": "ulasim",
+  "metin": "Karayolu Türkiye'de yük ve yolcu taşımacılığında en çok kullanılan yoldur.\nDenizyolu: en ucuz, büyük miktarda ağır yük için ideal. Havayolu: en hızlı ama pahalı. Demiryolu: ağır yük ve uzun mesafe.\nBoğazlar: Karadeniz, İstanbul Boğazı, Marmara, Çanakkale Boğazı, Ege sırasıyla birbirine bağlanır.\nBoru hatları ham petrol ve doğal gaz taşır.\nDağlar yolları geçitlere ve tünellere mecbur bırakır; kar kışın yolları kapatabilir."
+ },
+ {
+  "n": 15,
+  "konu": "dogal-afet",
+  "metin": "Deprem: fay hatlarında oluşur. Kuzey Anadolu ve Doğu Anadolu fayları en riskli olanlardır. Sarsıntıda: Çök-Kapan-Tutun.\nHeyelan: eğimli, bitki örtüsü zayıf, suya doymuş yamaçlarda toprak kayması (Karadeniz).\nSel: ani ve şiddetli yağışlarda taşkın. Çığ: eğimli yamaçta taze kar kütlesinin kayması.\nOrman yangını ve erozyon da insan eliyle büyür.\nHazırlık: afet çantası, toplanma alanı, yapı denetimi ve ağaçlandırma.\nNot: Kurtarma ekibi gelene kadar sakin kalmak en önemli şey."
+ }
+]

@@ -1,0 +1,1708 @@
+{
+ "surum": 1,
+ "aciklama": "Örnek vakalar. Yeni vaka yazarken docs/VAKA_SEMASI.md ve docs/ICERIK_KURALLARI.md kurallarına uy; her vakanın selfTest alanı dolu olmalı.",
+ "vakalar": [
+  {
+   "id": "konum-01-gps-adana",
+   "topic": "cografi-konum",
+   "difficulty": 1,
+   "type": "pin",
+   "title": "GPS’teki Rakamlar",
+   "radio": [
+    "Deniz: Merkez, telsizim zayıf ama GPS ekranında 37° kuzey, 35° doğu yazıyor. Etrafım geniş bir ova, uzakta dağlar görünüyor.",
+    "Deniz: Haritada beni bul, çok vaktim yok."
+   ],
+   "question": "Deniz’in konumunu haritada işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 37.0,
+    "lon": 35.0,
+    "radiusKm": 90
+   },
+   "hints": [
+    {
+     "from": "ayse",
+     "text": "Enlem kuzey-güney, boylam doğu-batı yönünü verir. Önce 37° kuzey çizgisini bul."
+    },
+    {
+     "from": "nuri",
+     "text": "35° doğu Türkiye’nin ortalarına denk gelir; 37° kuzey ise Akdeniz kıyısına yakındır."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Beni buldun, Çukurova ovasındayım.",
+    "wrong": "Deniz: Burası değil, koordinatları bir daha oku.",
+    "explain": "Enlem ekvatora göre kuzey-güney, boylam başlangıç meridyenine göre doğu-batı konumunu verir; 37°K 35°D Adana çevresine denk gelir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Koordinatları atlas ile kontrol et."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 37.0,
+      "lon": 35.1
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 41.0,
+      "lon": 29.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "iklim-01-akdeniz-pin",
+   "topic": "iklim-tipleri",
+   "difficulty": 1,
+   "type": "pin",
+   "title": "Kurak Yaz",
+   "radio": [
+    "Deniz: Yaz aylarında günlerdir bir damla yağmur yok, hava bunaltıcı. Köylüler kışların ılık ve yağmurlu geçtiğini söylemişti.",
+    "Deniz: Etrafımda kızılçam ormanı ve makilik çalılar var."
+   ],
+   "question": "Deniz hangi iklim bölgesinde? Haritadan seç.",
+   "board": {
+    "mapMode": "climate"
+   },
+   "answer": {
+    "mode": "zone",
+    "zone": "akdeniz"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Yazları sıcak ve kurak, kışları ılık ve yağışlı olan iklimin adını düşün."
+    },
+    {
+     "from": "ayse",
+     "text": "Kızılçam ve maki bu iklimin tipik bitki örtüsüdür; kıyı şeridinde ara."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Doğru yerdesin, Akdeniz kıyısındayım.",
+    "wrong": "Deniz: Burada yağış yazın hiç yok, tekrar düşün.",
+    "explain": "Yazın sıcak ve kurak, kışın ılık ve yağışlı geçmesi ile maki ve kızılçam görülmesi Akdeniz iklimini gösterir."
+   },
+   "reward": {
+    "jeton": 2,
+    "notebookPage": 5
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "İklim tipleri ünitesi, Akdeniz iklimi."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 37.2,
+      "lon": 29.5,
+      "zone": "akdeniz"
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 39.9,
+      "lon": 32.8,
+      "zone": "karasal"
+     }
+    ]
+   }
+  },
+  {
+   "id": "iklim-02-karadeniz-pin",
+   "topic": "iklim-tipleri",
+   "difficulty": 2,
+   "type": "pin",
+   "title": "Sis ve Çay",
+   "radio": [
+    "Deniz: Sis çok yoğun, her mevsim yağmur yağıyor, bugün de sağanak var.",
+    "Deniz: Yamaçlarda çay tarlaları ve gür kayın ormanları görüyorum."
+   ],
+   "question": "Deniz hangi iklim bölgesinde? Haritadan seç.",
+   "board": {
+    "mapMode": "climate"
+   },
+   "answer": {
+    "mode": "zone",
+    "zone": "karadeniz"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Yıl boyunca yağış alan, kurak mevsimi olmayan iklimi düşün."
+    },
+    {
+     "from": "ayse",
+     "text": "Çay yalnızca bol ve düzenli yağış alan nemli yamaçlarda yetişir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Tamam, Karadeniz kıyısındayım.",
+    "wrong": "Deniz: Burada hiç kurak mevsim yok, bunu unutma.",
+    "explain": "Her mevsim yağış alan, kurak mevsimi olmayan, çay ve kayın ormanı görülen kıyı Karadeniz iklimidir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Karadeniz iklimi."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 40.9,
+      "lon": 40.0,
+      "zone": "karadeniz"
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 37.0,
+      "lon": 30.0,
+      "zone": "akdeniz"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dis-01-peribacalari-pin",
+   "topic": "dis-kuvvetler",
+   "difficulty": 2,
+   "type": "pin",
+   "title": "Taştan Kuleler",
+   "radio": [
+    "Deniz: Çevremde konik, uzun, kayadan oyulmuş gibi kuleler var; bazılarının tepesinde sert bir taş şapka duruyor.",
+    "Deniz: Zemin yumuşak, soluk renkli bir taşa benziyor. Rüzgâr ve yağmur bu taşları sürekli aşındırıyor galiba."
+   ],
+   "question": "Bu şekiller hangi bölgede görülür? Deniz’in konumunu işaretle.",
+   "board": {
+    "mapMode": "neutral"
+   },
+   "answer": {
+    "mode": "point",
+    "lat": 38.64,
+    "lon": 34.83,
+    "radiusKm": 90
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Bu kule şekillerine peri bacası denir. Hangi dış kuvvetin ürünü olduğunu düşün."
+    },
+    {
+     "from": "ayse",
+     "text": "Volkanik tüflerin geniş yer kapladığı bu yöre, Erciyes ve Hasandağı volkanlarına yakındır."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Kapadokya’dayım, peri bacalarının arasında.",
+    "wrong": "Deniz: Burada böyle kayalar görünmüyor, volkanik bir bölge arıyorum.",
+    "explain": "Peri bacaları, volkanik tüflerin rüzgâr ve yağmur suyuyla aşınmasıyla oluşur; Kapadokya (Nevşehir) çevresi tipik örnektir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Dış kuvvetler: aşınma şekilleri, Kapadokya."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "lat": 38.5,
+      "lon": 34.9
+     }
+    ],
+    "wrong": [
+     {
+      "lat": 41.0,
+      "lon": 29.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "dunya-01-gunes-acisi-enlem",
+   "topic": "dunya-sekli-hareketleri",
+   "difficulty": 2,
+   "type": "number",
+   "title": "Öğle Güneşi",
+   "radio": [
+    "Deniz: 21 Haziran, öğle vakti. Güneş ışınlarının yere geliş açısını ölçtüm: 71°27′.",
+    "Deniz: Hangi enlemde olduğumu hesaplar mısın?"
+   ],
+   "question": "Deniz hangi enlemde? (derece ve yön)",
+   "board": {
+    "unit": "°",
+    "dirs": [
+     "K",
+     "G"
+    ],
+    "placeholder": "Örn. 30",
+    "given": [
+     "Tarih: 21 Haziran, öğle vakti",
+     "Ölçülen Güneş ışını açısı: 71°27′"
+    ]
+   },
+   "answer": {
+    "value": 42,
+    "tolerance": 0.3,
+    "dir": "K",
+    "angle": true
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "21 Haziran’da Güneş ışınları Yengeç Dönencesi’ne (23°27′ K) dik gelir."
+    },
+    {
+     "from": "ayse",
+     "text": "Açı = 90° − (bulunduğun enlem ile dönence arasındaki fark). Farkı bul, sonra enlemi hesapla."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 42° kuzey, Karadeniz kıyısına yakın bir enlem.",
+    "wrong": "Deniz: Hesabın tutmuyor, açı ile dönence arasındaki ilişkiyi bir daha düşün.",
+    "explain": "90° − 71°27′ = 18°33′ fark; kuzey yarım kürede dönencenin kuzeyinde: 23°27′ + 18°33′ = 42° K."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Dönence değeri ders kitabında 23°27′ ya da 23°26′ yazılabilir."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "42",
+      "dir": "K"
+     },
+     {
+      "raw": "42°",
+      "dir": "K"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "48",
+      "dir": "K"
+     },
+     {
+      "raw": "42",
+      "dir": "G"
+     },
+     {
+      "raw": "",
+      "dir": "K"
+     }
+    ]
+   }
+  },
+  {
+   "id": "konum-02-yerel-saat-boylam",
+   "topic": "cografi-konum",
+   "difficulty": 2,
+   "type": "number",
+   "title": "Saat Farkı",
+   "radio": [
+    "Deniz: Saatimi yerel öğleye göre ayarladım, şu an 14.12 gösteriyor.",
+    "Deniz: Telsizden Greenwich saatini sordum, 12.00 dediler. Hangi boylamdayım?"
+   ],
+   "question": "Deniz hangi boylamda? (derece ve yön)",
+   "board": {
+    "unit": "°",
+    "dirs": [
+     "D",
+     "B"
+    ],
+    "placeholder": "Örn. 15",
+    "given": [
+     "Deniz’in yerel saati: 14.12",
+     "Greenwich (başlangıç meridyeni) saati: 12.00"
+    ]
+   },
+   "answer": {
+    "value": 33,
+    "tolerance": 0.3,
+    "dir": "D",
+    "angle": true
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Dünya 24 saatte 360° döner: 1 saatte 15°, 1 derece 4 dakikadır."
+    },
+    {
+     "from": "ayse",
+     "text": "Yerel saat Greenwich’ten ileri ise doğu boylamındasın, geri ise batı."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 33° doğu. Ülkenin ortalarına yakınım.",
+    "wrong": "Deniz: Saat farkını dakikaya çevirip tekrar dene.",
+    "explain": "Saat farkı 2 saat 12 dakika = 132 dakika; 132 ÷ 4 = 33°. Yerel saat ileri olduğu için 33° Doğu."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "1° = 4 dakika."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "33",
+      "dir": "D"
+     },
+     {
+      "raw": "33°",
+      "dir": "D"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "33",
+      "dir": "B"
+     },
+     {
+      "raw": "30",
+      "dir": "D"
+     }
+    ]
+   }
+  },
+  {
+   "id": "harita-01-olcek-km",
+   "topic": "harita-bilgisi",
+   "difficulty": 1,
+   "type": "number",
+   "title": "Haritadaki Dört Santim",
+   "radio": [
+    "Deniz: Elimdeki haritanın ölçeği 1/500.000. Helikopterin iniş yeri ile benim aramda haritada 4 cm var.",
+    "Deniz: Yakıtının yetip yetmeyeceğini bilmem lazım. Gerçekte kaç kilometre?"
+   ],
+   "question": "Gerçek uzaklık kaç kilometredir?",
+   "board": {
+    "unit": "km",
+    "placeholder": "Örn. 12",
+    "given": [
+     "Harita ölçeği: 1/500.000",
+     "Haritadaki uzaklık: 4 cm"
+    ]
+   },
+   "answer": {
+    "value": 20,
+    "tolerance": 0.1
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "1/500.000 ölçekte haritadaki 1 cm gerçekte 500.000 cm’dir."
+    },
+    {
+     "from": "ayse",
+     "text": "100.000 cm = 1 km. Önce santimetreyi kilometreye çevir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 20 km, yakıt yeter. Teşekkürler.",
+    "wrong": "Deniz: Sonuç tutmuyor, ölçeği çarpıp birimi çevirmeyi dene.",
+    "explain": "4 cm × 500.000 = 2.000.000 cm = 20 km."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Ölçek hesabı."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "20"
+     },
+     {
+      "raw": "20 km"
+     },
+     {
+      "raw": "20,0"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "2"
+     },
+     {
+      "raw": "200"
+     }
+    ]
+   }
+  },
+  {
+   "id": "elemanlar-01-sicaklik-yukselti",
+   "topic": "iklim-elemanlari",
+   "difficulty": 2,
+   "type": "number",
+   "title": "Soğuyan Termometre",
+   "radio": [
+    "Deniz: Kıyıdaki ekip 24°C ölçtü. Ben çıktığım yerde termometre 12°C gösteriyor.",
+    "Deniz: Kıyıdan kaç metre yükseğe çıktığımı hesaplar mısın?"
+   ],
+   "question": "Deniz kıyıdan kaç metre yüksekte?",
+   "board": {
+    "unit": "m",
+    "placeholder": "Örn. 600",
+    "given": [
+     "Kıyıdaki sıcaklık: 24°C",
+     "Deniz’in bulunduğu yerde sıcaklık: 12°C",
+     "Yükseldikçe her 200 m’de sıcaklık yaklaşık 1°C azalır"
+    ]
+   },
+   "answer": {
+    "value": 2400,
+    "tolerance": 50
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Önce iki yer arasındaki sıcaklık farkını bul."
+    },
+    {
+     "from": "ayse",
+     "text": "Sıcaklık farkını 200 m ile çarp."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: 2400 metre! Çok yükseğe çıkmışım.",
+    "wrong": "Deniz: Rakam uymuyor, sıcaklık farkını bulup 200 ile çarp.",
+    "explain": "Fark 24 − 12 = 12°C; 12 × 200 m = 2400 m."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Ders kitabında 200 m’de 1°C kuralı mı, 100 m’de 0,6°C mi geçtiğini kontrol et."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "raw": "2400"
+     },
+     {
+      "raw": "2.400"
+     },
+     {
+      "raw": "2400 m"
+     }
+    ],
+    "wrong": [
+     {
+      "raw": "1200"
+     },
+     {
+      "raw": "24"
+     }
+    ]
+   }
+  },
+  {
+   "id": "ic-01-sarsinti-kart",
+   "topic": "ic-kuvvetler",
+   "difficulty": 1,
+   "type": "cards",
+   "title": "Ani Sarsıntı",
+   "radio": [
+    "Deniz: Yer birdenbire sarsıldı! Birkaç saniye sürdü, zeminde yeni yarıklar açıldı ve taşlar yuvarlandı.",
+    "Deniz: Burası bir fay hattı üzerinde olabilir. Ne oluyor?"
+   ],
+   "question": "Deniz’in yaşadığı olay hangi iç kuvvet hareketidir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Deprem",
+      "text": "Fay boyunca kırılma ve ani sarsıntı"
+     },
+     {
+      "id": "b",
+      "title": "Orojenez",
+      "text": "Dağ oluşumu",
+      "why": "Orojenez milyonlarca yıl süren yavaş bir kıvrılma ve yükselme olayıdır, birkaç saniyelik sarsıntı değildir."
+     },
+     {
+      "id": "c",
+      "title": "Epirojenez",
+      "text": "Kıta oluşumu, yükselme-alçalma",
+      "why": "Epirojenez geniş alanlarda çok yavaş yükselme ve çökmedir; ani sarsıntı yapmaz."
+     },
+     {
+      "id": "d",
+      "title": "Volkanizma",
+      "text": "Magmanın yeryüzüne çıkışı",
+      "why": "Volkanizmada magma yüzeye çıkar; burada lav ya da kül anlatılmıyor."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kısa sürede ve ani gerçekleşen, fay hatlarıyla ilgili olayı düşün."
+    },
+    {
+     "from": "ayse",
+     "text": "Orojenez çok yavaş gerçekleşir, birkaç saniyelik sarsıntı yapmaz.",
+     "eliminate": [
+      "b"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Deprem! Artçılara hazırlıklı olmalıyım.",
+    "wrong": "Deniz: Bu olay süre bakımından farklı, tekrar düşün.",
+    "explain": "Fay hatları boyunca kırılmalarla oluşan ani yer sarsıntısına deprem denir; orojenez ve epirojenez çok yavaş, volkanizma ise magma çıkışıyla ilgilidir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "İç kuvvetler."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "d"
+     ],
+     [
+      "b",
+      "a"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "su-01-gol-turu-kart",
+   "topic": "su-kaynaklari",
+   "difficulty": 2,
+   "type": "cards",
+   "title": "Dar ve Uzun Göl",
+   "radio": [
+    "Deniz: Yanımda uzun ve dar bir göl var. Kıyıları dik yamaçlarla çevrili, etrafta fay izleri görülüyor.",
+    "Deniz: Su, sanki yerin çökmesiyle oluşan bir çukuru doldurmuş."
+   ],
+   "question": "Bu göl hangi türdedir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Karstik göl",
+      "text": "Kalkerli arazide çözünme çukuru",
+      "why": "Karstik göller kalkerli arazide çözünmeyle oluşan çukurlarda bulunur; burada fay izi anlatılıyor."
+     },
+     {
+      "id": "b",
+      "title": "Tektonik göl",
+      "text": "Fayların oluşturduğu çukurluk"
+     },
+     {
+      "id": "c",
+      "title": "Volkanik set gölü",
+      "text": "Lav akıntısı bir vadiyi tıkar",
+      "why": "Volkanik set gölünde lav vadiyi tıkar; burada lav ya da volkan yok."
+     },
+     {
+      "id": "d",
+      "title": "Heyelan set gölü",
+      "text": "Kayan toprak vadiyi tıkar",
+      "why": "Heyelan seti kayan toprağın vadiyi tıkamasıyla oluşur; burada çökme çukuru var."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "b"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Fay hareketleriyle çöken çukurlukta oluşan göllere ne denir?"
+    },
+    {
+     "from": "ayse",
+     "text": "Burada ne lav ne de heyelan anlatılıyor.",
+     "eliminate": [
+      "c",
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Tektonik göl, Eğirdir gibi.",
+    "wrong": "Deniz: Gölün oluşumu başka, çukurluğun nedenini düşün.",
+    "explain": "Fay hareketleriyle çöken çukurluklarda oluşan göllere tektonik göl denir; Eğirdir Gölü tektonik kökenlidir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Eğirdir Gölü tektonik kökenli mi ders kitabında kontrol et."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "b"
+     ]
+    ],
+    "wrong": [
+     [
+      "a"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "nufus-01-yerlesme-tipi-kart",
+   "topic": "nufus-yerlesme",
+   "difficulty": 2,
+   "type": "cards",
+   "title": "Evler Nerede?",
+   "radio": [
+    "Deniz: Köye vardım ama burada köy yok gibi! Evler birbirinden uzak, her biri kendi bahçesinin ortasında, ormanlık yamaçlara dağılmış.",
+    "Deniz: Çevrede bol yağış, çok sayıda dere ve engebeli arazi var."
+   ],
+   "question": "Burada görülen yerleşme türü hangisidir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Toplu yerleşme",
+      "text": "Evler tek merkezde toplanır",
+      "why": "Toplu yerleşmede evler birbirine yakındır ve köy tek merkezde toplanır."
+     },
+     {
+      "id": "b",
+      "title": "Dağınık yerleşme",
+      "text": "Evler araziye yayılır"
+     },
+     {
+      "id": "c",
+      "title": "Yayla yerleşmesi",
+      "text": "Mevsimlik kullanılan evler",
+      "why": "Yayla evleri mevsimlik kullanılır; burada kalıcı evler anlatılıyor."
+     },
+     {
+      "id": "d",
+      "title": "Kent yerleşmesi",
+      "text": "Yoğun nüfus ve yapı",
+      "why": "Kentte nüfus ve yapı yoğunluğu yüksektir; burada tek tek evler var."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "b"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Evlerin birbirine göre durumuna ve yağış, arazi, su faktörlerine bak."
+    },
+    {
+     "from": "ayse",
+     "text": "Mevsimlik kullanım ya da kalabalık nüfus anlatılmıyor.",
+     "eliminate": [
+      "c",
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Dağınık yerleşme, tam burası.",
+    "wrong": "Deniz: Evlerin dağılışı farklı, tekrar bak.",
+    "explain": "Bol yağış, bol su ve engebeli ormanlık arazi evlerin dağınık kurulmasına yol açar; buna dağınık yerleşme denir, Karadeniz’de yaygındır."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Yerleşme tipleri."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "b"
+     ]
+    ],
+    "wrong": [
+     [
+      "a"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "goc-01-mevsimlik-kart",
+   "topic": "goc",
+   "difficulty": 1,
+   "type": "cards",
+   "title": "Fındık Mevsimi",
+   "radio": [
+    "Deniz: Yol kenarında işçi çadırları var. Her yıl fındık toplama zamanı başka şehirlerden geliyorlar, iş bitince evlerine dönüyorlar."
+   ],
+   "question": "Bu insanların yaptığı göç türü hangisidir?",
+   "board": {
+    "multi": false,
+    "cards": [
+     {
+      "id": "a",
+      "title": "Mevsimlik göç",
+      "text": "İş mevsimine göre gidip dönülür"
+     },
+     {
+      "id": "b",
+      "title": "Kalıcı göç",
+      "text": "Yaşanan yer tamamen bırakılır",
+      "why": "Kalıcı göçte insanlar yaşadıkları yeri bırakıp başka yere yerleşir; burada işçiler eve dönüyor."
+     },
+     {
+      "id": "c",
+      "title": "Beyin göçü",
+      "text": "Nitelikli insanların yurt dışına gitmesi",
+      "why": "Beyin göçünde nitelikli insanlar ülke dışına gider; burada tarım işçileri anlatılıyor."
+     },
+     {
+      "id": "d",
+      "title": "Zorunlu göç",
+      "text": "Savaş ya da afet nedeniyle",
+      "why": "Zorunlu göçte savaş ya da afet gibi nedenlerle yer bırakılır; burada iş için gidiliyor."
+     }
+    ]
+   },
+   "answer": {
+    "correct": [
+     "a"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Belli bir sürede yapılan ve dönüşü olan göçü düşün."
+    },
+    {
+     "from": "ayse",
+     "text": "Savaş ya da afet anlatılmıyor.",
+     "eliminate": [
+      "d"
+     ]
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Mevsimlik göç, her yıl tekrarlanıyor.",
+    "wrong": "Deniz: Burada insanlar geri dönüyor, bunu hesaba kat.",
+    "explain": "İş mevsimine göre belli sürelerde yapılan ve dönüşü olan göçe mevsimlik göç denir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Göçün süreye göre türleri."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "a"
+     ]
+    ],
+    "wrong": [
+     [
+      "b"
+     ],
+     [
+      "c"
+     ],
+     [
+      "d"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "harita-02-esyukselti-rota",
+   "topic": "harita-bilgisi",
+   "difficulty": 3,
+   "type": "route",
+   "title": "En Az Tırmanış",
+   "radio": [
+    "Deniz: Helikopterin motor gücü az, yüksek tepeleri aşamaz. Haritamdaki çizgileri okuyabilir misin?",
+    "Deniz: Çizgiler sıklaştıkça yamaç dikleşiyor. Beni A noktasından alıp B’ye en az tırmanışla götür."
+   ],
+   "question": "A’dan B’ye toplam tırmanışı en az olan rotayı çiz.",
+   "board": {
+    "mode": "contour",
+    "terrain": {
+     "base": 100,
+     "hills": [
+      {
+       "x": 0.5,
+       "y": 0.5,
+       "h": 700,
+       "r": 0.17
+      },
+      {
+       "x": 0.22,
+       "y": 0.3,
+       "h": 260,
+       "r": 0.09
+      }
+     ]
+    },
+    "start": {
+     "x": 0.1,
+     "y": 0.85,
+     "r": 0.06
+    },
+    "end": {
+     "x": 0.9,
+     "y": 0.15,
+     "r": 0.06
+    },
+    "widthKm": 12,
+    "contourInterval": 50,
+    "maxAscentM": 150,
+    "maxLengthKm": 20,
+    "maxPoints": 8,
+    "contourNote": "Eş yükselti aralığı 50 m. Kalın çizgiler her 250 m’yi gösterir."
+   },
+   "answer": {},
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Eş yükselti çizgileri sıklaştıkça eğim artar, seyrekleştikçe azalır."
+    },
+    {
+     "from": "ayse",
+     "text": "Tepenin ortasından geçme; çizgilerin seyrek olduğu alçak sahadan dolaş."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Rotayı gördüm, helikopter rahat uçar.",
+    "wrong": "Deniz: Rota fazla zorlu, çizgilerin sıklığına dikkat et.",
+    "explain": "Eş yükselti çizgilerinin sık olduğu yerler diktir. Tepeyi aşmak yerine çizgilerin seyrek olduğu alçak sahadan dolaşmak toplam tırmanışı azaltır."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Eş yükselti eğri okuma (sentetik arazi)."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "points": [
+       [
+        0.1,
+        0.85
+       ],
+       [
+        0.5,
+        0.93
+       ],
+       [
+        0.9,
+        0.85
+       ],
+       [
+        0.9,
+        0.15
+       ]
+      ]
+     },
+     {
+      "points": [
+       [
+        0.1,
+        0.85
+       ],
+       [
+        0.35,
+        0.88
+       ],
+       [
+        0.75,
+        0.9
+       ],
+       [
+        0.9,
+        0.6
+       ],
+       [
+        0.9,
+        0.15
+       ]
+      ]
+     }
+    ],
+    "wrong": [
+     {
+      "points": [
+       [
+        0.1,
+        0.85
+       ],
+       [
+        0.9,
+        0.15
+       ]
+      ]
+     },
+     {
+      "points": [
+       [
+        0.1,
+        0.85
+       ],
+       [
+        0.12,
+        0.6
+       ],
+       [
+        0.2,
+        0.1
+       ],
+       [
+        0.5,
+        0.06
+       ],
+       [
+        0.9,
+        0.15
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "ulasim-01-dogu-koridoru-rota",
+   "topic": "ulasim",
+   "difficulty": 3,
+   "type": "route",
+   "title": "Doğu Hattı",
+   "radio": [
+    "Deniz: Yardım malzemesi İstanbul’dan trenle gelecek. Ana hattı Ankara, Sivas ve Erzurum üzerinden Kars’a kadar izlemeli.",
+    "Deniz: Haritada bu doğu hattının rotasını çizer misin?"
+   ],
+   "question": "İstanbul’dan Kars’a, Ankara, Sivas ve Erzurum’dan geçen rotayı çiz.",
+   "board": {
+    "mode": "map",
+    "mapMode": "neutral",
+    "start": {
+     "lat": 41.01,
+     "lon": 28.98,
+     "radiusKm": 70,
+     "name": "İstanbul"
+    },
+    "end": {
+     "lat": 40.6,
+     "lon": 43.09,
+     "radiusKm": 80,
+     "name": "Kars"
+    },
+    "ordered": true,
+    "waypoints": [
+     {
+      "lat": 39.93,
+      "lon": 32.86,
+      "radiusKm": 70,
+      "name": "Ankara"
+     },
+     {
+      "lat": 39.75,
+      "lon": 37.02,
+      "radiusKm": 70,
+      "name": "Sivas"
+     },
+     {
+      "lat": 39.9,
+      "lon": 41.27,
+      "radiusKm": 70,
+      "name": "Erzurum"
+     }
+    ],
+    "forbidden": [],
+    "maxLengthKm": 1700,
+    "maxPoints": 10
+   },
+   "answer": {},
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Bu ana hat ülkeyi doğu-batı yönünde, iç kesimlerden geçerek katediyor. Ankara’dan sonra Sivas’a git."
+    },
+    {
+     "from": "ayse",
+     "text": "Sivas’tan sonra Erzurum, oradan Kars. Kıyıdan gitme, iç Anadolu ve Doğu Anadolu’dan geç."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Rotayı aldım, malzeme zamanında ulaşır.",
+    "wrong": "Deniz: Bu rota ana hattan sapıyor, şehirleri sırayla say.",
+    "explain": "İstanbul–Ankara–Sivas–Erzurum–Kars hattı, ülkeyi doğu-batı doğrultusunda kat eden ana ulaşım koridorlarından biridir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Ara istasyonları demiryolu atlasından kontrol et."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "points": [
+       {
+        "lat": 41.01,
+        "lon": 28.98
+       },
+       {
+        "lat": 39.93,
+        "lon": 32.86
+       },
+       {
+        "lat": 39.75,
+        "lon": 37.02
+       },
+       {
+        "lat": 39.9,
+        "lon": 41.27
+       },
+       {
+        "lat": 40.6,
+        "lon": 43.09
+       }
+      ]
+     }
+    ],
+    "wrong": [
+     {
+      "points": [
+       {
+        "lat": 41.01,
+        "lon": 28.98
+       },
+       {
+        "lat": 40.6,
+        "lon": 43.09
+       }
+      ]
+     },
+     {
+      "points": [
+       {
+        "lat": 41.01,
+        "lon": 28.98
+       },
+       {
+        "lat": 39.75,
+        "lon": 37.02
+       },
+       {
+        "lat": 39.93,
+        "lon": 32.86
+       },
+       {
+        "lat": 39.9,
+        "lon": 41.27
+       },
+       {
+        "lat": 40.6,
+        "lon": 43.09
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "afet-01-deprem-karar",
+   "topic": "dogal-afetler",
+   "difficulty": 1,
+   "type": "decision",
+   "title": "Sarsıntı Anı",
+   "radio": [
+    "Deniz: Bir binanın ikinci katındayım ve zemin sallanmaya başladı! Ne yapmalıyım?"
+   ],
+   "question": "Deniz’e ne yapmasını söylersin?",
+   "board": {
+    "start": "s1",
+    "steps": [
+     {
+      "id": "s1",
+      "text": "Zemin sallanıyor. Deniz binanın ikinci katında. Ne yapsın?",
+      "options": [
+       {
+        "id": "s1a",
+        "text": "Asansörle hemen aşağı inmek",
+        "end": "bad",
+        "note": "Deprem sırasında asansör mahsur bırakabilir; kullanılmaz."
+       },
+       {
+        "id": "s1b",
+        "text": "Çök-Kapan-Tutun: sağlam bir masanın yanına çökmek",
+        "next": "s2",
+        "note": "Doğru: başını ve boynunu koruyarak sağlam bir mobilyanın yanında çök, kapan ve tutun."
+       },
+       {
+        "id": "s1c",
+        "text": "Balkona çıkmak",
+        "end": "bad",
+        "note": "Balkon sarsıntıda en tehlikeli yerlerdendir."
+       },
+       {
+        "id": "s1d",
+        "text": "Merdivenlerden hızla koşmak",
+        "end": "bad",
+        "note": "Sarsıntı sürerken merdivenlerde düşme ve çökme riski yüksektir."
+       }
+      ]
+     },
+     {
+      "id": "s2",
+      "text": "Sarsıntı durdu. Şimdi ne yapsın?",
+      "options": [
+       {
+        "id": "s2a",
+        "text": "Asansörle hızla inmek",
+        "end": "bad",
+        "note": "Artçı sarsıntıda asansör mahsur bırakabilir."
+       },
+       {
+        "id": "s2b",
+        "text": "Merdivenle, çevreyi kontrol ederek çıkıp açık toplanma alanına gitmek",
+        "end": "best",
+        "note": "Doğru: artçı sarsıntılara karşı binadan çıkıp açık alanda toplanmak en güvenlisi."
+       },
+       {
+        "id": "s2c",
+        "text": "Eşyalarını toplamak için içeride beklemek",
+        "end": "bad",
+        "note": "Artçı sarsıntılar gelebilir; hemen binadan çıkmak gerekir."
+       }
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "okEndings": [
+     "best"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "AFAD’ın önerisi: Çök, Kapan, Tutun."
+    },
+    {
+     "from": "ayse",
+     "text": "Sarsıntı bitince asansör kullanılmaz; artçı sarsıntı olabilir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Güvendeyim, toplanma alanına ulaştım.",
+    "wrong": "Deniz: Bu iyi bir karar değildi, tekrar düşünelim.",
+    "explain": "Sarsıntı anında çök-kapan-tutun, sarsıntı bitince merdivenle çıkıp açık toplanma alanına gidilir; asansör ve balkon kullanılmaz."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "AFAD çök-kapan-tutun."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "s1b",
+      "s2b"
+     ]
+    ],
+    "wrong": [
+     [
+      "s1a"
+     ],
+     [
+      "s1b",
+      "s2c"
+     ],
+     [
+      "s1c"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "afet-02-sel-karar",
+   "topic": "dogal-afetler",
+   "difficulty": 2,
+   "type": "decision",
+   "title": "Yükselen Dere",
+   "radio": [
+    "Deniz: Bir dere yatağının kenarındayım. Yukarıda sağanak başladı ve suyun rengi bulanıklaştı. Ne yapmalıyım?"
+   ],
+   "question": "Deniz’e ne yapmasını söylersin?",
+   "board": {
+    "start": "s1",
+    "steps": [
+     {
+      "id": "s1",
+      "text": "Su bulanıklaştı ve yükseliyor. Deniz dere kenarında. Ne yapsın?",
+      "options": [
+       {
+        "id": "s1a",
+        "text": "Dere kenarında durup suyun yükselişini izlemek",
+        "end": "bad",
+        "note": "Sel çok hızlı gelebilir; dere yatağından hemen uzaklaşmak gerekir."
+       },
+       {
+        "id": "s1b",
+        "text": "Hemen yüksek ve sağlam bir yere çıkmak",
+        "next": "s2",
+        "note": "Doğru: sel suyundan uzaklaşıp yüksek bir yere çıkmak ilk adımdır."
+       },
+       {
+        "id": "s1c",
+        "text": "Dereyi hızla karşıdan karşıya geçmek",
+        "end": "bad",
+        "note": "Hızlı akan sudan geçmeye çalışmak çok tehlikelidir."
+       }
+      ]
+     },
+     {
+      "id": "s2",
+      "text": "Yüksek bir yere çıktı ama su hızla yükseliyor. Telsizi çalışıyor. Ne yapsın?",
+      "options": [
+       {
+        "id": "s2a",
+        "text": "Telsizle konumunu bildirip kurtarma ekibini beklemek",
+        "end": "best",
+        "note": "Doğru: güvenli yerde kalıp konumu bildirmek en doğrusu."
+       },
+       {
+        "id": "s2b",
+        "text": "Arabayla sel suyundan geçmeye çalışmak",
+        "end": "bad",
+        "note": "Sel suyu araçları sürükleyebilir; asla geçilmez."
+       },
+       {
+        "id": "s2c",
+        "text": "Bir köprünün altına sığınmak",
+        "end": "bad",
+        "note": "Köprü altı sel sırasında en tehlikeli yerlerden biridir."
+       }
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "okEndings": [
+     "best"
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Sel anında önce dere yatağından uzaklaşılır."
+    },
+    {
+     "from": "ayse",
+     "text": "Güvenli yerde beklerken telsizle yardım istemek en iyi seçenektir."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Yüksekteyim, ekip yola çıktı.",
+    "wrong": "Deniz: Bu karar beni riske atar, başka bir yol bulalım.",
+    "explain": "Sel anında dere yatağından uzaklaşıp yüksek ve güvenli bir yere çıkılır; sel suyundan araçla ya da yürüyerek geçilmez, köprü altına sığınılmaz."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulandi",
+    "note": "Sel güvenliği."
+   },
+   "selfTest": {
+    "correct": [
+     [
+      "s1b",
+      "s2a"
+     ]
+    ],
+    "wrong": [
+     [
+      "s1a"
+     ],
+     [
+      "s1b",
+      "s2b"
+     ],
+     [
+      "s1c"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "iklim-03-kurak-aylar-grafik",
+   "topic": "iklim-tipleri",
+   "difficulty": 2,
+   "type": "graph",
+   "title": "Kurak Aylar",
+   "radio": [
+    "Deniz: İstasyonun grafiğini okuyorum. Bir yıllık yağış ve sıcaklık değerleri var.",
+    "Deniz: Sıcaklık çizgisi yazın yükseliyor. Yağışın en az olduğu ayları bulabilir misin?"
+   ],
+   "question": "Grafikte yağışın en az olduğu 3 ayı işaretle.",
+   "board": {
+    "kind": "climograph",
+    "pickMode": "months",
+    "data": {
+     "title": "Örnek istasyon (yaklaşık değerler)",
+     "temp": [
+      10,
+      11,
+      13,
+      16,
+      20,
+      25,
+      28,
+      28,
+      25,
+      20,
+      15,
+      11
+     ],
+     "precip": [
+      220,
+      150,
+      90,
+      50,
+      30,
+      10,
+      3,
+      3,
+      15,
+      80,
+      140,
+      230
+     ]
+    },
+    "hintText": "İşaretlemek için ayın sütununa dokun."
+   },
+   "answer": {
+    "months": [
+     6,
+     7,
+     8
+    ]
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Yağış çubukları en kısa olan ayları ara."
+    },
+    {
+     "from": "ayse",
+     "text": "Bu ayların hepsi yaz aylarına düşer."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Haziran, Temmuz, Ağustos. Kurak mevsim yaz.",
+    "wrong": "Deniz: Bu aylar yağışlı görünüyor, çubukların boyuna bak.",
+    "explain": "Haziran, Temmuz ve Ağustos’ta yağış çok az, sıcaklık yüksektir; yazın kurak, kışın yağışlı grafik Akdeniz iklimini gösterir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Örnek (yaklaşık) veri; ders kitabındaki gerçek istasyon grafiğiyle değiştir."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "months": [
+       6,
+       7,
+       8
+      ]
+     }
+    ],
+    "wrong": [
+     {
+      "months": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "months": [
+       7,
+       8
+      ]
+     },
+     {
+      "months": []
+     }
+    ]
+   }
+  },
+  {
+   "id": "iklim-04-grafik-iklim-sec",
+   "topic": "iklim-tipleri",
+   "difficulty": 3,
+   "type": "graph",
+   "title": "Hangi İklim?",
+   "radio": [
+    "Deniz: Başka bir istasyonun grafiğini aldım. Yağış çubukları yıl boyu yüksek, hiç kurak ay yok."
+   ],
+   "question": "Bu grafik hangi iklim tipine aittir?",
+   "board": {
+    "kind": "climograph",
+    "pickMode": "choice",
+    "data": {
+     "title": "Örnek istasyon (yaklaşık değerler)",
+     "temp": [
+      7,
+      7,
+      9,
+      13,
+      17,
+      21,
+      23,
+      24,
+      21,
+      17,
+      12,
+      9
+     ],
+     "precip": [
+      220,
+      170,
+      150,
+      120,
+      100,
+      120,
+      130,
+      150,
+      200,
+      260,
+      230,
+      240
+     ]
+    },
+    "choices": [
+     {
+      "id": "akdeniz",
+      "text": "Akdeniz iklimi",
+      "why": "Akdeniz iklimi yazın kurak geçer; bu grafikte yaz aylarında da yağış yüksek."
+     },
+     {
+      "id": "karadeniz",
+      "text": "Karadeniz iklimi"
+     },
+     {
+      "id": "karasal",
+      "text": "Karasal iklim",
+      "why": "Karasal iklimde yağış azdır ve sıcaklık farkı büyüktür; bu grafikte yağış yıl boyu fazla."
+     }
+    ]
+   },
+   "answer": {
+    "choice": "karadeniz"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Kurak mevsimin olup olmadığına bak."
+    },
+    {
+     "from": "ayse",
+     "text": "Yaz aylarında da yağışın yüksek olduğu iklimi düşün."
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Karadeniz iklimi, her mevsim yağışlı.",
+    "wrong": "Deniz: Grafikle uyuşmuyor, yaz yağışına dikkat et.",
+    "explain": "Her ay yüksek yağış, ılıman sıcaklıklar ve kurak mevsimin olmaması Karadeniz iklimini gösterir."
+   },
+   "reward": {
+    "jeton": 3
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Örnek (yaklaşık) veri; ders kitabındaki gerçek grafikle değiştir."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "choice": "karadeniz"
+     }
+    ],
+    "wrong": [
+     {
+      "choice": "akdeniz"
+     },
+     {
+      "choice": "karasal"
+     },
+     {
+      "choice": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "goc-02-piramit-grafik",
+   "topic": "goc",
+   "difficulty": 2,
+   "type": "graph",
+   "title": "Duvardaki Piramit",
+   "radio": [
+    "Deniz: Muhtarın duvarında bir nüfus piramidi asılı. Tabanı çok geniş, yukarı çıktıkça hızla daralıyor, tepesi sivri."
+   ],
+   "question": "Bu piramit nüfusun hangi özelliğini gösterir?",
+   "board": {
+    "kind": "pyramid",
+    "pickMode": "choice",
+    "data": {
+     "title": "Örnek nüfus piramidi (yaklaşık değerler)",
+     "groups": [
+      "0-14",
+      "15-29",
+      "30-44",
+      "45-59",
+      "60+"
+     ],
+     "male": [
+      14,
+      11,
+      9,
+      6,
+      3.5
+     ],
+     "female": [
+      13.5,
+      10.5,
+      9,
+      6.5,
+      4.5
+     ]
+    },
+    "choices": [
+     {
+      "id": "genc",
+      "text": "Genç nüfus oranı yüksektir"
+     },
+     {
+      "id": "yasli",
+      "text": "Yaşlı nüfus oranı yüksektir",
+      "why": "Yaşlı nüfus piramidin tepesindeki çubuklarla gösterilir; burada tepe dar."
+     },
+     {
+      "id": "dengeli",
+      "text": "Yaş grupları dengelidir",
+      "why": "Dengeli piramitte yaş grupları birbirine yakın uzunluktadır; burada taban belirgin biçimde geniş."
+     }
+    ]
+   },
+   "answer": {
+    "choice": "genc"
+   },
+   "hints": [
+    {
+     "from": "nuri",
+     "text": "Piramidin tabanı en genç yaş grubunu gösterir."
+    },
+    {
+     "from": "ayse",
+     "text": "Tabanı geniş, tepesi dar piramit hangi nüfus yapısını anlatır?"
+    }
+   ],
+   "feedback": {
+    "correct": "Deniz: Genç nüfus çok, köy canlı.",
+    "wrong": "Deniz: Piramidin şekli başka bir şeyi anlatıyor.",
+    "explain": "Tabanı geniş, tepesi dar piramit doğum oranının yüksek ve genç nüfusun fazla olduğunu gösterir."
+   },
+   "reward": {
+    "jeton": 2
+   },
+   "source": {
+    "status": "dogrulanacak",
+    "note": "Örnek (yaklaşık) veri; ders kitabındaki piramitle değiştir."
+   },
+   "selfTest": {
+    "correct": [
+     {
+      "choice": "genc"
+     }
+    ],
+    "wrong": [
+     {
+      "choice": "yasli"
+     },
+     {
+      "choice": "dengeli"
+     }
+    ]
+   }
+  }
+ ]
+}

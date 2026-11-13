@@ -276,6 +276,15 @@
 
   var zoneMeshes = [];
   var zoneInfo = {};
+  // soru sistemi nötr modu: iklim renklerini gri tona çeker (doku yeniden üretilmez), uNeutral 0..1 arası yumuşakça değişir
+  var KP_NEUTRAL = { value: 0 };
+  function kpNeutralize(mat) {
+    mat.onBeforeCompile = function (sh) {
+      sh.uniforms.uNeutral = KP_NEUTRAL;
+      sh.fragmentShader = 'uniform float uNeutral;\n' + sh.fragmentShader.replace('#include <map_fragment>',
+        '#include <map_fragment>\nfloat kpLum = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(kpLum) * vec3(1.05,1.0,0.9), uNeutral);');
+    };
+  }
   (function buildReliefMap() {
     var MD = window.MAP_DATA;
     if (!MD) return;
@@ -344,7 +353,7 @@
       geo.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(norA), 3));
       geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvA), 2));
       var mat = new THREE.MeshStandardMaterial({ color: ZC[zi], roughness: zi === 4 ? 0.2 : 0.88, metalness: zi === 4 ? 0.12 : 0.0, emissive: 0xffc47a, emissiveIntensity: 0 });
-      texMats.push(mat);
+      texMats.push(mat); kpNeutralize(mat);
       if (zi < 4) nrmMats.push(mat);
       var mz = new THREE.Mesh(geo, mat);
       mz.castShadow = true; mz.receiveShadow = true; mz.userData.zone = KEYS[zi];
@@ -592,8 +601,15 @@
     g.fillStyle = '#2b2214'; g.font = '700 34px "Barlow Condensed", sans-serif'; g.fillText('Deniz’in defteri', 74, 58);
     g.font = '600 24px "IBM Plex Mono", monospace'; g.fillText('Sayfa ' + defterN + ' / 15', 74, 118);
     g.font = 'italic 26px cursive, "Brush Script MT", serif';
-    g.fillText('yazlar kurak,', 74, 186); g.fillText('kışlar ılık ve yağışlı...', 74, 220);
+    if (defterTxt) { // soru sistemi: açılan sayfanın ilk satırları (tamamı defter katmanında)
+      g.font = 'italic 21px cursive, "Brush Script MT", serif';
+      var tl = wrapText(defterTxt.replace(/\n/g, ' '), 34), mx = 8;
+      for (var li = 0; li < Math.min(tl.length, mx); li++) g.fillText(tl[li] + (li === mx - 1 && tl.length > mx ? '…' : ''), 74, 156 + li * 26);
+    } else {
+      g.fillText('yazlar kurak,', 74, 186); g.fillText('kışlar ılık ve yağışlı...', 74, 220);
+    }
   }
+  var defterTxt = '';
   var pageTex = makeTex(512, 384, drawPage);
   var pageTop = mesh(new THREE.PlaneGeometry(0.9, 0.64), new THREE.MeshStandardMaterial({ map: pageTex, roughness: 0.9 }), 0, 0.0755, 0);
   pageTop.rotation.x = -Math.PI / 2; nb.add(pageTop);
@@ -1520,12 +1536,18 @@
       canvas.style.cursor = state.hover ? 'pointer' : 'grab';
     }
   });
+  var KPS = { mode: 'climate', pickCb: null, markers: null, okPulse: 0, q: [], qTimer: 0 }; // soru sistemi köprüsünün durumu (KPScene aşağıda)
   canvas.addEventListener('pointerup', function (e) {
     var wasClick = drag && !drag.moved;
     drag = null;
     if (wasClick) {
       var z = pick(e);
-      if (z === 'notebook') { if (api.onDefter) api.onDefter(); }
+      if (KPS.pickCb && z && z !== 'notebook' && pickUV) {
+        // soru sistemi: seçimi enlem/boylama çevirip motora ver (eski seçim mantığı atlanır)
+        var ll = window.KP.geo.localToLatLon((pickUV[0] - 0.5) * PWm, (pickUV[1] - 0.5) * PHm);
+        KPS.pickCb({ lat: ll.lat, lon: ll.lon, x: (pickUV[0] - 0.5) * PWm, y: (pickUV[1] - 0.5) * PHm, zone: z });
+      }
+      else if (z === 'notebook') { if (api.onDefter) api.onDefter(); }
       else if (z && pickUV && api.onHarita) api.onHarita(z, pickUV[0], pickUV[1]);
     }
   });
@@ -1548,6 +1570,7 @@
     onHarita: null, // function (bolge, u, v): bolge 'karasal' | 'akdeniz' | 'karadeniz' | 'sert'; u, v levha üzerinde 0..1 (v = 1 kuzey)
     onDefter: null, // function ()
     setCam: function (n) { if (presets[n]) setCam(n); },
+    snapCam: function (n) { if (presets[n]) { setCam(n); camPos.copy(presets[n].pos); camLook.copy(presets[n].look); } }, // yumuşatmasız anında konum (sinematikten geçişte masa yakın planı)
     setText: function (text, bitti) { LINES = text ? wrapText(text, 36) : []; scrDone = !!bitti; },
     setPil: function (p, sessiz) {
       p = Math.max(0, Math.min(100, Math.round(p)));
@@ -1564,6 +1587,134 @@
     },
     setSecili: function (arr) { var o = {}; (arr || []).forEach(function (k) { o[k] = true; }); state.secili = o; }
   };
+
+  /* ---------- soru sistemi köprüsü (KPScene): src/questions/engine.js bununla konuşur ----------
+     Yalnızca ?kp=1 ile başlatılır; React oyunu bu modda kullanılmaz (pil/jeton/metni kendisi sürer). */
+  var KP_ZONES = ['karasal', 'akdeniz', 'karadeniz', 'sert'];
+  function kpMarkerPos(lat, lon) {
+    var p = window.KP.geo.latLonToLocal(lat, lon), h = 0;
+    if (gridH) {
+      var u = p.x / PWm + 0.5, v = p.y / PHm + 0.5;
+      var gx = Math.max(0, Math.min(GW - 1, Math.floor(u * GW))), gy = Math.max(0, Math.min(GH - 1, Math.floor((1 - v) * GH)));
+      h = gridH[gy * GW + gx] / 255 * 0.30;
+    }
+    return new THREE.Vector3(MAP_X + p.x, DY + h + 0.02, MAP_Z - p.y);
+  }
+  function kpTypeNext() { // telsiz kuyruğu: mesajı daktilo gibi yaz, bekle, sıradakine geç; sonuncusu ekranda kalır
+    clearTimeout(KPS.qTimer);
+    var msg = KPS.q.shift();
+    if (msg == null) return;
+    var i = 0;
+    (function step() {
+      i = Math.min(msg.length, i + 2);
+      api.setText(msg.slice(0, i), i >= msg.length);
+      if (i < msg.length) KPS.qTimer = setTimeout(step, 28);
+      else if (KPS.q.length) KPS.qTimer = setTimeout(kpTypeNext, 4200);
+    })();
+  }
+  window.KPScene = {
+    setBattery: function (p) { api.setPil(p, true); },
+    setCoins: function (n) { api.setJeton(n); },
+    setCamera: function (n) { api.setCam(n); },
+    radioShow: function (lines) { KPS.q = (lines || []).slice(); kpTypeNext(); },
+    flash: function (kind) { if (kind === 'right') KPS.okPulse = 1; else if (!reduce) triggerFlash(); },
+    setMapMode: function (mode) {
+      // 'climate': renkli bölgeler + etiket + vurgu. 'hidden': harita gizli. 'neutral': renksiz harita, etiket ve vurgu yok.
+      KPS.mode = mode; mapG.visible = mode !== 'hidden';
+      if (mode === 'hidden') { KPScene_clear(); window.KPScene.clearRoute(); }
+    },
+    enableMapPick: function (cb) { KPS.pickCb = cb; },
+    disableMapPick: function () { KPS.pickCb = null; },
+    addMarker: function (lat, lon) {
+      if (!KPS.markers) { KPS.markers = new THREE.Group(); scene.add(KPS.markers); }
+      var g = new THREE.Group(), red = new THREE.MeshStandardMaterial({ color: 0xd8382c, emissive: 0xff3a2e, emissiveIntensity: 0.6, roughness: 0.4 });
+      var stick = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.12, 8), new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.6, roughness: 0.4 }));
+      stick.position.y = 0.06;
+      var head = new THREE.Mesh(new THREE.SphereGeometry(0.026, 16, 12), red);
+      head.position.y = 0.13; head.castShadow = true;
+      g.add(stick); g.add(head);
+      g.position.copy(kpMarkerPos(lat, lon));
+      KPS.markers.add(g);
+    },
+    // doğru cevap bir defter sayfası açınca masadaki defterin sayfası güncellenir; tamamı deftere tıklayınca açılır
+    openNotebookPage: function (n) {
+      var pg = window.KP.defter && window.KP.defter.page(n);
+      defterTxt = pg ? pg.metin : ''; defterN = n;
+      var c = pageTex.image; drawPage(c.getContext('2d'), c.width, c.height); pageTex.needsUpdate = true;
+    },
+    clearMarkers: function () { if (KPS.markers) while (KPS.markers.children.length) KPS.markers.remove(KPS.markers.children[0]); },
+    // rota (harita modu): amber tüp + nokta topları; uçlar ve yasak daireler ayrı grupta
+    drawRoute: function (pts) {
+      kpRouteGroups();
+      kpDispose(KPS.routeLine);
+      if (!pts || !pts.length) return;
+      var amber = new THREE.MeshStandardMaterial({ color: 0xffc47a, emissive: 0xffa23a, emissiveIntensity: 0.7, roughness: 0.4 });
+      pts.forEach(function (p) {
+        var s = new THREE.Mesh(new THREE.SphereGeometry(0.014, 12, 10), amber);
+        s.position.copy(kpMarkerPos(p.lat, p.lon)); s.position.y += 0.012; KPS.routeLine.add(s);
+      });
+      if (pts.length < 2) return;
+      var path = [];
+      for (var i = 1; i < pts.length; i++) for (var k = (i === 1 ? 0 : 1); k <= 16; k++) {
+        var f = k / 16, v = kpMarkerPos(pts[i - 1].lat + (pts[i].lat - pts[i - 1].lat) * f, pts[i - 1].lon + (pts[i].lon - pts[i - 1].lon) * f);
+        v.y += 0.012; path.push(v);
+      }
+      var tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(path), path.length * 2, 0.006, 6, false), amber);
+      KPS.routeLine.add(tube);
+    },
+    clearRoute: function () { kpRouteGroups(); kpDispose(KPS.routeLine); kpDispose(KPS.routeEnds); },
+    showEndpoints: function (b) {
+      kpRouteGroups(); kpDispose(KPS.routeEnds);
+      if (!b || b.mode === 'contour' || !b.start || b.start.lat == null) return;
+      var KPg = window.KP.geo, mPerKm = 1 / (KPg.KX * KPg.KM_LON);
+      function ball(p, color, label, ring) {
+        var pos = kpMarkerPos(p.lat, p.lon), g = new THREE.Group();
+        if (ring) {
+          var r = new THREE.Mesh(new THREE.TorusGeometry(Math.max(0.03, p.radiusKm * mPerKm * 0.5), 0.004, 6, 28), new THREE.MeshBasicMaterial({ color: color }));
+          r.rotation.x = -Math.PI / 2; r.position.copy(pos); r.position.y += 0.015; g.add(r);
+        } else {
+          var s = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 12), new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.5 }));
+          s.position.copy(pos); s.position.y += 0.04; g.add(s);
+        }
+        if (label) {
+          var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTex(label, '#e6eee8'), transparent: true, depthTest: false, fog: false }));
+          sp.scale.set(0.36, 0.09, 1); sp.renderOrder = 10; sp.position.copy(pos); sp.position.y += 0.14; g.add(sp);
+        }
+        KPS.routeEnds.add(g);
+      }
+      ball(b.start, 0x3ddc84, 'A · ' + (b.start.name || 'Başlangıç'));
+      (b.waypoints || []).forEach(function (w) { ball(w, 0xffffff, w.name || '', true); });
+      ball(b.end, 0xff5a4d, 'B · ' + (b.end.name || 'Varış'));
+      (b.forbidden || []).forEach(function (f) {
+        var pos = kpMarkerPos(f.lat, f.lon), rr = f.radiusKm * mPerKm;
+        var cyl = new THREE.Mesh(new THREE.CylinderGeometry(rr, rr, 0.05, 32), new THREE.MeshBasicMaterial({ color: 0xff3a2e, transparent: true, opacity: 0.35, depthWrite: false }));
+        cyl.position.copy(pos); cyl.position.y += 0.03; KPS.routeEnds.add(cyl);
+      });
+    }
+  };
+  function kpRouteGroups() {
+    if (KPS.routeLine) return;
+    KPS.routeLine = new THREE.Group(); KPS.routeEnds = new THREE.Group(); scene.add(KPS.routeLine); scene.add(KPS.routeEnds);
+  }
+  function kpDispose(g) {
+    if (!g) return;
+    while (g.children.length) {
+      var ch = g.children[0]; g.remove(ch);
+      ch.traverse(function (o) { if (o.geometry) o.geometry.dispose(); });
+    }
+  }
+  function KPScene_clear() { window.KPScene.clearMarkers(); }
+  // ?kp=1: soru sistemini başlat (?vaka=<id> ile belirli vaka)
+  if (/[?&]kp=1/.test(location.search) && window.KP && window.KP.engine) {
+    var KPE = window.KP.engine, kpVaka = (location.search.match(/[?&]vaka=([\w-]+)/) || [])[1];
+    document.body.classList.add('kp-on');
+    KP.geo.setMapData(window.MAP_DATA); KP.scene = window.KPScene; KPE.load(); KPE.addCases(window.KP_CASES || []);
+    api.onDefter = function () { KP.defter.open(); };
+    var kpOpened = KP.defter.unlocked(); // kayıttan: en son açılan sayfa defterde görünsün
+    if (kpOpened.length) window.KPScene.openNotebookPage(kpOpened[kpOpened.length - 1]);
+    window.KPScene.setBattery(KPE.state.battery); window.KPScene.setCoins(KPE.state.jeton);
+    if (!(kpVaka && KPE.startCase(kpVaka))) KPE.start();
+  }
 
   /* ---------- animasyon döngüsü ---------- */
   var clock = new THREE.Clock();
@@ -1595,8 +1746,10 @@
     // bölgeler
     Object.keys(zoneInfo).forEach(function (k) {
       var zi = zoneInfo[k];
-      var sel = !!state.secili[k];
-      var hov = state.hover === k && !sel;
+      var climate = KPS.mode === 'climate'; // nötr/gizli modda bölge yükselmesi, vurgu ve etiket yok
+      var sel = climate && !!state.secili[k];
+      var hov = climate && state.hover === k && !sel;
+      zi.sprite.visible = climate;
       var tgt = sel ? 1.7 : (hov ? 1.2 : 1);
       var emi = sel ? 0.4 : (hov ? 0.14 : 0);
       zi.meshes.forEach(function (m) {
@@ -1611,7 +1764,7 @@
     });
 
     // raptiyeler bölgeyle birlikte yükselir
-    pins.forEach(function (pn) { pn.g.position.z = pn.h * pn.z.scale.z; });
+    pins.forEach(function (pn) { pn.g.position.z = pn.h * pn.z.scale.z; pn.g.visible = KPS.mode === 'climate'; }); // nötr modda bölge merkezini sızdırmasın
     // odak noktası: bakılan yerin masa seviyesi
     if (bokehPass) {
       bokehPass.uniforms.focus.value = camera.position.distanceTo(tmpFocus.set(camLook.x, Math.min(camLook.y, 1.4), camLook.z));
@@ -1679,7 +1832,9 @@
       drawScreen(t);
       drawWindow();
     }
-    screenLight.intensity = 0.85 + Math.sin(t * 40) * 0.05 * (1 - state.pil / 100 + 0.2);
+    KP_NEUTRAL.value += ((KPS.mode === 'neutral' ? 1 : 0) - KP_NEUTRAL.value) * 0.12;
+    KPS.okPulse = Math.max(0, KPS.okPulse - dt * 1.6);
+    screenLight.intensity = 0.85 + Math.sin(t * 40) * 0.05 * (1 - state.pil / 100 + 0.2) + KPS.okPulse * 1.2;
 
     if (composerOn) {
       try { composer.render(dt); }
