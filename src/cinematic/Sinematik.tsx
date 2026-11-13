@@ -12,9 +12,10 @@ import { Agaclar } from './ormanCizim'
 import { ormanUret } from './orman'
 import { HDRI_URL } from './dokular'
 import { Havuz } from './particles'
-import { KISA, OLAY, SURUKLEME, TOPLAM, altyaziMetni, heliDurum, kamera, rotorParca } from './timeline'
+import { ALTYAZILAR, KISA, OLAY, SURUKLEME, TOPLAM, altyaziMetni, heliDurum, kamera, rotorParca } from './timeline'
 import { sinematikSesBaslat, type SinematikSes } from '../game/sinematikSes'
 import { bip, cizirti } from '../game/audio'
+import { konus, konusmaDurdur, konusmaHazirla } from '../game/konusma'
 import { useOyun } from '../game/store'
 import type { Ortam } from '../game/types'
 
@@ -77,11 +78,13 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
       if (o.name === 'rotor') o.visible = false // yer tutucunun sabit rotoru: kendi dönen rotorumuz var
       if ((o as THREE.Mesh).isMesh) o.castShadow = true
     })
+    void konusmaHazirla()
     return () => {
       havuzlar.alev.dispose()
       havuzlar.duman.dispose()
       havuzlar.yaprak.dispose()
       ses.current?.durdur()
+      konusmaDurdur()
     }
   }, [havuzlar])
 
@@ -331,6 +334,8 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
       o.altyazi = anahtar
       o.kelime = a?.kelime ?? 0
       onAltyazi(a ? { kim: a.kim, metin: a.metin } : null)
+      if (a) { const i = ALTYAZILAR.findIndex((x) => x.t0 === a.anahtar); if (i >= 0) konus(i, ALTYAZILAR[i].kim, ALTYAZILAR[i].metin, (ALTYAZILAR[i].t1 - ALTYAZILAR[i].t0) / (kisa ? KISA.hiz : 1), kisa ? KISA.hiz : 1) }
+      else konusmaDurdur()
     }
 
     // — ekran geçişleri: açılış karartması, duman, kapanış karartması (patlama parlaması yok)

@@ -45,3 +45,11 @@ React, Three.js, React Three Fiber, drei, postprocessing, Zustand, Vite, Vitest,
 ## NC (ticari olmayan) kuralı
 
 CC BY-NC lisanslı varlıklar bilerek onaylanmadıkça kullanılmaz (`registry.ts` → `yuklenebilirMi`, test: `src/assets/registry.test.ts`).
+
+## Ses
+
+| Ses | Kaynak | Not |
+|---|---|---|
+| Sinematik telsiz konuşmaları (`public/ses/konusma/`) | Microsoft Edge nöral metin-okuma sesleri (tr-TR-AhmetNeural, tr-TR-EmelNeural), `edge-tts` ile | Üretim: `scripts/konusma-uret.py`. Oyunda telsiz süzgecinden geçirilir. Resmî bir lisans dosyası yok; yayımlamadan önce Microsoft'un kullanım koşullarını kontrol et. |
+| Müzik, ortam ve efektler | Kodla üretilir (Web Audio) | Dış dosya yok. |
+

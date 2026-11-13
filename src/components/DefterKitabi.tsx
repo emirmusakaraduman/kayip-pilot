@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { sayfaSesi } from '../game/audio'
 import { useOyun } from '../game/store'
 import { KONULAR } from '../data/topics'
 import { DEFTER } from '../data/defter'
@@ -44,6 +45,7 @@ export function DefterKitabi({ kapat, yanlisAc = false }: { kapat: () => void; y
   const [yanlis, setYanlis] = useState(yanlisAc) // "Hata Defteri" düğmesi doğrudan yanlış listesiyle açar
 
   const cevir = (yon: 1 | -1) => {
+    sayfaSesi()
     if (anim) return
     const hedef = spread + yon
     if (hedef < 0 || hedef >= SPREAD) return

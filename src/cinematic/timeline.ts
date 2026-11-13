@@ -195,13 +195,13 @@ export interface Altyazi {
 }
 
 export const ALTYAZILAR: Altyazi[] = [
-  { t0: 1.5, t1: 7.2, kim: 'MERKEZ', metin: 'TC-KRT, burası Merkez. Tıbbi malzeme uçuşunuz radarda, rota normal.' },
+  { t0: 1.5, t1: 8.2, kim: 'MERKEZ', metin: 'TC-KRT, burası Merkez. Tıbbi malzeme uçuşunuz radarda, rota normal.' },
   { t0: 8.4, t1: 12.4, kim: 'DENİZ', metin: 'Mayday, mayday! [cızırtı] Sol motor yangını!' },
   { t0: 12.7, t1: 15.6, kim: 'DENİZ', metin: 'Yangın büyüyor, kuyruk kontrolünü kaybediyorum!' },
   { t0: 15.8, t1: 19.2, kim: 'MERKEZ', metin: 'Deniz! [cızırtı] Deniz, duyuyor musun?' },
   { t0: 19.5, t1: 23, kim: 'DENİZ', metin: 'Ağaçlara çarpacağım, tutun— [cızırtı]' },
   { t0: 28.8, t1: 32.8, kim: 'DENİZ', metin: '...Merkez... beni duyan var mı? [cızırtı]' },
-  { t0: 33.4, t1: 37.4, kim: 'MERKEZ', metin: 'Tüm birimler: helikopter düşmüş olabilir. Deniz\'i bulmamız lazım.' },
+  { t0: 32.9, t1: 37.9, kim: 'MERKEZ', metin: 'Tüm birimler: helikopter düşmüş olabilir. Deniz\'i bulmamız lazım.' },
 ]
 
 /** Kelime kelime yazılan altyazı: süresinin ilk %75'inde tamamlanır. */

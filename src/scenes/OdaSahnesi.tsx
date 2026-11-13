@@ -253,6 +253,7 @@ export function OdaSahnesi({ acilis, anaEkran, giris = false }: { acilis?: Acili
 
       <div className="hud kameralar">
         <button className="kucuk" onClick={oyun.sesDegistir} aria-label="Ses">{oyun.sesAcik ? '🔊' : '🔇'}</button>
+        <button className="kucuk" onClick={oyun.muzikDegistir} aria-label="Müzik" style={{ opacity: oyun.muzikAcik ? 1 : 0.5 }}>🎵</button>
         {(Object.keys(KAMERALAR) as Kamera[]).map((k) => (
           <button key={k} className={'kucuk' + (k === kamera ? ' secili' : '')} onClick={() => { setKamera(k); setEkran(k === 'telsiz' || k === 'nuri' || k === 'ayse' ? (kamera === k && ekran === k ? null : k) : null) }}>
             {KAMERALAR[k].ad}

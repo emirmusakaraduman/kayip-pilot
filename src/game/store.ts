@@ -12,6 +12,7 @@ interface Durum {
   yanlisDefteri: string[] // yanlış yapılan vaka id'leri
   istatistik: Record<string, VakaIst> // vaka başına doğru/yanlış sayısı ve aralıklı tekrar kutusu
   sesAcik: boolean
+  muzikAcik: boolean
   girisIzlendi: boolean
   aramaIlerleme: number // Büyük Arama'da tamamlanan aşama sayısı
   aramaBitti: boolean
@@ -20,6 +21,7 @@ interface Durum {
   ipucuAl: () => boolean
   pilDoldur: () => boolean
   sesDegistir: () => void
+  muzikDegistir: () => void
   girisBitti: () => void
   aramaAsamaBitir: (jeton: number, son: boolean) => void
   aramaYenidenBasla: () => void
@@ -41,6 +43,7 @@ export const useOyun = create<Durum>()(
       yanlisDefteri: [],
       istatistik: {},
       sesAcik: true,
+      muzikAcik: true,
       girisIzlendi: false,
       aramaIlerleme: 0,
       aramaBitti: false,
@@ -68,6 +71,7 @@ export const useOyun = create<Durum>()(
         return true
       },
       sesDegistir: () => set((s) => ({ sesAcik: !s.sesAcik })),
+      muzikDegistir: () => set((s) => ({ muzikAcik: !s.muzikAcik })),
       girisBitti: () => set({ girisIzlendi: true }),
       // Büyük Arama defter sayfası kazandırmaz (sayfalar yalnızca Konu Modu ile açılır).
       aramaAsamaBitir: (jeton, son) =>

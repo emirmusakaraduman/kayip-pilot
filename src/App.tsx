@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { OdaSahnesi } from './scenes/OdaSahnesi'
 import { odaGecisSesi, sesBaslat } from './game/audio'
@@ -6,6 +6,8 @@ import { Sinematik } from './cinematic/Sinematik'
 import { ModelTest } from './dev/ModelTest'
 import { AnaEkran, type Acilis } from './components/AnaEkran'
 import { useOyun } from './game/store'
+import { konusmaHazirla } from './game/konusma'
+import { muzikSahne } from './game/muzik'
 
 // Sinematikteki modeller ilk kullanımdan önce indirilip çözülsün (ilk geçişteki takılmayı azaltır)
 for (const k of ['helikopter', 'nuri', 'ayse']) useGLTF.preload(`/models/${k}.glb`)
@@ -32,6 +34,11 @@ export default function App() {
   const girisIzlendi = useOyun((s) => s.girisIzlendi)
   const girisBitti = useOyun((s) => s.girisBitti)
 
+  // Sahneye göre müzik: ana ekranda sakin pad, odada yağmur ve telsiz ortamı, sinematikte sessiz (kendi sesi var)
+  useEffect(() => {
+    muzikSahne(sahne === 'baslik' ? 'menu' : sahne === 'oda' ? 'oda' : 'yok')
+  }, [sahne])
+
   if (import.meta.env.DEV && new URLSearchParams(location.search).has('modeller')) return <ModelTest />
 
   // Geliştirme: ?sinema=22 → sinematiği o saniyeden başlatır (yalnızca geliştirme sunucusunda)
@@ -45,11 +52,13 @@ export default function App() {
         <AnaEkran
           basla={(a) => {
             sesBaslat()
+            void konusmaHazirla()
             setAcilis(a)
             setSahne(girisIzlendi ? 'oda' : 'giris')
           }}
           izle={() => {
             sesBaslat()
+            void konusmaHazirla()
             setSahne('izle')
           }}
         />
