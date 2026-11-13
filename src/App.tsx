@@ -7,6 +7,7 @@ import { OdaSahnesi } from './scenes/OdaSahnesi'
 import { sesBaslat } from './game/audio'
 import { YUKSEKLIK_ATIF } from './map/turkey'
 import { Sinematik } from './cinematic/Sinematik'
+import { ModelTest } from './dev/ModelTest'
 import { useOyun } from './game/store'
 
 function Baslik({ basla, izle }: { basla: () => void; izle: () => void }) {
@@ -24,19 +25,22 @@ function Baslik({ basla, izle }: { basla: () => void; izle: () => void }) {
         <small className="atif">{atif || 'Varlık atıfları: (henüz varlık eklenmedi)'}</small>
         <small className="atif">{YUKSEKLIK_ATIF}</small>
       </div>
-      <Canvas camera={{ position: [6, 3, 8], fov: 45 }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[5, 8, 3]} intensity={1.4} />
-        <AssetModel varlik="helikopter" position={[0, 1, 0]} />
-        <AssetModel varlik="agacCam" position={[-4, 0, -1]} />
-        <AssetModel varlik="agacYaprakli" position={[4, 0, -2]} />
-        <AssetModel varlik="deniz" position={[2, 0, 3]} />
+      <div className="baslik-cv">
+      <Canvas camera={{ position: [8, 2.2, 15], fov: 42 }} gl={{ preserveDrawingBuffer: import.meta.env.DEV }}>
+        <hemisphereLight args={['#b8c4e0', '#2a3a22', 0.9]} />
+        <directionalLight position={[6, 8, 5]} intensity={2.2} />
+        <AssetModel varlik="helikopter" position={[0, 1.4, 0]} rotation={[0, -0.6, 0]} />
+        <AssetModel varlik="agacCam" position={[-7, 0, -3]} />
+        <AssetModel varlik="agacYaprakli" position={[7, 0, -4]} />
+        <AssetModel varlik="nuri" position={[-3.4, 0, 5]} rotation={[0, 0.5, 0]} />
+        <AssetModel varlik="ayse" position={[3.2, 0, 5.4]} rotation={[0, -0.5, 0]} />
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[30, 30]} />
+          <planeGeometry args={[60, 60]} />
           <meshStandardMaterial color="#27391f" />
         </mesh>
-        <OrbitControls />
+        <OrbitControls target={[0, 4.6, 0]} enablePan={false} />
       </Canvas>
+      </div>
     </div>
   )
 }
@@ -47,6 +51,8 @@ export default function App() {
   const [sahne, setSahne] = useState<Sahne>('baslik')
   const girisIzlendi = useOyun((s) => s.girisIzlendi)
   const girisBitti = useOyun((s) => s.girisBitti)
+
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('modeller')) return <ModelTest />
 
   // Geliştirme: ?sinema=22 → sinematiği o saniyeden başlatır (yalnızca geliştirme sunucusunda)
   const dev = import.meta.env.DEV ? new URLSearchParams(location.search) : null

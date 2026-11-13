@@ -87,17 +87,18 @@ export interface RotorParca {
 }
 
 /** Ağaç tepelerine çarpınca kopan ana rotor: eğik atış, sonra yere düşüp durur. */
-export function rotorParca(t: number): RotorParca | null {
+export function rotorParca(t: number, kok?: V3): RotorParca | null {
   if (t < OLAY.agacCarpma) return null
   const dt = t - OLAY.agacCarpma
-  const b = heliDurum(OLAY.agacCarpma).poz
+  const h0 = heliDurum(OLAY.agacCarpma).poz
+  const b: V3 = kok ?? [h0[0], h0[1] + 1.2, h0[2]] // rotor göbeği (kopma anı)
   const v: V3 = [7, 6, -4]
   const g = 12
   const yer = 0.15
-  const inis = (v[1] + Math.sqrt(v[1] * v[1] + 2 * g * (b[1] + 1.2 - yer))) / g
+  const inis = (v[1] + Math.sqrt(v[1] * v[1] + 2 * g * (b[1] - yer))) / g
   const tt = Math.min(dt, inis)
   return {
-    poz: [b[0] + v[0] * tt, b[1] + 1.2 + v[1] * tt - 0.5 * g * tt * tt, b[2] + v[2] * tt],
+    poz: [b[0] + v[0] * tt, b[1] + v[1] * tt - 0.5 * g * tt * tt, b[2] + v[2] * tt],
     donus: 25 * tt,
     yerde: dt >= inis,
   }

@@ -5,6 +5,7 @@ import { Bloom, EffectComposer, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import { AssetModel } from '../components/AssetModel'
+import { ASSETS } from '../assets/registry'
 import { ORTAMLAR, type OrtamAyar } from './ortam'
 import { Agaclar, BulutGolgesi, Daglar, GUNES_YON, Gokyuzu, Zemin } from './env'
 import { Havuz } from './particles'
@@ -35,6 +36,16 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
   const heliRef = useRef<THREE.Group>(null)
   const rotorRef = useRef<THREE.Group>(null)
   const kopukRotor = useRef<THREE.Group>(null)
+  const kopukBlade = useRef<THREE.Group>(null)
+  // GLB helikopterin adlandırılmış rotor düğümleri (yükleme asenkron; hazır olana dek yer tutucu rotor kullanılır)
+  const glb = useRef<{
+    ana: THREE.Object3D; kuy: THREE.Object3D | null
+    qAna: THREE.Quaternion; qKuy: THREE.Quaternion
+    eksAna: THREE.Vector3; eksKuy: THREE.Vector3
+    aciAna: number; aciKuy: number
+    kopuk: boolean; kok: [number, number, number] | null
+  } | null>(null)
+  const qs = useMemo(() => new THREE.Quaternion(), [])
   const gunes = useRef<THREE.DirectionalLight>(null)
   const patlamaIsigi = useRef<THREE.PointLight>(null)
   const topRef = useRef<THREE.Mesh>(null)
@@ -86,11 +97,54 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
     const hx = vel.x, hy = vel.y, hz = vel.z
     o.poz.set(...h.poz)
 
+    // — GLB helikopter: rotorları ada göre bul, döndür, ağaca çarpınca ana rotoru kopar
+    if (!glb.current && g) {
+      const p = ASSETS.helikopter.parcalar
+      const ana = g.getObjectByName(p.anaRotor)
+      if (ana?.parent) {
+        g.updateMatrixWorld(true)
+        const gq = g.getWorldQuaternion(new THREE.Quaternion())
+        // heli-yerel bir ekseni, düğümün ebeveyn çerçevesine çevirir (düğümün kendi dönüşü bu çerçevede uygulanır)
+        const eksen = (yerel: THREE.Vector3, d: THREE.Object3D) => {
+          const pq = d.parent!.getWorldQuaternion(new THREE.Quaternion())
+          return yerel.clone().applyQuaternion(gq.clone().invert().multiply(pq).invert())
+        }
+        const kuy = g.getObjectByName(p.kuyrukRotor) ?? null
+        glb.current = {
+          ana, kuy,
+          qAna: ana.quaternion.clone(), qKuy: kuy ? kuy.quaternion.clone() : new THREE.Quaternion(),
+          eksAna: eksen(new THREE.Vector3(0, 1, 0), ana), // ana rotor: heli yukarı ekseni
+          eksKuy: kuy ? eksen(new THREE.Vector3(1, 0, 0), kuy) : new THREE.Vector3(1, 0, 0), // kuyruk rotoru: yanal eksen
+          aciAna: 0, aciKuy: 0, kopuk: false, kok: null,
+        }
+        g.traverse((m) => { if ((m as THREE.Mesh).isMesh) m.castShadow = true })
+        if (kopukBlade.current) kopukBlade.current.visible = false
+      }
+    }
+    const G = glb.current
+    if (G) {
+      G.aciAna += h.rotorHiz * dt * hiz
+      G.aciKuy += (t < OLAY.yereInis ? 38 * (1 - 0.7 * yum((t - OLAY.kuyrukKaybi) / 10)) : 0) * dt * hiz
+      if (!G.kopuk) G.ana.quaternion.copy(G.qAna).premultiply(qs.setFromAxisAngle(G.eksAna, G.aciAna))
+      if (G.kuy) G.kuy.quaternion.copy(G.qKuy).premultiply(qs.setFromAxisAngle(G.eksKuy, G.aciKuy))
+      if (!G.kopuk && t >= OLAY.agacCarpma && g) {
+        G.kopuk = true
+        g.updateMatrixWorld(true)
+        const poz = G.ana.getWorldPosition(new THREE.Vector3())
+        G.kok = [poz.x, poz.y, poz.z]
+        const klon = G.ana.clone(true)
+        klon.position.set(0, 0, 0)
+        klon.quaternion.copy(G.ana.getWorldQuaternion(new THREE.Quaternion()))
+        klon.scale.copy(G.ana.getWorldScale(new THREE.Vector3()))
+        kopukRotor.current?.add(klon)
+        G.ana.visible = false
+      }
+    }
     if (rotorRef.current) {
-      rotorRef.current.visible = t < OLAY.agacCarpma
+      rotorRef.current.visible = !G && t < OLAY.agacCarpma
       rotorRef.current.rotation.y += h.rotorHiz * dt * hiz
     }
-    const kp = rotorParca(t)
+    const kp = rotorParca(t, G?.kok ?? undefined)
     if (kopukRotor.current) {
       kopukRotor.current.visible = !!kp
       if (kp) {
@@ -120,7 +174,8 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
     // — parçacıklar
     const olcek = (gl.getDrawingBufferSize(new THREE.Vector2()).y) / (2 * Math.tan((pc.fov * Math.PI) / 360))
     const yangin = yum((t - OLAY.yanginBasla) / 3)
-    const yanimda = g ? g.localToWorld(v.set(0.55, 0.55, 0.3)) : v
+    const motor = ASSETS.helikopter.motorNoktasi
+    const yanimda = g ? g.localToWorld(glb.current ? v.set(motor[0], motor[1], motor[2]) : v.set(0.55, 0.55, 0.3)) : v
     const ex = yanimda.x, ey = yanimda.y, ez = yanimda.z
     const b = biriken.current
     b.alev += yangin * 70 * dt * hiz
@@ -249,7 +304,8 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
         shadow-camera-bottom={-45}
         shadow-camera-near={1}
         shadow-camera-far={220}
-        shadow-bias={-0.0004}
+        shadow-bias={-0.0003}
+        shadow-normalBias={0.05}
       />
       <primitive object={gunes.current?.target ?? new THREE.Object3D()} />
       <pointLight ref={patlamaIsigi} position={[ENKAZ[0], 3, ENKAZ[2]]} color="#ff9a40" distance={80} decay={1.6} intensity={0} />
@@ -274,14 +330,16 @@ function Sahne({ ayar, kisa, baslangic, tRef, onDone, onAltyazi, kaplama }: Sahn
         </group>
       </group>
       <group ref={kopukRotor} visible={false}>
-        <mesh castShadow>
-          <boxGeometry args={[6, 0.05, 0.22]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
-        <mesh castShadow rotation={[0, Math.PI / 2, 0]}>
-          <boxGeometry args={[5.2, 0.05, 0.22]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
+        <group ref={kopukBlade}>
+          <mesh castShadow>
+            <boxGeometry args={[6, 0.05, 0.22]} />
+            <meshStandardMaterial color="#222" />
+          </mesh>
+          <mesh castShadow rotation={[0, Math.PI / 2, 0]}>
+            <boxGeometry args={[5.2, 0.05, 0.22]} />
+            <meshStandardMaterial color="#222" />
+          </mesh>
+        </group>
       </group>
 
       <mesh ref={topRef} position={[ENKAZ[0], 2, ENKAZ[2]]} visible={false}>

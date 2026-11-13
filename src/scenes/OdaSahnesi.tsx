@@ -154,7 +154,7 @@ export function OdaSahnesi() {
 
   return (
     <div className="oda">
-      <Canvas camera={{ position: KAMERALAR.genel.poz, fov: 50 }} dpr={[1, 1.75]}>
+      <Canvas camera={{ position: KAMERALAR.genel.poz, fov: 50 }} dpr={[1, 1.75]} gl={{ preserveDrawingBuffer: import.meta.env.DEV }}>
         <RadioRoom
           kamera={kamera}
           satir={metin}
