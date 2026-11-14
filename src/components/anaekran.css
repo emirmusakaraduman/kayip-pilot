@@ -1,6 +1,7 @@
 /* Ana ekran: 884×489'luk görsel zemin + üstünde canlı katmanlar; sahne pencereye sığacak şekilde ölçeklenir */
 .ae { position: relative; height: 100%; overflow: hidden; background: #050505; font-family: 'Caveat', 'Segoe Print', cursive; color: #26201a; }
-.ae-sahne { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; background: #0a0807; box-shadow: 0 0 60px #000; }
+.ae-arka { position: absolute; left: -6%; top: -6%; width: 112%; height: 112%; object-fit: cover; filter: blur(26px) brightness(.5) saturate(1.1); user-select: none; pointer-events: none; }
+.ae-sahne { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; background: #0a0807; -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.4%, #000 98.6%, transparent), linear-gradient(180deg, transparent, #000 1.4%, #000 98.6%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 1.4%, #000 98.6%, transparent), linear-gradient(180deg, transparent, #000 1.4%, #000 98.6%, transparent); mask-composite: intersect; }
 .ae-zemin { position: absolute; inset: 0; display: block; user-select: none; -webkit-user-drag: none; }
 .ae button { padding: 0; font-family: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
 .ae button:disabled { opacity: 1; }
