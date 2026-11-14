@@ -1,6 +1,6 @@
-/* Ana ekran: görsel zemin + üstünde canlı katmanlar; sahne pencereyi kaplayacak şekilde ölçeklenir */
+/* Ana ekran: 884×489'luk görsel zemin + üstünde canlı katmanlar; sahne pencereye sığacak şekilde ölçeklenir */
 .ae { position: relative; height: 100%; overflow: hidden; background: #050505; font-family: 'Caveat', 'Segoe Print', cursive; color: #26201a; }
-.ae-sahne { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; background: #0a0807; }
+.ae-sahne { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; background: #0a0807; box-shadow: 0 0 60px #000; }
 .ae-zemin { position: absolute; inset: 0; display: block; user-select: none; -webkit-user-drag: none; }
 .ae button { padding: 0; font-family: inherit; border: 0; background: none; color: inherit; cursor: pointer; }
 .ae button:disabled { opacity: 1; }
