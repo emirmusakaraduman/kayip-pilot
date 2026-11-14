@@ -3,3 +3,6 @@ dist
 .DS_Store
 .yukseklik-onbellek
 .kaynak-modeller
+
+.vercel
+.env*
