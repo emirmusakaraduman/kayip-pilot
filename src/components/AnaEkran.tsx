@@ -24,7 +24,12 @@ const pad = (n: number) => String(n).padStart(2, '0')
 function useOlcek() {
   const [o, setO] = useState(1)
   useEffect(() => {
-    const f = () => setO(Math.min(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h))
+    // Pencereyi tamamen kaplar (kenarlarda siyah bant yok); en-boy oranı çok farklıysa görüntünün en fazla %12'si kırpılır, kalan fark koyu zeminle kapanır.
+    const f = () => {
+      const sigdir = Math.min(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h)
+      const kapla = Math.max(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h)
+      setO(Math.min(kapla, sigdir / 0.88))
+    }
     f()
     window.addEventListener('resize', f)
     return () => window.removeEventListener('resize', f)
@@ -60,6 +65,8 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
     else void document.documentElement.requestFullscreen?.().catch(() => {})
   }
   const olcek = useOlcek()
+  // kırpılan üst şerit (sahne birimi): sayaçlar görünür kalsın diye aşağı alınır
+  const kirpUst = Math.max(0, (SAHNE.h - window.innerHeight / olcek) / 2)
   const { jeton, defter, bitenVakalar, sesAcik, muzikAcik, sesDegistir, muzikDegistir, ilerlemeyiSifirla } = useOyun()
 
   // konu durumu: tamam (vakaların hepsi bitti) · aktif (ilk bitmemiş, önerilen) · acik (diğerleri). Kilit yok: öğrenci istediği konuya girer.
@@ -99,8 +106,6 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
 
   return (
     <div className="ae">
-      {/* pencere sahneden geniş/uzunsa kenarlardaki siyah bantlar yerine aynı görselin bulanık, loş hali görünür */}
-      <img className="ae-arka" src={yol('/arayuz/ana-ekran.webp')} alt="" aria-hidden draggable={false} />
       <div className="ae-sahne" style={{ width: SAHNE.w, height: SAHNE.h, transform: `translate(-50%, -50%) scale(${olcek})` }}>
         <img className="ae-zemin" src={yol('/arayuz/ana-ekran.webp')} width={SAHNE.w} height={SAHNE.h} alt="" draggable={false} />
 
@@ -111,8 +116,8 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         <KupaBuhari className="ae-buhar" />
 
         {/* sağ üst sayaçlar */}
-        <div className="ae-cip" style={{ left: 808, top: 12, width: 68 }}>Jeton: <b>{jeton}</b></div>
-        <div className="ae-cip" style={{ left: 887, top: 12, width: 100 }}>Defter: <b>{defter.length}/{KONULAR.length}</b></div>
+        <div className="ae-cip" style={{ left: 808, top: 12 + kirpUst, width: 68 }}>Jeton: <b>{jeton}</b></div>
+        <div className="ae-cip" style={{ left: 887, top: 12 + kirpUst, width: 100 }}>Defter: <b>{defter.length}/{KONULAR.length}</b></div>
 
         {/* görselden silinen bulanık yazıların keskin vektör karşılıkları */}
         <div className="ae-levha" style={{ left: 17, top: 16, width: 185, height: 66 }} role="banner">
