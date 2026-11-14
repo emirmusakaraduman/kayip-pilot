@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { yol } from '../yol'
 import type { Bolge } from '../map/turkey'
 import type { Kamera, Tiklama } from './kameralar'
 export type EkranTuru = 'telsiz' | 'nuri' | 'ayse'
@@ -150,7 +151,7 @@ export function TelsizOdasi({
 
   return (
     <>
-      <iframe ref={frame} src="/oda/index.html?kp=bridge" title="Telsiz odası" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />
+      <iframe ref={frame} src={yol('/oda/index.html?kp=bridge')} title="Telsiz odası" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />
       {ekran === 'telsiz' && (
         <div className="telsiz-ekran" role="dialog" aria-label="Telsiz ekranı">
           <div className="te-ust"><span>TELSİZ · PİL %{pil}</span><button className="te-x" onClick={ekranKapat} aria-label="Telsiz ekranını kapat">×</button></div>

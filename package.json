@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "site": "node scripts/site-kur.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

@@ -1,4 +1,5 @@
 import { baglam, cikis, cizirti, konusmaDurdurKaydet } from './audio'
+import { yol } from '../yol'
 import { useOyun } from './store'
 
 // Sinematik telsiz konuşmaları: public/ses/konusma/k{n}.mp3 (scripts/konusma-uret.py ile üretilen nöral Türkçe sesler).
@@ -23,7 +24,7 @@ export async function konusmaHazirla() {
     tamponlar.map(async (_, i) => {
       if (tamponlar[i]) return
       try {
-        const r = await fetch(`/ses/konusma/k${i}.mp3`)
+        const r = await fetch(yol(`/ses/konusma/k${i}.mp3`))
         if (r.ok) tamponlar[i] = await c.decodeAudioData(await r.arrayBuffer())
       } catch { /* dosya yoksa tarayıcı sesine düşülür */ }
     }),

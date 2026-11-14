@@ -1,5 +1,6 @@
 // Geliştirme sayfası (?modeller): üç GLB'yi yan yana gösterir; ölçü ve duruşu kontrol etmek için.
 import { useEffect, useRef } from 'react'
+import { yol } from '../yol'
 import { Canvas } from '@react-three/fiber'
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -37,9 +38,9 @@ export function ModelTest() {
           <mesh scale={50}><sphereGeometry /><meshBasicMaterial color="#8899aa" side={THREE.BackSide} /></mesh>
         </Environment>
         <gridHelper args={[40, 40]} />
-        <Model url="/models/nuri.glb" x={-6} />
-        <Model url="/models/ayse.glb" x={-3} />
-        <Model url="/models/helikopter.glb" x={4} />
+        <Model url={yol("/models/nuri.glb")} x={-6} />
+        <Model url={yol("/models/ayse.glb")} x={-3} />
+        <Model url={yol("/models/helikopter.glb")} x={4} />
         <OrbitControls target={yakin ? [-6, 0.4, 0] : [0, 1, 0]} />
       </Canvas>
     </div>

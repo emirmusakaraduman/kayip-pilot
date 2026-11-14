@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { yol } from './yol'
 import { useGLTF } from '@react-three/drei'
 import { OdaSahnesi } from './scenes/OdaSahnesi'
 import { odaGecisSesi, sesBaslat } from './game/audio'
@@ -10,13 +11,13 @@ import { konusmaHazirla } from './game/konusma'
 import { muzikSahne } from './game/muzik'
 
 // Sinematikteki modeller ilk kullanımdan önce indirilip çözülsün (ilk geçişteki takılmayı azaltır)
-for (const k of ['helikopter', 'nuri', 'ayse']) useGLTF.preload(`/models/${k}.glb`)
+for (const k of ['helikopter', 'nuri', 'ayse']) useGLTF.preload(yol(`/models/${k}.glb`))
 
 /** Ana ekranda gizli, görünmez bir oda iframe'i: odanın betikleri, verisi ve shader'ları önceden ısınır. */
 function OdaIsitma() {
   return (
     <iframe
-      src="/oda/index.html?kp=bridge&warm=1"
+      src={yol('/oda/index.html?kp=bridge&warm=1')}
       title=""
       aria-hidden
       tabIndex={-1}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { yol } from '../yol'
 import { useOyun } from '../game/store'
 import { KONULAR } from '../data/topics'
 import { VAKALAR } from '../data/cases'
@@ -89,7 +90,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
   return (
     <div className="ae">
       <div className="ae-sahne" style={{ width: SAHNE.w, height: SAHNE.h, transform: `translate(-50%, -50%) scale(${olcek})` }}>
-        <img className="ae-zemin" src="/arayuz/ana-ekran.webp" width={SAHNE.w} height={SAHNE.h} alt="" draggable={false} />
+        <img className="ae-zemin" src={yol('/arayuz/ana-ekran.webp')} width={SAHNE.w} height={SAHNE.h} alt="" draggable={false} />
 
         {/* canlı ışık/yağmur katmanları */}
         <CamYagmuru className="ae-yagmur" />
@@ -111,6 +112,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         <button className="ae-izle" style={{ left: 18, top: 90 }} onClick={izle}>▶ Girişi izle</button>
         <button className="ae-izle" style={{ left: 18, top: 128 }} onClick={sesDegistir} aria-label="Ses">{sesAcik ? '🔊 Ses açık' : '🔇 Ses kapalı'}</button>
         <button className="ae-izle" style={{ left: 18, top: 166, opacity: muzikAcik ? 1 : 0.55 }} onClick={muzikDegistir} aria-label="Müzik">{muzikAcik ? '🎵 Müzik açık' : '🎵 Müzik kapalı'}</button>
+        {import.meta.env.BASE_URL !== '/' && <a className="ae-izle" style={{ left: 18, top: 242, textDecoration: 'none' }} href="/">← Oyun Merkezi</a>}
         <button className="ae-izle" style={{ left: 18, top: 204 }} onClick={() => { if (window.confirm('Tüm ilerleme silinecek: çözülen vakalar, defter sayfaları, jeton, karne ve Büyük Arama. Emin misin?')) ilerlemeyiSifirla() }} aria-label="İlerlemeyi sıfırla">↺ İlerlemeyi sıfırla</button>
 
         {/* sol sayfa: konu listesi */}

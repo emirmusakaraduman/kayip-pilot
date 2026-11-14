@@ -1,3 +1,4 @@
+import { yol } from '../yol'
 // Takılıp çıkarılabilir varlık kaydı.
 // GLB dosyasını public/models/ altına koy ve ilgili satırda `url` alanını doldur.
 // url boşsa (null) yer tutucu şekil kullanılır.
@@ -61,7 +62,7 @@ export const ASSETS = {
     id: 'helikopter',
     etiket: 'Helikopter (TC-KRT)',
     placeholder: 'helicopter',
-    url: '/models/helikopter.glb',
+    url: yol('/models/helikopter.glb'),
     hedefUzunluk: 9,
     taban: -0.7,
     parcalar: { anaRotor: 'Empty_84', kuyrukRotor: 'Empty.003_41' },
@@ -79,7 +80,7 @@ export const ASSETS = {
     id: 'deniz',
     etiket: 'Karakter: Deniz (pilot)',
     placeholder: 'person',
-    url: '/models/nuri.glb', // Nuri ile aynı eser (aynı küçültülmüş dosya); sinematikte kabinde oturur
+    url: yol('/models/nuri.glb'), // Nuri ile aynı eser (aynı küçültülmüş dosya); sinematikte kabinde oturur
     hedefBoy: 1.75,
     donusY: -Math.PI / 2, // model +x'e bakıyor; sahnede +z'ye (helikopterin burnu) çevrilir
     kes: 0.47, // bacaklar kesilir: kalça koltukta, gövde ve kafa kabinde
@@ -94,7 +95,7 @@ export const ASSETS = {
     id: 'nuri',
     etiket: 'Karakter: Nuran (meteorolog)',
     placeholder: 'person',
-    url: '/models/nuri.glb',
+    url: yol('/models/nuri.glb'),
     hedefBoy: 1.75,
     donusY: -Math.PI / 2, // model +x'e bakıyor; sahnede +z'ye çevrilir
     oturma: 0.04, // masa 1,275 m yüksekte: yüksek sandalyede kalça neredeyse ayakta yükseklikte. Kolları indirilmiş üretilir (scripts/glb-optimize.mjs); iskeleti yok
@@ -108,7 +109,7 @@ export const ASSETS = {
     id: 'ayse',
     etiket: 'Karakter: Fatma (haritacı)',
     placeholder: 'person',
-    url: '/models/ayse.glb',
+    url: yol('/models/ayse.glb'),
     hedefBoy: 1.7,
     oturma: 0.04,
     // T-pozdan A-poza: sol kol (+x) saat yönünde, sağ kol (−x) ters yönde z ekseni etrafında indirilir

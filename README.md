@@ -102,6 +102,16 @@ Tarayıcıda <http://localhost:5173> açılır. Sesin başlaması için sayfada 
 
 Geliştirme sunucusunda sinematiği belirli bir saniyeden başlatmak için: `/?sinema=22`.
 
+## Oyun merkezi
+
+Bu depo, birkaç oyunu tek adreste toplayan **Karma Oyun Merkezi** sitesini de kurar. Merkez sayfası `merkez/` altındadır, diğer oyunlar `oyunlar/` klasörüne konur ve [oyunlar/README.md](oyunlar/README.md) adım adım anlatır.
+
+```bash
+npm run site        # site/ klasörünü kurar: merkez + Kayıp Pilot (/kayip-pilot/) + oyunlar/*
+```
+
+Vercel bu komutu çalıştırır (`vercel.json`).
+
 ## Mimari
 
 Oyun iki parçadan oluşur ve bir köprüyle birbirine bağlanır:
