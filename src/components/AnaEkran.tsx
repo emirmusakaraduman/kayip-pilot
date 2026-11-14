@@ -24,12 +24,8 @@ const pad = (n: number) => String(n).padStart(2, '0')
 function useOlcek() {
   const [o, setO] = useState(1)
   useEffect(() => {
-    // Pencereyi tamamen kaplar (kenarlarda siyah bant yok); en-boy oranı çok farklıysa görüntünün en fazla %12'si kırpılır, kalan fark koyu zeminle kapanır.
-    const f = () => {
-      const sigdir = Math.min(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h)
-      const kapla = Math.max(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h)
-      setO(Math.min(kapla, sigdir / 0.88))
-    }
+    // Pencereyi her zaman tamamen kaplar (kenarlarda boşluk yok); en-boy oranı farklıysa görüntünün taşan kısmı kırpılır.
+    const f = () => setO(Math.max(window.innerWidth / SAHNE.w, window.innerHeight / SAHNE.h))
     f()
     window.addEventListener('resize', f)
     return () => window.removeEventListener('resize', f)
@@ -54,16 +50,6 @@ const Cizim = ({ z }: { z: Zorluk }) => (
 )
 
 export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: () => void }) {
-  const [tamEkran, setTamEkran] = useState(false)
-  useEffect(() => {
-    const f = () => setTamEkran(!!document.fullscreenElement)
-    document.addEventListener('fullscreenchange', f)
-    return () => document.removeEventListener('fullscreenchange', f)
-  }, [])
-  const tamEkranDegistir = () => {
-    if (document.fullscreenElement) void document.exitFullscreen()
-    else void document.documentElement.requestFullscreen?.().catch(() => {})
-  }
   const olcek = useOlcek()
   // kırpılan üst şerit (sahne birimi): sayaçlar görünür kalsın diye aşağı alınır
   const kirpUst = Math.max(0, (SAHNE.h - window.innerHeight / olcek) / 2)
@@ -129,8 +115,7 @@ export function AnaEkran({ basla, izle }: { basla: (a: Acilis) => void; izle: ()
         <button className="ae-izle" style={{ left: 18, top: 90 }} onClick={izle}>▶ Girişi izle</button>
         <button className="ae-izle" style={{ left: 18, top: 128 }} onClick={sesDegistir} aria-label="Ses">{sesAcik ? '🔊 Ses açık' : '🔇 Ses kapalı'}</button>
         <button className="ae-izle" style={{ left: 18, top: 166, opacity: muzikAcik ? 1 : 0.55 }} onClick={muzikDegistir} aria-label="Müzik">{muzikAcik ? '🎵 Müzik açık' : '🎵 Müzik kapalı'}</button>
-        <button className="ae-izle" style={{ left: 18, top: 242 }} onClick={tamEkranDegistir} aria-label="Tam ekran">{tamEkran ? '⤡ Tam ekrandan çık' : '⤢ Tam ekran'}</button>
-        {import.meta.env.BASE_URL !== '/' && <a className="ae-izle" style={{ left: 18, top: 280, textDecoration: 'none' }} href="/">← Oyun Merkezi</a>}
+        {import.meta.env.BASE_URL !== '/' && <a className="ae-izle" style={{ left: 18, top: 242, textDecoration: 'none' }} href="/">← Oyun Merkezi</a>}
         <button className="ae-izle" style={{ left: 18, top: 204 }} onClick={() => { if (window.confirm('Tüm ilerleme silinecek: çözülen vakalar, defter sayfaları, jeton, karne ve Büyük Arama. Emin misin?')) ilerlemeyiSifirla() }} aria-label="İlerlemeyi sıfırla">↺ İlerlemeyi sıfırla</button>
 
         {/* sol sayfa: konu listesi */}
