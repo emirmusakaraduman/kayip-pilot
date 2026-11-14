@@ -16,7 +16,7 @@
   }
 
   var dersler = window.DERSLER || [];
-  var acik = dersler.filter(function (d) { return d.oyun; });
+  var acik = dersler.filter(function (d) { return d.oyun; }).sort(function (a, b) { return (a.sira || 99) - (b.sira || 99); });
   var yakinda = dersler.filter(function (d) { return !d.oyun; });
   document.getElementById('oynanabilir-sayi').textContent = acik.length ? '(' + acik.length + ')' : '';
   document.getElementById('yakinda-sayi').textContent = yakinda.length ? '(' + yakinda.length + ')' : '';

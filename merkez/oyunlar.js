@@ -16,11 +16,11 @@
 //     yol: 'oyunlar-klasoru/',           // bu sitede duran oyun (oyunlar/<klasör>)  YA DA
 //     // yol: 'oyun/?id=oyun-adi', cerceve: 'https://oyun.vercel.app/',   (başka adreste duran oyun, geri çubuklu çerçevede açılır)
 //   }
-// `renk` dersin vurgu rengidir.
+// `renk` dersin vurgu rengidir. `sira` (isteğe bağlı), "Oynanabilir" bölümündeki soldan sağa sırayı belirler; küçük olan önce gelir.
 window.DERSLER = [
   { id: 'turkce', ad: 'Türkçe', ikon: 'ti-book-2', renk: '#e0675a', oyun: null },
   {
-    id: 'matematik', ad: 'Matematik', ikon: 'ti-math-function', renk: '#35b8c9',
+    id: 'matematik', ad: 'Matematik', ikon: 'ti-math-function', renk: '#35b8c9', sira: 3,
     oyun: {
       id: 'kayip-formul',
       ad: 'Kayıp Formül',
@@ -36,7 +36,7 @@ window.DERSLER = [
   { id: 'geometri', ad: 'Geometri', ikon: 'ti-triangle-square-circle', renk: '#8a78e0', oyun: null },
   { id: 'tarih', ad: 'Tarih', ikon: 'ti-hourglass-high', renk: '#c9a24a', oyun: null },
   {
-    id: 'cografya', ad: 'Coğrafya', ikon: 'ti-world', renk: '#f0a64a',
+    id: 'cografya', ad: 'Coğrafya', ikon: 'ti-world', renk: '#f0a64a', sira: 1,
     oyun: {
       id: 'kayip-pilot',
       ad: 'Kayıp Pilot',
@@ -53,7 +53,7 @@ window.DERSLER = [
   { id: 'fizik', ad: 'Fizik', ikon: 'ti-atom', renk: '#e0a05a', oyun: null },
   { id: 'kimya', ad: 'Kimya', ikon: 'ti-flask', renk: '#9ad05a', oyun: null },
   {
-    id: 'biyoloji', ad: 'Biyoloji', ikon: 'ti-dna-2', renk: '#5ecb7a',
+    id: 'biyoloji', ad: 'Biyoloji', ikon: 'ti-dna-2', renk: '#5ecb7a', sira: 2,
     oyun: {
       id: 'kizil-tohum',
       ad: 'Kızıl Tohum',
