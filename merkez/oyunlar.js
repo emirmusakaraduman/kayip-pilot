@@ -55,14 +55,15 @@ window.DERSLER = [
   {
     id: 'biyoloji', ad: 'Biyoloji', ikon: 'ti-dna-2', renk: '#5ecb7a',
     oyun: {
-      id: 'biyoloji-oyunu',
-      ad: 'Biyoloji oyunu',
-      kisa: 'Hazırlanıyor',
-      aciklama: 'Biyoloji dersinin oyunu yolda. Bağlantısı eklenince buradan oynayabileceksin.',
-      etiketler: [],
-      yapimci: '',
-      gorsel: null,
-      yol: null, // oyunun adresi gelince doldurulacak
+      id: 'kizil-tohum',
+      ad: 'Kızıl Tohum',
+      kisa: 'TYT Biyoloji macerası',
+      aciklama: 'Kızıl bir gezegende kurulan seranın görevlerini biyoloji bilginle çöz.',
+      etiketler: ['3B', 'Biyoloji', 'Görev'],
+      yapimci: 'Umut',
+      gorsel: 'gorseller/kizil-tohum.jpg',
+      yol: 'oyun/?id=kizil-tohum', // çerçeve sayfası: üstte "Ana sayfaya dön" çubuğu
+      cerceve: 'https://kizil-tohum.vercel.app/?t=1',
     },
   },
 ]
