@@ -18,7 +18,7 @@ oyunlar/
    - Create React App: `package.json` içine `"homepage": "."` ekle.
    - Düz HTML: `src="/resim.png"` yerine `src="resim.png"` yaz.
 3. **Klasörü buraya kopyala:** `oyunlar/oyun-2/` (adını istediğin gibi seçebilirsin, küçük harf ve tire kullan).
-4. **Listeye ekle:** `merkez/oyunlar.js` dosyasında kendi oyununun kutusundaki `yakinda: true` satırını sil, `ad`, `aciklama`, `etiketler`, `yapimci` alanlarını doldur, kapak görselini `merkez/gorseller/` altına koy ve `gorsel` alanına yaz.
+4. **Dersine ekle:** `merkez/oyunlar.js` dosyasında kendi dersinin satırını bul (örneğin Fizik). `oyun: null` yerine oyun bilgilerini yaz (dosyanın başındaki açıklamada örnek var). Kapak görselini `merkez/gorseller/` altına koy ve `gorsel` alanına yaz. Oyunu olan ders renkli görünür, olmayan ders gri ve "YAKINDA" damgalı kalır.
 5. **Dene:** `npm run site` ile siteyi kur, sonra `npx serve site` ile aç.
 6. Değişiklikleri GitHub'a gönder. Vercel siteyi yeniden kurar.
 
@@ -38,7 +38,7 @@ Oyununun bir köşesine şu bağlantıyı koyman yeter:
 
 ## Oyun başka bir adreste duruyorsa (kendi Vercel'inde)
 
-Oyunun dosyalarını bu depoya koymak zorunda değilsin. `merkez/oyunlar.js` içinde kutuya şunları yaz:
+Oyunun dosyalarını bu depoya koymak zorunda değilsin. `merkez/oyunlar.js` içinde dersin `oyun` kutusuna şunları yaz:
 
 ```js
 yol: 'oyun/?id=oyunun-id',

@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Karma Oyun Merkezi</title>
-  <meta name="description" content="Üç arkadaşın yaptığı oyunlar tek yerde. Bir oyun seç ve oyna.">
+  <meta name="description" content="TYT'nin 10 dersi için oyunlar tek yerde. Bir ders seç ve oyna.">
   <meta name="theme-color" content="#0b1114">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="merkez.css">
 </head>
 <body>
@@ -17,18 +18,25 @@
   <div class="isik" aria-hidden="true"></div>
 
   <header class="ust">
-    <p class="ust-etiket">Üç arkadaş, üç oyun</p>
+    <p class="ust-etiket">TYT hazırlık oyunları</p>
     <h1>Karma<br>Oyun Merkezi</h1>
-    <p class="ust-alt">Bir oyun seç ve oyna. Hepsi tarayıcıda açılır, indirmek gerekmez.</p>
+    <p class="ust-alt">10 dersin hepsi burada olacak. Oyunu hazır olan dersler renkli, diğerleri yakında.</p>
   </header>
 
   <main>
-    <ul class="kartlar" id="kartlar"></ul>
-    <noscript><p class="not">Oyunları görmek için JavaScript gerekli.</p></noscript>
+    <section aria-labelledby="oynanabilir-baslik">
+      <h2 class="bolum" id="oynanabilir-baslik">Oynanabilir <span id="oynanabilir-sayi"></span></h2>
+      <ul class="kartlar" id="kartlar"></ul>
+    </section>
+    <section aria-labelledby="yakinda-baslik">
+      <h2 class="bolum" id="yakinda-baslik">Yakında <span id="yakinda-sayi"></span></h2>
+      <ul class="dersler" id="dersler"></ul>
+    </section>
+    <noscript><p class="not">Dersleri görmek için JavaScript gerekli.</p></noscript>
   </main>
 
   <footer class="alt">
-    <p>İyi eğlenceler. Oyun açılınca sol üstteki "Oyun Merkezi" bağlantısıyla buraya dönebilirsin.</p>
+    <p>İyi eğlenceler. Oyun açılınca "Oyun Merkezi" bağlantısıyla buraya dönebilirsin.</p>
   </footer>
 
   <div class="gecis" id="gecis" aria-hidden="true"><span>Yükleniyor…</span></div>

@@ -1,5 +1,6 @@
 (function () {
   var liste = document.getElementById('kartlar');
+  var dersListe = document.getElementById('dersler');
   var gecis = document.getElementById('gecis');
 
   function oge(tag, sinif, metin) {
@@ -8,17 +9,31 @@
     if (metin != null) e.textContent = metin;
     return e;
   }
+  function ikon(sinif) {
+    var i = oge('i', 'ti ' + sinif);
+    i.setAttribute('aria-hidden', 'true');
+    return i;
+  }
 
-  (window.OYUNLAR || []).forEach(function (o, i) {
+  var dersler = window.DERSLER || [];
+  var acik = dersler.filter(function (d) { return d.oyun; });
+  var yakinda = dersler.filter(function (d) { return !d.oyun; });
+  document.getElementById('oynanabilir-sayi').textContent = acik.length ? '(' + acik.length + ')' : '';
+  document.getElementById('yakinda-sayi').textContent = yakinda.length ? '(' + yakinda.length + ')' : '';
+
+  // Oyunu olan dersler: büyük, renkli kartlar
+  acik.forEach(function (d, i) {
+    var o = d.oyun;
+    var hazir = !!o.yol;
     var li = oge('li');
     li.style.setProperty('--i', i);
-    var kart = o.yakinda ? oge('div', 'kart yakinda') : oge('a', 'kart');
-    if (o.yakinda) {
-      kart.setAttribute('aria-disabled', 'true');
-      if (o.renk) kart.style.setProperty('--renk', o.renk);
-    } else {
+    var kart = hazir ? oge('a', 'kart') : oge('div', 'kart hazirlaniyor');
+    kart.style.setProperty('--renk', d.renk);
+    if (hazir) {
       kart.href = o.yol;
-      kart.setAttribute('aria-label', o.ad + ' oyununu aç');
+      kart.setAttribute('aria-label', d.ad + ': ' + o.ad + ' oyununu aç');
+    } else {
+      kart.setAttribute('aria-disabled', 'true');
     }
 
     var kapak = oge('div', 'kapak');
@@ -27,29 +42,44 @@
       img.src = o.gorsel; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
       kapak.appendChild(img);
     } else {
-      kapak.appendChild(oge('b', null, String(i + 1)));
+      kapak.classList.add('kapak-bos');
+      kapak.appendChild(ikon(d.ikon));
     }
-    if (o.yakinda) kapak.appendChild(oge('span', 'rozet', 'Yakında'));
+    var rozet = oge('span', 'ders-rozet');
+    rozet.appendChild(ikon(d.ikon));
+    rozet.appendChild(document.createTextNode(' ' + d.ad));
+    kapak.appendChild(rozet);
     kart.appendChild(kapak);
 
     var govde = oge('div', 'govde');
-    govde.appendChild(oge('h2', null, o.ad));
-    if (o.kisa && !o.yakinda) govde.appendChild(oge('p', 'kisa', o.kisa));
+    govde.appendChild(oge('h3', null, o.ad));
+    if (o.kisa) govde.appendChild(oge('p', 'kisa', o.kisa));
     govde.appendChild(oge('p', 'aciklama', o.aciklama || ''));
     if (o.etiketler && o.etiketler.length) {
       var ul = oge('ul', 'etiketler');
       o.etiketler.forEach(function (t) { ul.appendChild(oge('li', null, t)); });
       govde.appendChild(ul);
     }
-    if (!o.yakinda) {
-      var alt = oge('div', 'alt-satir');
-      alt.appendChild(oge('span', 'yapimci', o.yapimci ? 'Yapımcı: ' + o.yapimci : ''));
-      alt.appendChild(oge('span', 'oyna', 'Oyna →'));
-      govde.appendChild(alt);
-    }
+    var alt = oge('div', 'alt-satir');
+    alt.appendChild(oge('span', 'yapimci', o.yapimci ? 'Yapımcı: ' + o.yapimci : ''));
+    alt.appendChild(oge('span', 'oyna', hazir ? 'Oyna →' : 'Hazırlanıyor'));
+    govde.appendChild(alt);
     kart.appendChild(govde);
     li.appendChild(kart);
     liste.appendChild(li);
+  });
+
+  // Oyunu olmayan dersler: siyah beyaz, üstünde YAKINDA
+  yakinda.forEach(function (d, i) {
+    var li = oge('li');
+    li.style.setProperty('--i', i + acik.length);
+    var k = oge('div', 'ders');
+    k.setAttribute('aria-label', d.ad + ': yakında');
+    k.appendChild(ikon(d.ikon));
+    k.appendChild(oge('span', 'ders-ad', d.ad));
+    k.appendChild(oge('span', 'damga', 'Yakında'));
+    li.appendChild(k);
+    dersListe.appendChild(li);
   });
 
   // Oyuna geçerken kısa bir karartma
