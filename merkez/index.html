@@ -7,78 +7,106 @@
 <meta name="description" content="TYT'nin 10 dersi için oyunlar tek yerde. Bir ders seç ve oyna.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Pacifico&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:inherit;text-decoration:none}
 .btn{transition:transform .15s,background .15s}
-.btn:hover{transform:translateY(-2px);background:#D6303F !important}
-.btn:focus-visible,.navlink:focus-visible{outline:3px solid #1E1B6B;outline-offset:3px}
+.btn:hover{transform:translateY(-2px);background:#FFA04D !important}
+.btn:focus-visible,.navlink:focus-visible{outline:3px solid #FFB36B;outline-offset:3px}
 .navlink:hover{text-decoration:underline;text-underline-offset:6px}
+.rain{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.rain-l{position:absolute;inset:-30% -15%;transform:rotate(12deg)}
+.rain::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.22),rgba(20,8,38,0) 60%)}
+.rain-l1{background:linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 32.4% 0/1px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 39.5% 0/1px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 7.2% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 9.4% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 5.8% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 21.5% 0/1px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 43.4% 0/1px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 24.1% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 42.5% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 12.4% 0/1px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 63.1% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 94.8% 0/1px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 58.6% 0/1px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 97.6% 0/1px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 55.7% 0/1px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.2) 18%,rgba(196,181,255,0) 18.2%) 29.0% 0/1px 240px repeat-y;animation:rainfall1 2.6s linear infinite}
+@keyframes rainfall1{from{background-position-y:0}to{background-position-y:1200px}}
+.rain-l2{background:linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 54.1% 0/1.5px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 30.8% 0/1.5px 1200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 18.1% 0/1.5px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 57.1% 0/1.5px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 37.2% 0/1.5px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 71.2% 0/1.5px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 6.0% 0/1.5px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 49.6% 0/1.5px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 42.8% 0/1.5px 300px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 46.6% 0/1.5px 400px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 36.2% 0/1.5px 240px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 79.4% 0/1.5px 1200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 78.0% 0/1.5px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.3) 18%,rgba(196,181,255,0) 18.2%) 57.4% 0/1.5px 600px repeat-y;animation:rainfall2 1.9s linear infinite}
+@keyframes rainfall2{from{background-position-y:0}to{background-position-y:1200px}}
+.rain-l3{background:linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 49.5% 0/2px 300px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 72.9% 0/2px 300px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 60.9% 0/2px 200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 11.8% 0/2px 400px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 16.5% 0/2px 300px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 15.2% 0/2px 400px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 42.2% 0/2px 1200px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 7.8% 0/2px 600px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 57.3% 0/2px 300px repeat-y,linear-gradient(to bottom,rgba(196,181,255,0) 0,rgba(196,181,255,0.42) 18%,rgba(196,181,255,0) 18.2%) 34.0% 0/2px 300px repeat-y;animation:rainfall3 1.4s linear infinite}
+@keyframes rainfall3{from{background-position-y:0}to{background-position-y:1200px}}
+@media (prefers-reduced-motion:reduce){.rain{display:none}}
+.gcard{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.gcard:hover,.gcard:focus-within{transform:translateY(-6px);border-color:#FF7A1A !important;box-shadow:0 0 0 1px rgba(255,122,26,.5),0 18px 40px rgba(255,122,26,.18),0 0 60px rgba(124,58,237,.25)}
+.gimg{overflow:hidden;border-radius:14px}
+.gimg img{transition:transform .5s ease,filter .5s ease}
+.gcard:hover .gimg img,.gcard:focus-within .gimg img{transform:scale(1.06);filter:brightness(1.08) saturate(1.1)}
+.gcard:hover h2{color:#FFB36B}
+.gcard h2{transition:color .25s ease}
+@media (prefers-reduced-motion:reduce){.gcard,.gimg img{transition:none}.gcard:hover,.gcard:focus-within{transform:none}.gcard:hover .gimg img,.gcard:focus-within .gimg img{transform:none}}
+.gcard{animation:cardin .7s cubic-bezier(.2,.7,.2,1) backwards}
+.gcard:nth-child(2){animation-delay:.12s}
+.gcard:nth-child(3){animation-delay:.24s}
+@keyframes cardin{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.logo{animation:logoglow 5s ease-in-out infinite}
+@keyframes logoglow{0%,100%{text-shadow:0 0 18px rgba(167,139,250,.35)}50%{text-shadow:0 0 34px rgba(255,138,43,.55),0 0 18px rgba(167,139,250,.5)}}
+.btn svg{transition:transform .2s ease}
+.btn:hover svg{transform:translateX(4px)}
+@media (prefers-reduced-motion:reduce){.gcard,.logo{animation:none}.btn svg{transition:none}.btn:hover svg{transform:none}}
 .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
 .grid4{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 </style>
 </head>
 <body>
-<div style="width:100%;min-height:100vh;font-family:Inter,system-ui,sans-serif;color:#1E1B6B">
+<div style="width:100%;min-height:100vh;position:relative;background:#140826;font-family:Inter,system-ui,sans-serif;color:#F5F0FF">
+<div class="rain" aria-hidden="true"><div class="rain-l rain-l1"></div><div class="rain-l rain-l2"></div><div class="rain-l rain-l3"></div></div>
 
-<div style="background:#FFC46B">
+<div style="position:relative;z-index:1">
 <header id="top" style="max-width:1120px;margin:0 auto;padding:20px 24px 24px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px">
 <div>
-<p style="margin:0;font-family:Fredoka,Inter,sans-serif;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase">TYT hazırlık oyunları</p>
-<h1 style="margin:2px 0 0;font-family:Pacifico,cursive;font-weight:400;font-size:clamp(34px,5vw,52px);line-height:1.2;color:#D6303F;text-shadow:2px 2px 0 rgba(255,255,255,.55)">Karma Oyun Merkezi</h1>
+<p style="margin:0;font-family:'Space Grotesk',Inter,sans-serif;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase">TYT hazırlık oyunları</p>
+<h1 class="logo" style="margin:2px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;letter-spacing:-0.03em;font-size:clamp(34px,5vw,52px);line-height:1.1;color:#FF8A2B;text-shadow:0 0 28px rgba(167,139,250,.45)">Karma Oyun Merkezi</h1>
 </div>
 <p style="margin:0;max-width:340px;font-size:16px;line-height:1.5;font-weight:500">Konuları oyunla öğren. TYT’nin 10 dersi için eğitici oyunlar tek yerde.</p>
 </header>
 <main id="oyunlar" style="max-width:1120px;margin:0 auto;padding:0 24px 40px;box-sizing:border-box">
-<div class="games"><article style="display:flex;flex-direction:column;background:#AEDDEE;border-radius:24px;padding:24px;box-sizing:border-box">
-<img src="gorseller/kayip-pilot.jpg" alt="Kayıp Pilot oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px">
-<p style="margin:16px 0 0;font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600;color:#2B2870">Kayıp Pilot</p>
-<h2 style="margin:2px 0 0;font-family:Fredoka,Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Coğrafya</h2>
-<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#2B2870">TYT Coğrafya macerası</p>
+<div class="games"><article class="gcard" style="display:flex;flex-direction:column;background:#221040;border:1px solid #3B2270;border-radius:24px;padding:24px;box-sizing:border-box">
+<div class="gimg"><img src="gorseller/kayip-pilot.jpg" alt="Kayıp Pilot oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px"></div>
+<p style="margin:16px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600;color:#C4B5E8">Kayıp Pilot</p>
+<h2 style="margin:2px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Coğrafya</h2>
+<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#C4B5E8">TYT Coğrafya macerası</p>
 <p style="margin:10px 0 0;flex:1;font-size:15px;line-height:1.5">Düşen helikopterin pilotu Deniz telsizden yardım istiyor. Coğrafya sorularını çöz, ipuçlarını birleştir, onu bul.</p>
-<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">Macera</span></div>
+<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">Macera</span></div>
 <div style="margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
-<a class="btn" href="kayip-pilot/" aria-label="Coğrafya: Kayıp Pilot oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#1E1B6B;color:#FFFFFF;font-family:Fredoka,Inter,sans-serif;font-size:15px;font-weight:600">Oyna
+<a class="btn" href="kayip-pilot/" aria-label="Coğrafya: Kayıp Pilot oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#FF7A1A;color:#1A0B2E;font-family:'Space Grotesk',Inter,sans-serif;font-size:15px;font-weight:600">Oyna
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-<span style="font-size:13px;color:#2B2870">Yapımcı: Emir Musa Karaduman</span>
+<span style="font-size:13px;color:#C4B5E8">Yapımcı: Emir Musa Karaduman</span>
 </div>
-</article><article style="display:flex;flex-direction:column;background:#F8A9C6;border-radius:24px;padding:24px;box-sizing:border-box">
-<img src="gorseller/kizil-tohum.jpg" alt="Kızıl Tohum oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px">
-<p style="margin:16px 0 0;font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600;color:#2B2870">Kızıl Tohum</p>
-<h2 style="margin:2px 0 0;font-family:Fredoka,Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Biyoloji</h2>
-<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#2B2870">TYT Biyoloji macerası</p>
+</article><article class="gcard" style="display:flex;flex-direction:column;background:#221040;border:1px solid #3B2270;border-radius:24px;padding:24px;box-sizing:border-box">
+<div class="gimg"><img src="gorseller/kizil-tohum.jpg" alt="Kızıl Tohum oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px"></div>
+<p style="margin:16px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600;color:#C4B5E8">Kızıl Tohum</p>
+<h2 style="margin:2px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Biyoloji</h2>
+<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#C4B5E8">TYT Biyoloji macerası</p>
 <p style="margin:10px 0 0;flex:1;font-size:15px;line-height:1.5">Kızıl bir gezegende kurulan seranın görevlerini biyoloji bilginle çöz.</p>
-<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">Görev</span></div>
+<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">Görev</span></div>
 <div style="margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
-<a class="btn" href="oyun/?id=kizil-tohum" aria-label="Biyoloji: Kızıl Tohum oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#1E1B6B;color:#FFFFFF;font-family:Fredoka,Inter,sans-serif;font-size:15px;font-weight:600">Oyna
+<a class="btn" href="oyun/?id=kizil-tohum" aria-label="Biyoloji: Kızıl Tohum oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#FF7A1A;color:#1A0B2E;font-family:'Space Grotesk',Inter,sans-serif;font-size:15px;font-weight:600">Oyna
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-<span style="font-size:13px;color:#2B2870">Yapımcı: Umut Delek</span>
+<span style="font-size:13px;color:#C4B5E8">Yapımcı: Umut Delek</span>
 </div>
-</article><article style="display:flex;flex-direction:column;background:#F6D3AE;border-radius:24px;padding:24px;box-sizing:border-box">
-<img src="gorseller/kayip-formul.jpg" alt="Kayıp Formül oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px">
-<p style="margin:16px 0 0;font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600;color:#2B2870">Kayıp Formül</p>
-<h2 style="margin:2px 0 0;font-family:Fredoka,Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Matematik</h2>
-<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#2B2870">Matematik zaman yolculuğu</p>
+</article><article class="gcard" style="display:flex;flex-direction:column;background:#221040;border:1px solid #3B2270;border-radius:24px;padding:24px;box-sizing:border-box">
+<div class="gimg"><img src="gorseller/kayip-formul.jpg" alt="Kayıp Formül oyunundan bir ekran görüntüsü" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px"></div>
+<p style="margin:16px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600;color:#C4B5E8">Kayıp Formül</p>
+<h2 style="margin:2px 0 0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;font-size:44px;line-height:1.05">Matematik</h2>
+<p style="margin:6px 0 0;font-size:14px;font-weight:600;color:#C4B5E8">Matematik zaman yolculuğu</p>
 <p style="margin:10px 0 0;flex:1;font-size:15px;line-height:1.5">Matematik silindi, zaman makinesi susuyor. Üç çağa yolculuk et, kayıp formülü geri getir.</p>
-<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#FFFFFF;color:#1E1B6B;font-size:12px;font-weight:600">Zaman yolculuğu</span></div>
+<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">3B</span><span style="padding:4px 10px;border-radius:999px;background:#36196B;color:#E9DDFF;font-size:12px;font-weight:600">Zaman yolculuğu</span></div>
 <div style="margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
-<a class="btn" href="oyun/?id=kayip-formul" aria-label="Matematik: Kayıp Formül oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#1E1B6B;color:#FFFFFF;font-family:Fredoka,Inter,sans-serif;font-size:15px;font-weight:600">Oyna
+<a class="btn" href="oyun/?id=kayip-formul" aria-label="Matematik: Kayıp Formül oyununu aç" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;box-sizing:border-box;border-radius:999px;background:#FF7A1A;color:#1A0B2E;font-family:'Space Grotesk',Inter,sans-serif;font-size:15px;font-weight:600">Oyna
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-<span style="font-size:13px;color:#2B2870">Yapımcı: Mehmet Ali Şinik</span>
+<span style="font-size:13px;color:#C4B5E8">Yapımcı: Mehmet Ali Şinik</span>
 </div>
 </article></div>
 </main>
 </div>
 
-<section id="yakinda" style="background:#1E1B6B;color:#FFFFFF">
+<section id="yakinda" style="position:relative;z-index:1;background:rgba(14,5,25,.72);color:#FFFFFF">
 <div style="max-width:1120px;margin:0 auto;padding:36px 24px 40px;box-sizing:border-box">
-<h2 style="margin:0 0 20px;font-family:Fredoka,Inter,sans-serif;font-weight:700;font-size:28px;line-height:1">Yakında <span style="font-size:14px;font-weight:500;color:#FFC46B">· 7 ders</span></h2>
-<ul class="grid4"><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Türkçe</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Geometri</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Tarih</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Felsefe</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Din Kültürü</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Fizik</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #7C79C9;border-radius:14px;color:#FFFFFF"><span style="font-family:Fredoka,Inter,sans-serif;font-size:16px;font-weight:600">Kimya</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FFC46B">Yakında</span></li></ul>
+<h2 style="margin:0 0 20px;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;font-size:28px;line-height:1">Yakında <span style="font-size:14px;font-weight:500;color:#FB923C">· 7 ders</span></h2>
+<ul class="grid4"><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Türkçe</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Geometri</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Tarih</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Felsefe</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Din Kültürü</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Fizik</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li><li style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:2px dashed #5B3BA8;border-radius:14px;color:#FFFFFF"><span style="font-family:'Space Grotesk',Inter,sans-serif;font-size:16px;font-weight:600">Kimya</span><span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#FB923C">Yakında</span></li></ul>
 </div>
 </section>
 
-<footer style="background:#FFC46B">
+<footer style="position:relative;z-index:1;border-top:1px solid #3B2270">
 <div style="max-width:1120px;margin:0 auto;padding:16px 24px;box-sizing:border-box;font-size:13px;font-weight:500">İyi eğlenceler. Oyun açılınca “Oyun Merkezi” bağlantısıyla buraya dönebilirsin.</div>
 </footer>
 </div>
