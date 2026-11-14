@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oyun | Karma Oyun Merkezi</title>
+  <meta name="theme-color" content="#0b1114">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <style>
+    html,body{height:100%;margin:0;background:#0b1114;color:#e6eee8;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;overflow:hidden}
+    .cubuk{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;box-sizing:border-box;background:#0f171b;border-bottom:1px solid rgba(255,255,255,.09)}
+    .cubuk a{color:inherit;text-decoration:none}
+    .geri{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:#f0a64a;color:#1a1108;font-weight:600;font-size:14px;white-space:nowrap}
+    .geri:hover,.geri:focus-visible{background:#ffbb66;outline:none}
+    .ad{flex:1;min-width:0;font-size:14px;color:#93a49b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .yeni{font-size:13px;color:#93a49b;white-space:nowrap}
+    .yeni:hover{color:#e6eee8}
+    .alan{position:relative;height:calc(100% - 44px)}
+    iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+    .yukleniyor{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#93a49b;letter-spacing:.2em;text-transform:uppercase;font-size:14px}
+    @media (max-width:520px){.yeni{display:none}}
+  </style>
+</head>
+<body>
+  <div class="cubuk">
+    <a class="geri" href="../">← Ana sayfaya dön</a>
+    <span class="ad" id="ad"></span>
+    <a class="yeni" id="yeni" target="_blank" rel="noopener">Yeni sekmede aç ↗</a>
+  </div>
+  <div class="alan">
+    <div class="yukleniyor" id="yukleniyor">Yükleniyor…</div>
+    <iframe id="oyun" title="Oyun" allow="autoplay; fullscreen; gamepad; clipboard-write; accelerometer; gyroscope" allowfullscreen></iframe>
+  </div>
+  <script src="../oyunlar.js"></script>
+  <script>
+    (function () {
+      var id = new URLSearchParams(location.search).get('id');
+      var o = (window.OYUNLAR || []).filter(function (x) { return x.id === id && x.cerceve; })[0];
+      var f = document.getElementById('oyun');
+      if (!o) { document.getElementById('yukleniyor').textContent = 'Oyun bulunamadı'; return; }
+      document.title = o.ad + ' | Karma Oyun Merkezi';
+      document.getElementById('ad').textContent = o.ad + (o.yapimci ? ' · ' + o.yapimci : '');
+      document.getElementById('yeni').href = o.cerceve;
+      f.addEventListener('load', function () {
+        document.getElementById('yukleniyor').style.display = 'none';
+        f.focus(); // klavye ilk tıklamayı beklemeden oyuna gitsin
+      });
+      f.src = o.cerceve;
+    })();
+  </script>
+</body>
+</html>

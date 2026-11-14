@@ -35,3 +35,14 @@ Oyununun bir köşesine şu bağlantıyı koyman yeter:
 - Her oyun kendi adresinde çalıştığı için `localStorage` kayıtları birbirine karışmaz. Yine de anahtar adına oyunun adını ekle (`oyun2-kayit` gibi).
 - Dosyalar büyükse (modeller, sesler) toplam site boyutuna dikkat et; tek dosya 100 MB'ı geçmemeli.
 - Üçüncü taraf görsel, ses ve modellerin lisansını ve yazarını oyununun içinde ya da `CREDITS` dosyasında belirt.
+
+## Oyun başka bir adreste duruyorsa (kendi Vercel'inde)
+
+Oyunun dosyalarını bu depoya koymak zorunda değilsin. `merkez/oyunlar.js` içinde kutuya şunları yaz:
+
+```js
+yol: 'oyun/?id=oyunun-id',
+cerceve: 'https://oyunun-adresi.vercel.app/',
+```
+
+Oyun, üstünde "← Ana sayfaya dön" çubuğu olan bir çerçevede açılır. Oyunun çerçevede açılmasını engellememesi gerekir (`X-Frame-Options` / `frame-ancestors` başlığı koyma). Çubuktaki "Yeni sekmede aç" bağlantısı yedek olarak durur.
